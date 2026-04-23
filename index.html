@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuito Cero | Próximamente</title>
+    <style>
+        :root {
+            --primary-color: #00d4ff;
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .highlight {
+            color: var(--primary-color);
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+            background: #1e293b;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid #334155;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>CIRCUITO <span class="highlight">CERO</span></h1>
+        <p>Plataforma en fase de desarrollo técnico.</p>
+        
+        <div class="status">
+            <span class="pulse"></span> Sistema Online - GitHub Pages
+        </div>
+    </div>
+
+</body>
+</html>
