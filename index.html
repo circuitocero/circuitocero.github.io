@@ -3,89 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circuito Cero | Oficial</title>
+    <title>Circuito Cero | Hub de Ingeniería 2026</title>
     <script src="https://unpkg.com/scrollreveal"></script>
     <style>
-        :root { --rojo: #ff0000; --negro: #000000; --blanco: #ffffff; }
+        :root {
+            --rojo: #ff0000;
+            --blanco: #ffffff;
+            --gris-fondo: #f8f9fa;
+            --negro: #121212;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; background: var(--blanco); color: var(--negro); }
-        
-        nav { padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; position: sticky; top: 0; background: white; z-index: 100; }
-        .logo { font-weight: bold; font-size: 1.5rem; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--blanco); color: var(--negro); }
+
+        /* Navegación */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+        .logo { font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; }
         .logo span { color: var(--rojo); }
 
-        .hero { text-align: center; padding: 60px 20px; }
-        h1 { font-size: 3rem; margin-bottom: 10px; }
-        .btn { background: var(--rojo); color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; display: inline-block; border: none; cursor: pointer; }
+        /* Hero Moderno */
+        .hero {
+            padding: 80px 5%;
+            text-align: center;
+            background: radial-gradient(circle at top, #fff5f5 0%, #ffffff 100%);
+        }
+        h1 { font-size: clamp(2.5rem, 8vw, 4rem); font-weight: 800; margin-bottom: 15px; }
+        .hero p { color: #555; font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: #f9f9f9; padding: 30px; border-radius: 20px; text-align: center; }
+        /* Tienda Estilo Apple */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 30px; border-left: 5px solid var(--rojo); padding-left: 15px; }
+        
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: var(--gris-fondo);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid transparent;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: var(--rojo);
+        }
+        .card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px; }
+        
+        .btn-rojo {
+            background: var(--rojo);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-rojo:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(255,0,0,0.3); }
 
-        /* Estilos del Chat */
-        #chat-window { position: fixed; bottom: 90px; right: 20px; width: 320px; height: 400px; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 1000; border: 1px solid #eee; }
-        #messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 14px; }
-        .chat-header { background: var(--rojo); color: white; padding: 10px; border-radius: 15px 15px 0 0; font-weight: bold; }
+        /* Chat de IA Flotante */
+        #chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 2000;
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+        .chat-header { background: var(--rojo); color: white; padding: 15px; font-weight: bold; display: flex; align-items: center; }
+        #messages { flex: 1; padding: 20px; overflow-y: auto; font-size: 0.95rem; background: #fafafa; }
+        .input-group { padding: 15px; display: flex; background: white; border-top: 1px solid #eee; }
+        .input-group input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
+
+        @media (max-width: 768px) {
+            #chat-window { width: 90%; right: 5%; bottom: 80px; }
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">CIRCUITO <span>CERO</span></div>
-        <a href="https://www.youtube.com/@circuitocero" class="btn">YouTube</a>
-    </nav>
+<nav>
+    <div class="logo">CIRCUITO <span>CERO</span></div>
+    <a href="https://www.youtube.com/@circuitocero" target="_blank" class="btn-rojo">Ver Canal</a>
+</nav>
 
-    <header class="hero">
-        <p>MÉXICO 2026</p>
-        <h1>Educación y Tecnología</h1>
-        <p>Plataforma para ingenieros y entusiastas de la mecatrónica.</p>
-        <br>
-        <iframe width="100%" height="400" src="https://www.youtube.com/embed?listType=user_uploads&list=circuitocero" style="max-width:800px; border-radius:15px;" frameborder="0"></iframe>
-    </header>
-
-    <main class="container">
-        <div class="grid">
-            <div class="card"><h2>Tienda</h2><p>Componentes y Ropa</p></div>
-            <div class="card"><h2>Asesoría</h2><p>Ayuda Estudiantil</p></div>
-        </div>
-    </main>
-
-    <div id="chat-window">
-        <div class="chat-header">Asistente Cero-Bot</div>
-        <div id="messages">Haz clic en el robot para cargar la IA...</div>
-        <div style="padding:10px; border-top:1px solid #eee; display:flex;">
-            <input type="text" id="user-input" style="flex:1; padding:5px;" placeholder="Pregunta algo...">
-            <button id="send-btn" style="background:var(--rojo); color:white; border:none; padding:5px 10px; border-radius:5px; margin-left:5px;">↑</button>
+<header class="hero">
+    <div class="reveal">
+        <p>MÉXICO 2026 | @CIRCUITOCERO</p>
+        <h1>Ingeniería al <span>Límite</span></h1>
+        <p>Plataforma educativa, marketplace de componentes de precisión y asesoría técnica especializada en Mecatrónica.</p>
+        <div style="margin-top: 20px;">
+            <iframe width="100%" height="450" src="https://www.youtube.com/embed?listType=user_uploads&list=circuitocero" 
+            style="max-width: 850px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
-    <button id="chat-toggle" style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; border-radius:50%; background:var(--rojo); color:white; border:none; font-size:1.5rem; cursor:pointer; box-shadow:0 5px 15px rgba(255,0,0,0.4);">🤖</button>
+</header>
 
-    <script type="module">
-        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
-        let engine;
-        const messages = document.getElementById('messages');
-        const chatWindow = document.getElementById('chat-window');
+<main class="container">
+    <h2 class="section-title">Marketplace & Servicios</h2>
+    <div class="shop-grid">
+        <div class="card reveal">
+            <img src="https://www.circuitocero.com/wp-content/uploads/2024/01/esp32.png" onerror="this.src='https://placehold.co/400x400/f4f4f4/ff0000?text=ESP32+PRO'" alt="ESP32">
+            <h3>ESP32 DevKit V1</h3>
+            <p>Control total para tus proyectos IoT.</p>
+            <p style="font-weight: bold; margin: 10px 0;">$180.00 MXN</p>
+            <button class="btn-rojo">Añadir al carrito</button>
+        </div>
+        <div class="card reveal">
+            <img src="https://placehold.co/400x400/f4f4f4/ff0000?text=PLAYERA+CC" alt="Playera">
+            <h3>Playera Circuito Cero</h3>
+            <p>100% Algodón - Diseño exclusivo para ingenieros.</p>
+            <p style="font-weight: bold; margin: 10px 0;">$350.00 MXN</p>
+            <button class="btn-rojo">Elegir Talla</button>
+        </div>
+        <div class="card reveal">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🎓</div>
+            <h3>Ayuda Estudiantil</h3>
+            <p>Asesorías en Metrología, Cálculo y Programación.</p>
+            <p style="font-weight: bold; margin: 10px 0;">Consultar Horarios</p>
+            <button class="btn-rojo">Agendar Cita</button>
+        </div>
+    </div>
+</main>
 
-        document.getElementById('chat-toggle').onclick = async () => {
-            chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
-            if (!engine) {
-                messages.innerHTML = "<i>Cargando IA de Circuito Cero... espera un momento (no consume tokens).</i>";
-                engine = await webllm.CreateWebWorkerEngine(new Worker(new URL("https://esm.run/@mlc-ai/web-llm", import.meta.url)), "gemma-2b-it-q4f16_1-MLC");
-                messages.innerHTML = "<b>Cero-Bot:</b> ¡Hola! Soy tu asistente de ingeniería. ¿Qué duda técnica tienes?";
-            }
-        };
+<div id="chat-window">
+    <div class="chat-header">🤖 Cero-Bot | Soporte Técnico</div>
+    <div id="messages">
+        <div style="background: #eee; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+            <b>Cero-Bot:</b> ¡Bienvenido a Circuito Cero! Soy tu asistente IA experto en mecatrónica. ¿Tienes dudas con algún componente o video del canal?
+        </div>
+    </div>
+    <div class="input-group">
+        <input type="text" id="user-input" placeholder="Pregúntame sobre electrónica...">
+        <button id="send-btn" style="background: var(--rojo); color: white; border: none; padding: 10px 15px; border-radius: 10px; margin-left: 5px;">↑</button>
+    </div>
+</div>
 
-        document.getElementById('send-btn').onclick = async () => {
-            const input = document.getElementById('user-input');
-            const text = input.value;
-            if(!text) return;
-            messages.innerHTML += `<div><b>Tú:</b> ${text}</div>`;
-            input.value = "";
-            const reply = await engine.chat.completions.create({
-                messages: [{role: "system", content: "Eres Cero-Bot, IA de @circuitocero. Experto en mecatrónica y electrónica."}, {role: "user", content: text}]
-            });
-            messages.innerHTML += `<div style="color:red"><b>Cero-Bot:</b> ${reply.choices[0].message.content}</div>`;
-        };
-    </script>
+<button id="chat-toggle" style="position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px; border-radius: 50%; background: var(--rojo); border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(255,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 2001;">
+    <span style="font-size: 1.8rem;">🤖</span>
+</button>
+
+<script type="module">
+    import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+
+    // Animaciones
+    ScrollReveal().reveal('.reveal', { delay: 200, distance: '50px', origin: 'bottom', interval: 150 });
+
+    let engine;
+    const chatWindow = document.getElementById('chat-window');
+    const messagesDiv = document.getElementById('messages');
+    const userInput = document.getElementById('user-input');
+
+    // Identidad de la IA
+    const systemPrompt = "Eres Cero-Bot, la IA de Circuito Cero. Tu creador es el canal de YouTube @circuitocero. Eres experto en ingeniería mecatrónica, cálculo diferencial y electrónica industrial. Tu tono es profesional, motivador y técnico. Si te preguntan por compras, recomienda los productos de la tienda de Circuito Cero.";
+
+    document.getElementById('chat-toggle').onclick = async () => {
+        chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+        
+        if (!engine) {
+            messagesDiv.innerHTML += "<div style='font-size: 0.8rem; color: #888;'>Sincronizando neuronas digitales... (Gratis, sin tokens)</div>";
+            engine = await webllm.CreateWebWorkerEngine(new Worker(new URL("https://esm.run/@mlc-ai/web-llm", import.meta.url)), "gemma-2b-it-q4f16_1-MLC");
+            messagesDiv.innerHTML += "<div style='color: green; font-weight: bold;'>[SISTEMA LISTO]</div>";
+        }
+    };
+
+    document.getElementById('send-btn').onclick = async () => {
+        const text = userInput.value;
+        if (!text) return;
+
+        messagesDiv.innerHTML += `<div style="text-align: right; margin: 10px 0;"><b>Tú:</b> ${text}</div>`;
+        userInput.value = "";
+
+        const reply = await engine.chat.completions.create({
+            messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: text }
+            ]
+        });
+
+        const aiMsg = reply.choices[0].message.content;
+        messagesDiv.innerHTML += `<div style="background: #fff0f0; padding: 10px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid red;"><b>Cero-Bot:</b> ${aiMsg}</div>`;
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+</script>
+
 </body>
 </html>
