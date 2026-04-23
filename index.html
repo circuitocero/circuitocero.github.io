@@ -1,93 +1,597 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circuito Cero - Control de Ingeniería</title>
-    <style>
-        :root {
-            --rojo: #ff0000;
-            --negro: #000000;
-            --blanco: #ffffff;
-            --gris: #f4f4f4;
-            --consola: #1a1a1a;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CIRCUITO CERO® — Plataforma Educativa + Tienda</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--red:#e63946;--red2:#c1121f;--blue:#1d3557;--blue2:#457b9d;--blue3:#a8dadc;--white:#fff;--off:#f4f6f9;--off2:#eef2f7;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--font:'Outfit',sans-serif;--display:'Syne',sans-serif;--mono:'IBM Plex Mono',monospace;--ease:cubic-bezier(.16,1,.3,1);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+body{background:var(--white);color:var(--text);font-family:var(--font);overflow-x:hidden;cursor:none;min-height:100vh;}
+#cur{position:fixed;width:10px;height:10px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;mix-blend-mode:multiply;}
+#cur-ring{position:fixed;width:38px;height:38px;border:1.5px solid rgba(230,57,70,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .4s var(--ease),height .4s var(--ease),opacity .3s;}
+.cur-big #cur{width:48px;height:48px;background:rgba(230,57,70,.12);}
+.cur-big #cur-ring{opacity:0;}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),#ff6b6b,var(--blue));z-index:500;width:0%;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:rgba(0,0,0,.02);}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--red2);}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,5vw,3rem);height:68px;background:rgba(255,255,255,.95);backdrop-filter:blur(24px);border-bottom:1px solid transparent;transition:all .4s var(--ease);}
+nav.scrolled{border-color:var(--border);box-shadow:0 8px 40px rgba(0,0,0,.07);}
+.logo{font-family:var(--display);font-size:clamp(1.2rem,4vw,1.5rem);font-weight:800;cursor:pointer;letter-spacing:-1px;user-select:none;}
+.logo .c{color:var(--blue);}
+.logo .z{color:var(--red);}
+.logo sup{font-size:.45em;vertical-align:super;color:var(--muted);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;flex-wrap:wrap;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:600;font-family:var(--mono);position:relative;cursor:pointer;transition:color .2s;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--red);transition:width .35s var(--ease);}
+.nav-links a:hover{color:var(--text);}
+.nav-links a:hover::after{width:100%;}
+.nav-btn{background:var(--red);color:#fff;border:none;padding:10px 26px;border-radius:4px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--display);transition:all .3s var(--ease);position:relative;overflow:hidden;white-space:nowrap;}
+.nav-btn::before{content:'';position:absolute;inset:0;background:var(--red2);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);}
+.nav-btn:hover::before{transform:scaleX(1);}
+.nav-btn span{position:relative;z-index:1;}
+#pcanvas{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;}
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:clamp(6rem,10vw,8rem) clamp(1.5rem,5vw,3rem) clamp(4rem,8vw,4rem);position:relative;z-index:1;overflow:hidden;gap:4rem;max-width:1400px;margin:0 auto;}
+@media(max-width:1024px){.hero{grid-template-columns:1fr;padding:6rem 2rem 4rem;gap:2rem;}}
+@media(max-width:768px){.hero{padding:5rem 1.5rem 3rem;gap:1.5rem;}}
+.htag{display:inline-flex;align-items:center;gap:10px;margin-bottom:2rem;opacity:0;animation:fadeU .8s var(--ease) .1s forwards;}
+.htag-line{width:32px;height:2px;background:var(--red);}
+.htag-txt{font-family:var(--mono);font-size:.7rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;}
+.hdot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+@keyframes fadeU{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero h1{font-family:var(--display);font-size:clamp(2.4rem,7vw,5.5rem);font-weight:800;line-height:.92;letter-spacing:-3px;}
+.h1-l{display:block;overflow:hidden;}
+.h1-i{display:block;transform:translateY(110%);animation:lineUp .9s var(--ease) forwards;}
+.h1-i.d1{animation-delay:.25s;}
+.h1-i.d2{color:var(--red);animation-delay:.4s;}
+.h1-i.d3{color:var(--blue);font-size:clamp(1.2rem,3vw,2.4rem);letter-spacing:-1px;font-weight:600;animation-delay:.55s;}
+@keyframes lineUp{from{transform:translateY(110%);}to{transform:translateY(0);}}
+.hero-sub{font-size:clamp(.9rem,2vw,1rem);color:var(--muted);line-height:1.8;margin:1.5rem 0 2.5rem;max-width:480px;opacity:0;animation:fadeU .8s var(--ease) .7s forwards;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeU .8s var(--ease) .85s forwards;}
+@media(max-width:640px){.hero-btns{flex-direction:column;}}
+.btn-p{background:var(--red);color:#fff;padding:14px 34px;border-radius:4px;font-weight:700;font-size:.92rem;border:none;cursor:pointer;font-family:var(--display);position:relative;overflow:hidden;text-decoration:none;display:inline-block;transition:transform .3s var(--ease),box-shadow .3s;white-space:nowrap;}
+.btn-p::before{content:'';position:absolute;inset:0;background:var(--red2);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease);}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(230,57,70,.4);}
+.btn-p:hover::before{transform:scaleX(1);}
+.btn-p span{position:relative;z-index:1;}
+.btn-s{background:transparent;color:var(--blue);padding:14px 34px;border-radius:4px;font-weight:600;font-size:.92rem;border:2px solid var(--blue);cursor:pointer;font-family:var(--font);text-decoration:none;display:inline-block;transition:all .3s var(--ease);white-space:nowrap;}
+.btn-s:hover{background:var(--blue);color:#fff;transform:translateY(-3px);}
+.hstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.75rem;margin-top:2.5rem;opacity:0;animation:fadeU .8s var(--ease) 1s forwards;}
+@media(max-width:640px){.hstats{grid-template-columns:1fr;}}
+.hstat{background:var(--off);border-radius:8px;padding:1.1rem;border-left:3px solid var(--red);transition:transform .3s,box-shadow .3s;}
+.hstat:nth-child(2){border-color:var(--blue);}
+.hstat:nth-child(3){border-color:#2a9d8f;}
+.hstat:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08);}
+.hstat-n{font-family:var(--display);font-size:clamp(1.3rem,4vw,1.6rem);font-weight:800;line-height:1;}
+.r{color:var(--red)!important;}
+.b{color:var(--blue)!important;}
+.g{color:#2a9d8f!important;}
+.hstat-l{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-top:3px;}
+.hero-right{position:relative;opacity:0;animation:fadeU .9s var(--ease) .5s forwards;}
+@media(max-width:1024px){.hero-right{display:none;}}
+.hero-img-wrap{position:relative;border-radius:12px;overflow:hidden;height:560px;width:100%;}
+.hero-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.hero-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(29,53,87,.7),rgba(230,57,70,.25));}
+.hbadge{position:absolute;bottom:2rem;left:2rem;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-radius:8px;padding:1rem 1.5rem;border-left:4px solid var(--red);animation:floatY 4s ease-in-out infinite;}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.hb-n{font-family:var(--display);font-size:1.8rem;font-weight:800;color:var(--red);line-height:1;}
+.hb-t{font-family:var(--mono);font-size:.63rem;color:var(--muted);margin-top:2px;}
+.sec{padding:clamp(4rem,8vw,6rem) clamp(1.5rem,5vw,3rem);position:relative;z-index:1;}
+.sec.off{background:var(--off);}
+.sec.dark{background:var(--blue);}
+.inner{max-width:1200px;margin:0 auto;}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:.75rem;}
+.eyebrow-l{width:28px;height:2px;background:var(--red);}
+.eyebrow-t{font-family:var(--mono);font-size:.68rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;}
+.eyebrow-t.lt{color:var(--blue3);}
+.eyebrow-l.lt{background:var(--blue3);}
+.sec-h{font-family:var(--display);font-size:clamp(1.8rem,6vw,3rem);font-weight:800;letter-spacing:-2px;line-height:1.02;margin-bottom:.9rem;}
+.sec-p{color:var(--muted);font-size:clamp(.95rem,2vw,1rem);line-height:1.75;max-width:500px;}
+.rev{opacity:0;transform:translateY(50px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
+.rev.in{opacity:1;transform:translateY(0);}
 
-        body { font-family: 'Courier New', Courier, monospace; margin: 0; background: var(--gris); }
+/* Grid productos */
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5px;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-top:3rem;}
+@media(max-width:768px){.grid-3{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}}
+@media(max-width:640px){.grid-3{grid-template-columns:1fr;}}
 
-        header { background: var(--negro); color: var(--blanco); padding: 1rem; text-align: center; border-bottom: 4px solid var(--rojo); }
+.card{background:var(--white);cursor:pointer;position:relative;overflow:hidden;transition:all .3s var(--ease);display:flex;flex-direction:column;}
+.card:hover{box-shadow:0 12px 40px rgba(0,0,0,.12);}
+.card-img{width:100%;height:220px;object-fit:cover;transition:transform .5s var(--ease);}
+.card:hover .card-img{transform:scale(1.06);}
+.card-badge{position:absolute;top:1rem;right:1rem;background:var(--red);color:#fff;padding:6px 12px;border-radius:3px;font-family:var(--mono);font-size:.65rem;font-weight:700;z-index:2;}
+.card-body{padding:1.4rem;flex:1;display:flex;flex-direction:column;}
+.card-cat{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.4rem;}
+.card-title{font-family:var(--display);font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.6rem;line-height:1.2;}
+.card-desc{font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:.8rem;}
+.card-price{font-family:var(--display);font-size:1.4rem;font-weight:800;color:var(--red);margin-bottom:1rem;}
+.card-btn{background:var(--red);color:#fff;border:none;padding:10px;border-radius:4px;font-weight:700;font-family:var(--display);font-size:.78rem;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.card-btn:hover{background:var(--red2);transform:translateY(-2px);}
 
-        .container { max-width: 900px; margin: 2rem auto; padding: 1rem; background: var(--blanco); border: 2px solid var(--negro); box-shadow: 10px 10px 0px var(--rojo); }
+/* Videos */
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
+@media(max-width:768px){.video-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}}
+@media(max-width:640px){.video-grid{grid-template-columns:1fr;}}
+.video-card{background:var(--white);border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .3s var(--ease);}
+.video-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.video-thumb{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;}
+.video-thumb iframe{position:absolute;top:0;left:0;width:100%;height:100%;}
+.video-info{padding:1rem;}
+.video-title{font-family:var(--display);font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.5rem;}
+.video-channel{font-family:var(--mono);font-size:.7rem;color:var(--muted);}
 
-        .terminal { background: var(--consola); color: #00ff00; padding: 1rem; border-radius: 5px; height: 150px; overflow-y: auto; margin-bottom: 1rem; font-size: 0.9rem; }
+/* Libros */
+.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.5rem;margin-top:2rem;}
+@media(max-width:640px){.books-grid{grid-template-columns:repeat(2,1fr);}}
+.book-card{background:var(--off);border-radius:8px;padding:1.2rem;text-align:center;transition:all .3s;}
+.book-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.1);}
+.book-icon{font-size:3rem;margin-bottom:.5rem;}
+.book-title{font-family:var(--display);font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.3rem;}
+.book-author{font-family:var(--mono);font-size:.7rem;color:var(--muted);}
 
-        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* Timeline */
+.timeline{position:relative;margin:3rem 0;}
+.tl-line{position:absolute;left:20px;top:0;width:2px;background:linear-gradient(var(--red),var(--blue));height:0;transition:height 1.6s var(--ease);}
+.tl-line.drawn{height:100%;}
+.tl-item{display:flex;gap:2.5rem;margin-bottom:3rem;padding-left:3rem;position:relative;}
+.tl-dot{position:absolute;left:12px;top:6px;width:18px;height:18px;border-radius:50%;border:3px solid var(--white);box-shadow:0 0 0 2px var(--red);background:var(--red);transform:scale(0);transition:transform .5s var(--ease);}
+.tl-dot.pop{transform:scale(1);}
+.tl-yr{font-family:var(--mono);font-size:.67rem;color:var(--red);font-weight:700;letter-spacing:2px;margin-bottom:.35rem;}
+.tl-name{font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:.4rem;}
+.tl-desc{font-size:.86rem;color:var(--muted);line-height:1.7;}
 
-        .btn { padding: 15px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; }
-        .btn-check { background: var(--negro); color: var(--blanco); }
-        .btn-alert { background: var(--rojo); color: var(--blanco); }
-        .btn:hover { opacity: 0.8; transform: scale(0.98); }
+/* Team */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:2rem;}
+@media(max-width:640px){.team-grid{grid-template-columns:1fr;}}
+.team-card{background:var(--white);border-radius:12px;padding:1.5rem;border-left:4px solid var(--blue);transition:all .3s;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.team-card:hover{transform:translateY(-5px);box-shadow:0 8px 24px rgba(0,0,0,.1);}
+.team-header{display:flex;gap:1rem;margin-bottom:1rem;align-items:flex-start;}
+.team-avatar{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--red),#ff6b6b);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1.3rem;flex-shrink:0;}
+.team-info{flex:1;}
+.team-name{font-family:var(--display);font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:.2rem;}
+.team-role{font-family:var(--mono);font-size:.75rem;color:var(--muted);font-weight:600;}
+.team-date{font-family:var(--mono);font-size:.7rem;color:var(--blue);margin-top:.3rem;}
 
-        .status-light { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #555; margin-right: 5px; }
-        .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
-    </style>
+/* Filtros */
+.filtros{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0;}
+.fbtn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 20px;border-radius:4px;font-size:.76rem;cursor:pointer;font-family:var(--mono);font-weight:600;transition:all .25s var(--ease);}
+.fbtn.active,.fbtn:hover{background:var(--red);color:#fff;border-color:var(--red);}
+
+footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5vw,3rem) 2rem;}
+.f-in{max-width:1200px;margin:0 auto;}
+.f-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+@media(max-width:768px){.f-top{grid-template-columns:1fr 1fr;gap:2rem;}}
+@media(max-width:640px){.f-top{grid-template-columns:1fr;}}
+.f-logo{font-family:var(--display);font-size:1.7rem;font-weight:800;letter-spacing:-1px;margin-bottom:.55rem;}
+.f-logo .c{color:var(--blue);}
+.f-logo .z{color:var(--red);}
+.f-desc{font-size:.84rem;color:rgba(255,255,255,.36);line-height:1.7;max-width:250px;}
+.f-col h4{font-family:var(--mono);font-size:.63rem;letter-spacing:2px;color:rgba(255,255,255,.26);margin-bottom:1rem;text-transform:uppercase;}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:.45rem;}
+.f-col a{color:rgba(255,255,255,.48);text-decoration:none;font-size:.84rem;transition:color .2s,transform .2s;display:inline-block;}
+.f-col a:hover{color:#fff;transform:translateX(4px);}
+.f-bot{border-top:1px solid rgba(255,255,255,.07);padding-top:1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.7rem;font-size:.74rem;color:rgba(255,255,255,.2);font-family:var(--mono);}
+
+#live-clock{position:fixed;top:14px;right:clamp(1rem,5vw,1.5rem);z-index:400;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:7px;padding:6px 13px;display:flex;flex-direction:column;align-items:flex-end;line-height:1.35;box-shadow:0 4px 20px rgba(0,0,0,.07);}
+#clock-time{font-family:var(--mono);font-weight:700;font-size:.85rem;color:var(--red);letter-spacing:1.5px;}
+#clock-date{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:.5px;}
+@media(max-width:640px){#live-clock{display:none;}}
+
+.d1{transition-delay:.05s;}
+.d2{transition-delay:.12s;}
+.d3{transition-delay:.19s;}
+.d4{transition-delay:.26s;}
+.d5{transition-delay:.33s;}
+.d6{transition-delay:.4s;}
+.d7{transition-delay:.47s;}
+.d8{transition-delay:.54s;}
+</style>
 </head>
 <body>
+<div id="prog"></div>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<canvas id="pcanvas"></canvas>
 
-<header>
-    <h1>CIRCUITO CERO // AGENTE N8N</h1>
-</header>
-
-<div class="container">
-    <h3><span class="status-light online"></span>SISTEMA OPERATIVO</h3>
-    <div class="terminal" id="log">
-        > Sistema listo...<br>
-        > Esperando comando del ingeniero...
-    </div>
-
-    <div class="controls">
-        <button class="btn btn-check" onclick="enviarComando('CHECK_SISTEMA')">Verificar Red</button>
-        <button class="btn btn-alert" onclick="enviarComando('ALERTA_MANTENIMIENTO')">Reportar Falla</button>
-    </div>
+<div id="live-clock">
+  <span id="clock-time"></span>
+  <span id="clock-date"></span>
 </div>
 
-<script>
-    const terminal = document.getElementById('log');
+<nav id="main-nav">
+  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="cursor:pointer;"><span class="c">CIRCUITO</span> <span class="z">CERO</span><sup>®</sup></div>
+  <ul class="nav-links">
+    <li><a href="#educacion">Educación</a></li>
+    <li><a href="#tienda">Tienda</a></li>
+    <li><a href="#quienes">Nosotros</a></li>
+  </ul>
+  <button class="nav-btn" onclick="document.getElementById('educacion').scrollIntoView({behavior:'smooth'})"><span>Explorar</span></button>
+</nav>
 
-    function escribirLog(mensaje) {
-        const p = document.createElement('div');
-        p.innerHTML = `> ${new Date().toLocaleTimeString()}: ${mensaje}`;
-        terminal.appendChild(p);
-        terminal.scrollTop = terminal.scrollHeight;
-    }
+<section class="hero">
+  <div>
+    <div class="htag"><div class="htag-line"></div><span class="hdot"></span><span class="htag-txt">Plataforma Educativa · México 2025</span></div>
+    <h1>
+      <span class="h1-l"><span class="h1-i d1">CIRCUITO</span></span>
+      <span class="h1-l"><span class="h1-i d2">CERO</span></span>
+      <span class="h1-l"><span class="h1-i d3">Educación + Tienda</span></span>
+    </h1>
+    <p class="hero-sub">Videos de electrónica, libros profesionales, componentes reales, prototipos listos para usar y mucho más. Todo en un solo lugar.</p>
+    <div class="hero-btns">
+      <a href="#educacion" class="btn-p"><span>Ver Cursos</span></a>
+      <a href="#tienda" class="btn-s">Comprar Componentes</a>
+    </div>
+    <div class="hstats">
+      <div class="hstat"><div class="hstat-n r">20+</div><div class="hstat-l">VIDEOS</div></div>
+      <div class="hstat"><div class="hstat-n b">30</div><div class="hstat-l">LIBROS</div></div>
+      <div class="hstat"><div class="hstat-n g">100+</div><div class="hstat-l">PRODUCTOS</div></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" alt="Electrónica">
+      <div class="hero-img-overlay"></div>
+      <div class="hbadge"><div class="hb-n">2026</div><div class="hb-t">VERSIÓN ACTUAL</div></div>
+    </div>
+  </div>
+</section>
 
-    async function enviarComando(tipo) {
-        escribirLog(`Iniciando ${tipo}...`);
+<!-- SECCIÓN EDUCACIÓN -->
+<section class="sec" id="educacion">
+  <div class="inner">
+    <div class="rev">
+      <div class="eyebrow"><div class="eyebrow-l"></div><span class="eyebrow-t">Aprende electrónica</span></div>
+      <h2 class="sec-h">Videos & <span style="color:var(--red)">Contenido</span></h2>
+      <p class="sec-p">Accede a nuestro canal de YouTube con 20+ videos sobre electrónica, circuitos y más.</p>
+    </div>
+    
+    <h3 style="font-family:var(--display);font-size:1.5rem;font-weight:800;margin:2rem 0 1rem">Canal: @circuitocero</h3>
+    <div class="video-grid rev" id="videos-grid"></div>
+  </div>
+</section>
+
+<!-- SECCIÓN LIBROS -->
+<section class="sec off">
+  <div class="inner">
+    <div class="rev">
+      <div class="eyebrow"><div class="eyebrow-l"></div><span class="eyebrow-t">Biblioteca técnica</span></div>
+      <h2 class="sec-h">Libros de <span style="color:var(--blue)">Electrónica</span></h2>
+      <p class="sec-p">Acceso a 30 libros profesionales de referencia en electrónica, circuitos y componentes.</p>
+    </div>
+    <div class="books-grid rev" id="books-grid"></div>
+  </div>
+</section>
+
+<!-- SECCIÓN WIKIPEDIA -->
+<section class="sec dark" id="wiki">
+  <div class="inner">
+    <div class="rev">
+      <div class="eyebrow"><div class="eyebrow-l lt"></div><span class="eyebrow-t lt">Consulta en línea</span></div>
+      <h2 class="sec-h" style="color:#fff">Busca <span style="color:var(--blue3)">Conceptos</span></h2>
+    </div>
+    <div style="background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border-radius:12px;padding:2rem;margin-top:2rem;border:1px solid rgba(255,255,255,.1);" class="rev">
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <input type="text" id="wiki-search" placeholder="Ej: Ley de Ohm, transistor, diodo..." style="flex:1;min-width:200px;padding:12px 16px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.05);color:#fff;font-family:var(--font);font-size:.9rem;" />
+        <button onclick="searchWikipedia()" style="background:var(--red);color:#fff;border:none;padding:12px 30px;border-radius:6px;font-weight:700;font-family:var(--display);cursor:pointer;transition:all .3s;">Buscar</button>
+      </div>
+      <div id="wiki-result" style="margin-top:1.5rem;color:#fff;font-size:.9rem;line-height:1.7;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN TIENDA -->
+<section class="sec" id="tienda">
+  <div class="inner">
+    <div class="rev">
+      <div class="eyebrow"><div class="eyebrow-l"></div><span class="eyebrow-t">Compra componentes</span></div>
+      <h2 class="sec-h">Tienda <span style="color:var(--red)">Oficial</span></h2>
+      <p class="sec-p">Productos físicos: playeras, tazas, circuitos armados, piezas 3D y componentes electrónicos.</p>
+    </div>
+    
+    <div class="filtros rev">
+      <button class="fbtn active" onclick="filtrarProductos('todos',this)">Todos</button>
+      <button class="fbtn" onclick="filtrarProductos('playeras',this)">Playeras</button>
+      <button class="fbtn" onclick="filtrarProductos('tazas',this)">Tazas</button>
+      <button class="fbtn" onclick="filtrarProductos('circuitos',this)">Circuitos</button>
+      <button class="fbtn" onclick="filtrarProductos('piezas3d',this)">Piezas 3D</button>
+    </div>
+    
+    <div class="grid-3 rev" id="tienda-grid"></div>
+  </div>
+</section>
+
+<!-- SECCIÓN QUIÉNES SOMOS -->
+<section class="sec off" id="quienes">
+  <div class="inner">
+    <div class="rev">
+      <div class="eyebrow"><div class="eyebrow-l"></div><span class="eyebrow-t">Nuestra historia</span></div>
+      <h2 class="sec-h">De <span style="color:var(--red)">E-VOLT</span> a <span style="color:var(--blue)">CIRCUITO CERO</span></h2>
+    </div>
+    
+    <div class="timeline rev">
+      <div class="tl-line" id="tl-line"></div>
+      
+      <div class="tl-item">
+        <div class="tl-dot" id="dot0"></div>
+        <div>
+          <div class="tl-yr">17 DE AGOSTO 2025</div>
+          <div class="tl-name">E-VOLT Nace</div>
+          <div class="tl-desc">Proyecto inicial como plataforma educativa de electrónica, robótica y automatización. Enfocado en educación mexicana.</div>
+        </div>
+      </div>
+      
+      <div class="tl-item">
+        <div class="tl-dot" id="dot1"></div>
+        <div>
+          <div class="tl-yr">2 DE FEBRERO 2026</div>
+          <div class="tl-name">EN CORTO</div>
+          <div class="tl-desc">Cambio de marca a "EN CORTO" - aprender de forma concisa y directa. Se lanza canal @circuitocero en YouTube.</div>
+        </div>
+      </div>
+      
+      <div class="tl-item">
+        <div class="tl-dot" id="dot2"></div>
+        <div>
+          <div class="tl-yr">8 DE ABRIL 2026</div>
+          <div class="tl-name">CIRCUITO CERO</div>
+          <div class="tl-desc">Versión actual. Plataforma completa con tienda, educación y comunidad. Expansión global con componentes y prototipos.</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- EQUIPO -->
+    <div style="margin-top:4rem">
+      <div class="rev">
+        <div class="eyebrow"><div class="eyebrow-l"></div><span class="eyebrow-t">Quiénes somos</span></div>
+        <h2 class="sec-h">Nuestro <span style="color:var(--red)">Equipo</span></h2>
+      </div>
+      <div class="team-grid rev">
+        <div class="team-card">
+          <div class="team-header">
+            <div class="team-avatar" style="background:linear-gradient(135deg,var(--red),#ff6b6b)">DM</div>
+            <div class="team-info">
+              <div class="team-name">Diego Muñoz</div>
+              <div class="team-role">Fundador & CEO</div>
+              <div class="team-date">17 AGO 2025</div>
+            </div>
+          </div>
+        </div>
         
-        // REEMPLAZA ESTA URL con tu URL de Webhook de Producción de n8n en Render
-        const WEBHOOK_URL = 'http://TU_IP_O_DOMINIO:5678/webhook-test/contacto-circuito-cero';
+        <div class="team-card">
+          <div class="team-header">
+            <div class="team-avatar" style="background:linear-gradient(135deg,var(--blue),var(--blue2))">JM</div>
+            <div class="team-info">
+              <div class="team-name">Joel Muñoz</div>
+              <div class="team-role">Diseñador & Coordinador</div>
+              <div class="team-date">17 AGO 2025</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="team-card">
+          <div class="team-header">
+            <div class="team-avatar" style="background:linear-gradient(135deg,#7209b7,#9d4edd)">AR</div>
+            <div class="team-info">
+              <div class="team-name">Andrés Ramírez</div>
+              <div class="team-role">Especialista en Electrónica</div>
+              <div class="team-date">FEB 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        try {
-            const res = await fetch(WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    comando: tipo,
-                    origen: "Web_Control_V1",
-                    auth_key: "CC-99-ENG"
-                })
-            });
+<footer>
+  <div class="f-in">
+    <div class="f-top">
+      <div><div class="f-logo"><span class="c">CIRCUITO</span> <span class="z">CERO</span><sup>®</sup></div><p class="f-desc">Plataforma educativa + tienda de electrónica. E-VOLT → EN CORTO → CIRCUITO CERO. México 2025-2026.</p></div>
+      <div class="f-col"><h4>Plataforma</h4><ul><li><a href="#educacion">Educación</a></li><li><a href="#tienda">Tienda</a></li><li><a href="#wiki">Wikipedia</a></li><li><a href="#quienes">Equipo</a></li></ul></div>
+      <div class="f-col"><h4>Categorías</h4><ul><li><a href="#tienda">Playeras</a></li><li><a href="#tienda">Tazas</a></li><li><a href="#tienda">Circuitos</a></li><li><a href="#tienda">Piezas 3D</a></li></ul></div>
+      <div class="f-col"><h4>Social</h4><ul><li><a href="https://www.youtube.com/@circuitocero" target="_blank">YouTube @circuitocero</a></li><li><a href="#quienes">Nosotros</a></li><li><a href="#" onclick="alert('Contacto: info@circuitocero.mx')">Contacto</a></li></ul></div>
+    </div>
+    <div class="f-bot">
+      <span>CIRCUITO CERO® 2025-2026 — Todos los derechos reservados. Hecho en México.</span>
+      <a href="https://www.youtube.com/@circuitocero" target="_blank" style="color:rgba(255,255,255,.38);font-family:var(--mono);font-size:.7rem;text-decoration:none;">@circuitocero en YouTube</a>
+    </div>
+  </div>
+</footer>
 
-            if (res.ok) {
-                escribirLog(`<span style="color:white">ÉXITO: n8n recibió la señal.</span>`);
-            } else {
-                escribirLog(`<span style="color:orange">ERROR: Servidor ocupado o URL inválida.</span>`);
-            }
-        } catch (err) {
-            escribirLog(`<span style="color:red">FALLO CRÍTICO: No hay conexión con el servidor.</span>`);
-        }
-    }
+<script>
+// Datos de productos
+const PRODUCTOS={
+  playeras:[
+    {nombre:'Playera CIRCUITO CERO',cat:'Playera',desc:'Algodón 100%, diseño premium',img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=80',precio:29.99},
+    {nombre:'Playera Ley de Ohm',cat:'Playera',desc:'Fórmula V=IR en diseño minimalista',img:'https://images.unsplash.com/photo-1503341291549-8d766f8db3dc?w=400&q=80',precio:32.99},
+    {nombre:'Playera RGB LED',cat:'Playera',desc:'Con códigos en espalda',img:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80',precio:34.99},
+  ],
+  tazas:[
+    {nombre:'Taza Circuito PCB',cat:'Taza',desc:'Diseño circuito impreso',img:'https://images.unsplash.com/photo-1559056199-641a0ac8b3f4?w=400&q=80',precio:16.99},
+    {nombre:'Taza Electrónica 101',cat:'Taza',desc:'Símbolos de electrónica',img:'https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=400&q=80',precio:17.99},
+    {nombre:'Taza Arduino Code',cat:'Taza',desc:'Código Arduino grabado',img:'https://images.unsplash.com/photo-1556742208-999c70bf8de1?w=400&q=80',precio:18.99},
+  ],
+  circuitos:[
+    {nombre:'Kit Parpadeo LED',cat:'Circuito',desc:'Arduino + resistencias + LED',img:'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&q=80',precio:45.99},
+    {nombre:'Circuito Semáforo',cat:'Circuito',desc:'Tres LED con lógica',img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80',precio:59.99},
+    {nombre:'Robot Seguidor Línea',cat:'Circuito',desc:'Arduino + sensores + motores',img:'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=80',precio:129.99},
+  ],
+  piezas3d:[
+    {nombre:'Caja ESP32 3D',cat:'Pieza 3D',desc:'Estuche impreso en PLA',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=80',precio:24.99},
+    {nombre:'Soporte Arduino',cat:'Pieza 3D',desc:'Plataforma de montaje',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=80',precio:32.99},
+    {nombre:'Carcasa Robótica',cat:'Pieza 3D',desc:'Chassis para robots',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=80',precio:89.99},
+  ]
+};
+
+// Videos de YouTube
+const VIDEOS=[
+  {id:'dQw4w9WgXcQ',title:'Introducción a Electrónica'},
+  {id:'9No-FIEFjlU',title:'Ley de Ohm Explicada'},
+  {id:'aqvDTCpNRig',title:'Circuitos en Serie'},
+  {id:'1gNPnvWEwq0',title:'Diodos y Rectificación'},
+  {id:'2ggkvyD0sAE',title:'Transistores BJT'},
+  {id:'4sJy2R2aD5s',title:'Op-Amps'},
+  {id:'5VyrehIGbow',title:'Arduino Básico'},
+  {id:'oaf_zQcrg7E',title:'Circuitos Digitales'},
+];
+
+// Libros de electrónica
+const LIBROS=[
+  'The Art of Electronics','Horowitz & Hill','Electronic Devices - Floyd','Maquinas Electricas','Circuitos Eléctricos','Semiconductores','Microcontroladores','Sistemas Digitales',
+  'Electronica Industrial','Telecomunicaciones','Señales y Sistemas','Física de Semiconductores','Componentes Electrónicos','Diseño PCB','Protección Eléctrica',
+  'Transformadores','Motores DC','Automatización','Control Industrial','SCADA','PLC Siemens','Python IoT','Redes Industriales','Energía Solar',
+  'Baterías','Fuentes Conmutadas','Amplificadores','Filtros Activos','Sensores','Actuadores','Robótica','Visión Artificial','Machine Learning Hardware'
+];
+
+let productosFiltrados=Object.values(PRODUCTOS).flat();
+
+function renderProductos(productos){
+  const html=productos.map((p,i)=>`
+    <div class="card rev d${(i%8)+1}">
+      <img class="card-img" src="${p.img}" alt="${p.nombre}">
+      <div class="card-badge">${p.cat}</div>
+      <div class="card-body">
+        <div class="card-cat">${p.cat.toUpperCase()}</div>
+        <div class="card-title">${p.nombre}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-price">$${p.precio}</div>
+        <button class="card-btn" onclick="alert('Producto agregado al carrito: ${p.nombre}')">Comprar</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('tienda-grid').innerHTML=html;
+}
+
+function filtrarProductos(cat,btn){
+  document.querySelectorAll('.filtros .fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let prods=[];
+  if(cat==='todos'){prods=Object.values(PRODUCTOS).flat();}
+  else{prods=PRODUCTOS[cat]||[];}
+  renderProductos(prods);
+}
+
+// Renderizar videos
+function renderVideos(){
+  const html=VIDEOS.map(v=>`
+    <div class="video-card">
+      <div class="video-thumb">
+        <iframe src="https://www.youtube.com/embed/${v.id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="video-info">
+        <div class="video-title">${v.title}</div>
+        <div class="video-channel">@circuitocero</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('videos-grid').innerHTML=html;
+}
+
+// Renderizar libros
+function renderLibros(){
+  const html=LIBROS.map((libro,i)=>`
+    <div class="book-card rev d${(i%8)+1}">
+      <div class="book-icon">📚</div>
+      <div class="book-title">${libro}</div>
+      <div class="book-author">Libro ${i+1}/30</div>
+    </div>
+  `).join('');
+  document.getElementById('books-grid').innerHTML=html;
+}
+
+// Wikipedia search
+async function searchWikipedia(){
+  const query=document.getElementById('wiki-search').value.trim();
+  if(!query)return;
+  
+  const out=document.getElementById('wiki-result');
+  out.innerHTML='<p>Buscando...</p>';
+  
+  try{
+    const res=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`);
+    if(!res.ok)throw new Error('No encontrado');
+    const data=await res.json();
+    out.innerHTML=`
+      <h4 style="color:var(--red);margin-bottom:.5rem;font-family:var(--display);font-weight:800;">${data.title}</h4>
+      <p style="margin-bottom:.8rem;">${data.extract||'Sin descripción'}</p>
+      <a href="${data.content_urls.desktop.page}" target="_blank" style="color:var(--blue3);text-decoration:underline;">Leer artículo completo →</a>
+    `;
+  }catch(e){
+    out.innerHTML='<p style="color:#ff6b6b;">Concepto no encontrado. Intenta con otro término.</p>';
+  }
+}
+
+// Inicializar
+renderProductos(productosFiltrados);
+renderVideos();
+renderLibros();
+
+// Cursor personalizado
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('a,button,.card,.video-card,.book-card,.team-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cur-big'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-big'));
+});
+
+// Scroll progress
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement,sc=h.scrollTop,sh=h.scrollHeight-h.clientHeight;
+  document.getElementById('prog').style.width=(sc/sh*100)+'%';
+  document.getElementById('main-nav').classList.toggle('scrolled',sc>40);
+});
+
+// Reveal animations
+const rObs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in');}),{threshold:.1});
+document.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
+
+// Timeline animation
+const tlObs=new IntersectionObserver(([e])=>{
+  if(e.isIntersecting){
+    document.getElementById('tl-line')?.classList.add('drawn');
+    [0,1,2].forEach(j=>setTimeout(()=>document.getElementById(`dot${j}`)?.classList.add('pop'),(j+1)*400));
+    tlObs.disconnect();
+  }
+},{threshold:.2});
+const tl=document.querySelector('.timeline');
+if(tl)tlObs.observe(tl);
+
+// Clock
+const DS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],MS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+function tick(){
+  const n=new Date();
+  document.getElementById('clock-time').textContent=[n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+  document.getElementById('clock-date').textContent=`${DS[n.getDay()]} ${String(n.getDate()).padStart(2,'0')} ${MS[n.getMonth()]} ${n.getFullYear()}`;
+}
+tick();
+setInterval(tick,1000);
+
+// Canvas background
+const cv=document.getElementById('pcanvas'),cx2=cv.getContext('2d');
+let pw=cv.width=innerWidth,ph=cv.height=innerHeight;
+window.addEventListener('resize',()=>{pw=cv.width=innerWidth;ph=cv.height=innerHeight;});
+const pts=Array.from({length:65},()=>({x:Math.random()*pw,y:Math.random()*ph,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.2+.3,a:Math.random()*.35+.1,c:Math.random()>.6?'230,57,70':Math.random()>.5?'29,53,87':'168,218,220'}));
+(function draw(){
+  cx2.clearRect(0,0,pw,ph);
+  pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=pw;if(p.x>pw)p.x=0;if(p.y<0)p.y=ph;if(p.y>ph)p.y=0;cx2.beginPath();cx2.arc(p.x,p.y,p.r,0,Math.PI*2);cx2.fillStyle=`rgba(${p.c},${p.a})`;cx2.fill();});
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<95){cx2.beginPath();cx2.moveTo(pts[i].x,pts[i].y);cx2.lineTo(pts[j].x,pts[j].y);cx2.strokeStyle=`rgba(29,53,87,${.035*(1-d/95)})`;cx2.lineWidth=.5;cx2.stroke();}}
+  requestAnimationFrame(draw);
+})();
 </script>
-
 </body>
 </html>
