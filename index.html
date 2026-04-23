@@ -3,102 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Circuito Cero | IA Hub</title>
+    <title>Circuito Cero - Control de Ingeniería</title>
     <style>
-        :root { --rojo: #ff0000; --negro: #121212; --blanco: #ffffff; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--blanco); }
-        
-        /* Estilo del Chat */
-        #chat-window { position: fixed; bottom: 85px; right: 20px; width: 340px; height: 480px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 2000; border: 1px solid #eee; overflow: hidden; }
-        .chat-header { background: var(--rojo); color: white; padding: 15px; font-weight: bold; text-align: center; }
-        #messages { flex: 1; padding: 15px; overflow-y: auto; font-size: 14px; background: #fefefe; }
-        .chat-input { padding: 10px; border-top: 1px solid #eee; display: flex; }
-        .chat-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 10px; outline: none; }
-        
-        #chat-toggle { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: var(--rojo); color: white; border: none; cursor: pointer; font-size: 1.5rem; box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
-        
-        .msg-ia { background: #f1f1f1; padding: 10px; border-radius: 10px; margin: 5px 0; border-left: 4px solid var(--rojo); }
-        .msg-user { background: #ffebeb; padding: 10px; border-radius: 10px; margin: 5px 0; text-align: right; }
+        :root {
+            --rojo: #ff0000;
+            --negro: #000000;
+            --blanco: #ffffff;
+            --gris: #f4f4f4;
+            --consola: #1a1a1a;
+        }
+
+        body { font-family: 'Courier New', Courier, monospace; margin: 0; background: var(--gris); }
+
+        header { background: var(--negro); color: var(--blanco); padding: 1rem; text-align: center; border-bottom: 4px solid var(--rojo); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 1rem; background: var(--blanco); border: 2px solid var(--negro); box-shadow: 10px 10px 0px var(--rojo); }
+
+        .terminal { background: var(--consola); color: #00ff00; padding: 1rem; border-radius: 5px; height: 150px; overflow-y: auto; margin-bottom: 1rem; font-size: 0.9rem; }
+
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .btn { padding: 15px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.2s; }
+        .btn-check { background: var(--negro); color: var(--blanco); }
+        .btn-alert { background: var(--rojo); color: var(--blanco); }
+        .btn:hover { opacity: 0.8; transform: scale(0.98); }
+
+        .status-light { display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #555; margin-right: 5px; }
+        .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
     </style>
 </head>
 <body>
 
-    <div id="chat-window">
-        <div class="chat-header">🤖 CERO-BOT INTERACTIVO</div>
-        <div id="messages">
-            <p><i>Haz clic en el robot para cargar mi cerebro...</i></p>
-        </div>
-        <div class="chat-input">
-            <input type="text" id="user-input" placeholder="Pregunta sobre ingeniería...">
-            <button id="send-btn" style="background:var(--rojo); color:white; border:none; padding:10px; border-radius:10px; margin-left:5px; cursor:pointer;">↑</button>
-        </div>
+<header>
+    <h1>CIRCUITO CERO // AGENTE N8N</h1>
+</header>
+
+<div class="container">
+    <h3><span class="status-light online"></span>SISTEMA OPERATIVO</h3>
+    <div class="terminal" id="log">
+        > Sistema listo...<br>
+        > Esperando comando del ingeniero...
     </div>
-    
-    <button id="chat-toggle">🤖</button>
 
-    <script type="module">
-        import * as webllm from "https://esm.run/@mlc-ai/web-llm";
+    <div class="controls">
+        <button class="btn btn-check" onclick="enviarComando('CHECK_SISTEMA')">Verificar Red</button>
+        <button class="btn btn-alert" onclick="enviarComando('ALERTA_MANTENIMIENTO')">Reportar Falla</button>
+    </div>
+</div>
 
-        // --- AQUÍ PERSONALIZAS LO QUE QUIERES QUE DIGA ---
-        const INSTRUCCIONES_PERSONALIZADAS = `
-            Eres Cero-Bot, la IA oficial de Circuito Cero. 
-            Tu creador es un experto en Mecatrónica de México. 
-            Misión: Ayudar a estudiantes con Cálculo, Metrología y Electrónica.
-            Personalidad: Eres técnico pero muy amable. 
-            Dato importante: Promueve siempre el canal de YouTube @circuitocero y la tienda de componentes.
-            Si no sabes algo, di que lo revisen en los videos del canal.
-        `;
+<script>
+    const terminal = document.getElementById('log');
 
-        let engine;
-        const messagesDiv = document.getElementById('messages');
-        const userInput = document.getElementById('user-input');
+    function escribirLog(mensaje) {
+        const p = document.createElement('div');
+        p.innerHTML = `> ${new Date().toLocaleTimeString()}: ${mensaje}`;
+        terminal.appendChild(p);
+        terminal.scrollTop = terminal.scrollHeight;
+    }
 
-        // Función de Voz
-        function hablar(texto) {
-            window.speechSynthesis.cancel();
-            const mensaje = new SpeechSynthesisUtterance(texto);
-            mensaje.lang = 'es-MX';
-            window.speechSynthesis.speak(mensaje);
-        }
+    async function enviarComando(tipo) {
+        escribirLog(`Iniciando ${tipo}...`);
+        
+        // REEMPLAZA ESTA URL con tu URL de Webhook de Producción de n8n en Render
+        const WEBHOOK_URL = 'http://TU_IP_O_DOMINIO:5678/webhook-test/contacto-circuito-cero';
 
-        document.getElementById('chat-toggle').onclick = async () => {
-            const win = document.getElementById('chat-window');
-            win.style.display = win.style.display === 'none' ? 'flex' : 'none';
-
-            if (!engine) {
-                messagesDiv.innerHTML += "<p><i>Cargando Llama 3 en tu navegador... (Esto solo se hace una vez)</i></p>";
-                try {
-                    // Usamos Llama-3-8B optimizada para web
-                    engine = await webllm.CreateEngine("Llama-3-8B-Instruct-v0.1-q4f16_1-MLC");
-                    messagesDiv.innerHTML += "<p style='color:green'><b>[SISTEMA LISTO]</b></p>";
-                    hablar("Sistema de Circuito Cero activado. ¿Qué vamos a construir hoy?");
-                } catch (e) {
-                    messagesDiv.innerHTML += "<p style='color:red'>Error: Tu navegador no tiene WebGPU activo.</p>";
-                }
-            }
-        };
-
-        document.getElementById('send-btn').onclick = async () => {
-            const text = userInput.value;
-            if (!text || !engine) return;
-
-            messagesDiv.innerHTML += `<div class="msg-user"><b>Tú:</b> ${text}</div>`;
-            userInput.value = "";
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            const chunks = await engine.chat.completions.create({
-                messages: [
-                    { role: "system", content: INSTRUCCIONES_PERSONALIZADAS },
-                    { role: "user", content: text }
-                ]
+        try {
+            const res = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    comando: tipo,
+                    origen: "Web_Control_V1",
+                    auth_key: "CC-99-ENG"
+                })
             });
 
-            const respuesta = chunks.choices[0].message.content;
-            messagesDiv.innerHTML += `<div class="msg-ia"><b>Cero-Bot:</b> ${respuesta}</div>`;
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            hablar(respuesta);
-        };
-    </script>
+            if (res.ok) {
+                escribirLog(`<span style="color:white">ÉXITO: n8n recibió la señal.</span>`);
+            } else {
+                escribirLog(`<span style="color:orange">ERROR: Servidor ocupado o URL inválida.</span>`);
+            }
+        } catch (err) {
+            escribirLog(`<span style="color:red">FALLO CRÍTICO: No hay conexión con el servidor.</span>`);
+        }
+    }
+</script>
+
 </body>
 </html>
