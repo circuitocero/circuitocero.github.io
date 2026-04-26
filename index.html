@@ -8,382 +8,224 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <style>
-/* ══════════════════════════════════════════
-   TOKENS
-══════════════════════════════════════════ */
 :root {
-  --red:    #e63946;
-  --red2:   #c1121f;
-  --navy:   #1d3557;
-  --navy2:  #457b9d;
-  --teal:   #a8dadc;
-  --white:  #ffffff;
-  --off:    #f4f6f9;
-  --off2:   #eef2f7;
-  --text:   #0f172a;
-  --muted:  #64748b;
-  --border: rgba(33,34,38,.06);
-  --font:   'Outfit',    sans-serif;
-  --disp:   'Syne',      sans-serif;
-  --mono:   'IBM Plex Mono', monospace;
-  --ease:   cubic-bezier(.16,1,.3,1);
-  --ease-out-expo: cubic-bezier(.19,1,.22,1);
+  --red:#e63946;--red2:#c1121f;--navy:#1d3557;--navy2:#457b9d;--teal:#a8dadc;
+  --white:#ffffff;--off:#f4f6f9;--off2:#eef2f7;--text:#0f172a;--muted:#64748b;
+  --border:rgba(33,34,38,.06);--font:'Outfit',sans-serif;--disp:'Syne',sans-serif;
+  --mono:'IBM Plex Mono',monospace;--ease:cubic-bezier(.16,1,.3,1);
+  --ease-out-expo:cubic-bezier(.19,1,.22,1);
 }
-
-/* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;overscroll-behavior-y:contain;}
 body{background:var(--white);color:var(--text);font-family:var(--font);overflow-x:hidden;cursor:none;min-height:100vh;}
 img{max-width:100%;height:auto;}
 ul[class]{list-style:none;}
-figure{margin:0;}
-input,button,select{font-family:inherit;font-size:inherit;}
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-thumb{background:var(--red);border-radius:3px;}
 
-/* ── CUSTOM CURSOR ── */
 #cur{position:fixed;width:10px;height:10px;background:var(--red);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s,background .3s;mix-blend-mode:multiply;}
 #cur-ring{position:fixed;width:38px;height:38px;border:1.5px solid rgba(230,57,70,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .4s var(--ease),height .4s var(--ease),opacity .3s;}
 body.cur-big #cur{width:48px;height:48px;background:rgba(230,57,70,.12);}
 body.cur-big #cur-ring{opacity:0;}
-
-/* ── SCROLL PROGRESS ── */
 #prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),#ff6b6b,var(--navy));z-index:600;width:0%;transition:width .1s linear;}
 
-/* ══════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════ */
-.header-wrapper{
-  position:fixed;top:0;left:0;right:0;z-index:400;
-  transition:translate .25s ease;
-}
-/* Hidey bar — hides when scrolled down */
+.header-wrapper{position:fixed;top:0;left:0;right:0;z-index:400;transition:translate .25s ease;}
 .header-wrapper.hide{translate:0 -100%;}
-
-header{
-  display:flex;align-items:center;gap:2rem;
-  padding:0.55rem clamp(1.5rem,5vw,3rem);
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-  transition:box-shadow .3s;
-}
+header{display:flex;align-items:center;gap:2rem;padding:0.55rem clamp(1.5rem,5vw,3rem);background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:box-shadow .3s;}
 header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
-
-/* Logo */
-.logo{
-  font-family:var(--disp);font-weight:800;font-size:1.35rem;
-  letter-spacing:-.03em;text-decoration:none;cursor:pointer;user-select:none;
-  white-space:nowrap;
-}
+.logo{font-family:var(--disp);font-weight:800;font-size:1.35rem;letter-spacing:-.03em;text-decoration:none;cursor:pointer;user-select:none;white-space:nowrap;}
 .logo .lc{color:var(--navy);}
 .logo .lr{color:var(--red);}
 .logo sup{font-size:.42em;color:var(--muted);vertical-align:super;margin-left:1px;}
-
-/* Nav links */
 .nav-links{display:flex;gap:.2rem;list-style:none;margin-left:auto;}
-.nav-links a{
-  color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:600;
-  font-family:var(--mono);padding:.55em 1.1em;border-radius:999px;
-  transition:color .2s,background .2s;white-space:nowrap;
-}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:600;font-family:var(--mono);padding:.55em 1.1em;border-radius:999px;transition:color .2s,background .2s;white-space:nowrap;}
 .nav-links a:hover{color:var(--text);background:rgba(183,191,217,.2);}
-
-/* Nav CTA button */
-.nav-cta{
-  display:flex;align-items:center;gap:.4rem;
-  padding:.55em 1.4em;border-radius:999px;
-  background:var(--text);color:var(--white);border:none;
-  font-size:.82rem;font-weight:700;font-family:var(--disp);
-  cursor:pointer;white-space:nowrap;
-  transition:background .2s;
-}
+.nav-cta{display:flex;align-items:center;gap:.4rem;padding:.55em 1.4em;border-radius:999px;background:var(--text);color:var(--white);border:none;font-size:.82rem;font-weight:700;font-family:var(--disp);cursor:pointer;white-space:nowrap;transition:background .2s;}
 .nav-cta:hover{background:var(--navy);}
 .material-symbols-outlined{font-size:1.1em!important;vertical-align:middle;}
-
-/* Hamburger */
-.ham-btn{
-  display:none;padding:.55em;border-radius:999px;
-  background:none;border:none;cursor:pointer;
-  transition:background .2s;
-}
+.ham-btn{display:none;padding:.55em;border-radius:999px;background:none;border:none;cursor:pointer;transition:background .2s;}
 .ham-btn:hover{background:rgba(183,191,217,.2);}
 #ham-cb{display:none;}
-
 @media(max-width:860px){
   .nav-links,.nav-cta{display:none;}
   .ham-btn{display:flex;align-items:center;margin-left:auto;}
-  #ham-cb:checked ~ .nav-links{
-    display:flex;flex-direction:column;gap:0;
-    position:fixed;inset:0;top:60px;
-    background:rgba(255,255,255,.97);
-    padding:1.5rem 0;z-index:300;
-  }
-  #ham-cb:checked ~ .nav-links a{
-    padding:1.2rem 2rem;border-radius:0;font-size:1.4rem;
-    border-bottom:1px solid rgba(33,34,38,.05);
-  }
+  #ham-cb:checked ~ .nav-links{display:flex;flex-direction:column;gap:0;position:fixed;inset:0;top:60px;background:rgba(255,255,255,.97);padding:1.5rem 0;z-index:300;}
+  #ham-cb:checked ~ .nav-links a{padding:1.2rem 2rem;border-radius:0;font-size:1.4rem;border-bottom:1px solid rgba(33,34,38,.05);}
 }
 
-/* ══════════════════════════════════════════
-   HERO / WELCOME
-══════════════════════════════════════════ */
-#welcome{
-  min-height:100dvh;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  align-items:center;
-  gap:4rem;
-  padding:clamp(5.5rem,10vw,7rem) clamp(1.5rem,5vw,3rem) clamp(3rem,6vw,4rem);
-  position:relative;z-index:1;
-  max-width:1400px;margin:0 auto;
-  /* Ring particles background */
-  --ring-radius:150;
-  --ring-thickness:600;
-  --particle-count:80;
-  --particle-rows:25;
-  --particle-size:2;
-  --particle-color:navy;
-  --particle-min-alpha:.08;
-  --particle-max-alpha:.8;
-  --seed:200;
-}
-@supports(background:paint(ring-particles)){
-  #welcome{background-image:paint(ring-particles);}
-}
-@media(max-width:940px){
-  #welcome{grid-template-columns:1fr;padding-top:5.5rem;gap:2.5rem;}
-  .hero-right{display:none;}
-}
-
-/* Eyebrow */
-.htag{
-  display:inline-flex;align-items:center;gap:10px;margin-bottom:1.75rem;
-  opacity:0;animation:fadeUp .8s var(--ease) .1s forwards;
-}
+#welcome{min-height:100dvh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:clamp(5.5rem,10vw,7rem) clamp(1.5rem,5vw,3rem) clamp(3rem,6vw,4rem);position:relative;z-index:1;max-width:1400px;margin:0 auto;}
+@media(max-width:940px){#welcome{grid-template-columns:1fr;padding-top:5.5rem;gap:2.5rem;}.hero-right{display:none;}}
+.htag{display:inline-flex;align-items:center;gap:10px;margin-bottom:1.75rem;opacity:0;animation:fadeUp .8s var(--ease) .1s forwards;}
 .htag-line{width:30px;height:2px;background:var(--red);}
 .htag-txt{font-family:var(--mono);font-size:.7rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;}
 .hdot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 1.4s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
-
-/* Main heading */
-.hero-h1{
-  font-family:var(--disp);font-size:clamp(2.6rem,7vw,5.8rem);
-  font-weight:800;line-height:.9;letter-spacing:-3px;
-  margin-bottom:1.5rem;
-}
+.hero-h1{font-family:var(--disp);font-size:clamp(2.6rem,7vw,5.8rem);font-weight:800;line-height:.9;letter-spacing:-3px;margin-bottom:1.5rem;}
 .h1-row{display:block;overflow:hidden;}
-.h1-word{
-  display:block;
-  transform:translateY(110%);
-  animation:lineUp .9s var(--ease) forwards;
-}
+.h1-word{display:block;transform:translateY(110%);animation:lineUp .9s var(--ease) forwards;}
 .h1-word.d1{animation-delay:.28s;}
 .h1-word.d2{color:var(--red);animation-delay:.44s;}
-.h1-word.d3{
-  color:var(--navy);
-  font-size:clamp(1.2rem,3vw,2.5rem);
-  letter-spacing:-1px;font-weight:600;
-  animation-delay:.6s;
-}
+.h1-word.d3{color:var(--navy);font-size:clamp(1.2rem,3vw,2.5rem);letter-spacing:-1px;font-weight:600;animation-delay:.6s;}
 @keyframes lineUp{from{transform:translateY(110%);}to{transform:none;}}
-
-/* Sub copy */
-.hero-sub{
-  font-size:clamp(.9rem,1.8vw,1.05rem);color:var(--muted);line-height:1.8;
-  max-width:480px;margin-bottom:2.5rem;
-  opacity:0;animation:fadeUp .8s var(--ease) .72s forwards;
-}
-
-/* CTAs */
-.hero-btns{
-  display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:3rem;
-  opacity:0;animation:fadeUp .8s var(--ease) .88s forwards;
-}
+.hero-sub{font-size:clamp(.9rem,1.8vw,1.05rem);color:var(--muted);line-height:1.8;max-width:480px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s var(--ease) .72s forwards;}
+.hero-btns{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:3rem;opacity:0;animation:fadeUp .8s var(--ease) .88s forwards;}
 @media(max-width:500px){.hero-btns{flex-direction:column;}}
-
-.btn-p{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:13px 28px;border-radius:999px;
-  background:var(--text);color:var(--white);border:none;
-  font-size:.9rem;font-weight:700;font-family:var(--disp);
-  cursor:pointer;text-decoration:none;
-  transition:background .2s,transform .2s,box-shadow .2s;
-}
+.btn-p{display:inline-flex;align-items:center;gap:.4rem;padding:13px 28px;border-radius:999px;background:var(--text);color:var(--white);border:none;font-size:.9rem;font-weight:700;font-family:var(--disp);cursor:pointer;text-decoration:none;transition:background .2s,transform .2s,box-shadow .2s;}
 .btn-p:hover{background:var(--navy);transform:translateY(-2px);box-shadow:0 8px 28px rgba(29,53,87,.25);}
-
-.btn-s{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:13px 28px;border-radius:999px;
-  background:rgba(183,191,217,.12);color:var(--text);
-  border:1px solid rgba(33,34,38,.1);
-  font-size:.9rem;font-weight:600;font-family:var(--font);
-  cursor:pointer;text-decoration:none;
-  transition:background .2s,transform .2s;
-}
+.btn-s{display:inline-flex;align-items:center;gap:.4rem;padding:13px 28px;border-radius:999px;background:rgba(183,191,217,.12);color:var(--text);border:1px solid rgba(33,34,38,.1);font-size:.9rem;font-weight:600;font-family:var(--font);cursor:pointer;text-decoration:none;transition:background .2s,transform .2s;}
 .btn-s:hover{background:rgba(183,191,217,.24);transform:translateY(-2px);}
-
-/* Stats */
-.hstats{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;
-  max-width:460px;
-  opacity:0;animation:fadeUp .8s var(--ease) 1.04s forwards;
-}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:460px;opacity:0;animation:fadeUp .8s var(--ease) 1.04s forwards;}
 @media(max-width:500px){.hstats{grid-template-columns:1fr;}}
-.hstat{
-  background:var(--off);border-radius:10px;padding:1rem 1.1rem;
-  border-left:3px solid var(--red);
-  transition:transform .3s,box-shadow .3s;
-}
+.hstat{background:var(--off);border-radius:10px;padding:1rem 1.1rem;border-left:3px solid var(--red);transition:transform .3s,box-shadow .3s;}
 .hstat:nth-child(2){border-color:var(--navy);}
 .hstat:nth-child(3){border-color:#2a9d8f;}
 .hstat:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .hstat-n{font-family:var(--disp);font-size:1.6rem;font-weight:800;line-height:1;}
-.red{color:var(--red)!important;}
-.blue{color:var(--navy)!important;}
-.green{color:#2a9d8f!important;}
+.red{color:var(--red)!important;}.blue{color:var(--navy)!important;}.green{color:#2a9d8f!important;}
 .hstat-l{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:3px;letter-spacing:.1em;text-transform:uppercase;}
-
-/* ── Hero right: PLC ── */
-.hero-right{
-  position:relative;
-  opacity:0;animation:fadeUp .9s var(--ease) .5s forwards;
-}
-.hero-img-wrap{
-  position:relative;border-radius:16px;overflow:hidden;
-  height:560px;
-  box-shadow:0 32px 80px rgba(0,0,0,.22);
-}
+.hero-right{position:relative;opacity:0;animation:fadeUp .9s var(--ease) .5s forwards;}
+.hero-img-wrap{position:relative;border-radius:16px;overflow:hidden;height:560px;box-shadow:0 32px 80px rgba(0,0,0,.22);}
 .hero-img-wrap svg{width:100%;height:100%;display:block;}
-.hero-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(29,53,87,.1),rgba(230,57,70,.06));
-  pointer-events:none;
-}
-/* floating badge */
-.hbadge{
-  position:absolute;bottom:2rem;left:2rem;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(12px);
-  border-radius:10px;padding:.9rem 1.4rem;
-  border-left:4px solid var(--red);
-  animation:floatY 4s ease-in-out infinite;
-}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(29,53,87,.1),rgba(230,57,70,.06));pointer-events:none;}
+.hbadge{position:absolute;bottom:2rem;left:2rem;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-radius:10px;padding:.9rem 1.4rem;border-left:4px solid var(--red);animation:floatY 4s ease-in-out infinite;}
 @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 .hb-n{font-family:var(--disp);font-size:1.8rem;font-weight:800;color:var(--red);line-height:1;}
 .hb-t{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:2px;letter-spacing:.1em;text-transform:uppercase;}
 
-/* ══════════════════════════════════════════
-   PRODUCT / ICONS STRIP  (Antigravity style)
-══════════════════════════════════════════ */
-#product-strip{
-  overflow:hidden;
-  padding:0;
-  position:relative;z-index:1;
-  border-top:1px solid var(--border);
-}
-.product-heading{
-  max-width:1200px;margin:0 auto;
-  padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,3rem) 2rem;
-}
-.product-heading h2{
-  font-family:var(--disp);font-size:clamp(1.6rem,4vw,2.8rem);
-  font-weight:800;letter-spacing:-2px;line-height:1;
-  max-width:30ch;margin-bottom:.5rem;
-}
-.product-heading h2 .tw{
-  /* typewriter effect — pure CSS with @keyframes */
-  display:inline;
-  background:linear-gradient(90deg,var(--text) 0 0) 0/0 no-repeat transparent;
-  -webkit-background-clip:text;color:transparent;
-  animation:type-in 2.4s var(--ease-out-expo) 1s both;
-}
-@keyframes type-in{from{background-size:0 100%;}to{background-size:100% 100%;}}
-
-.icons-strip{
-  display:flex;align-items:center;gap:.6rem;
-  height:clamp(16rem,28vb,22rem);
-  padding-inline:clamp(1.5rem,5vw,3rem);
-  overflow-x:clip;
-  /* slide-in animation */
-  animation:slideInRight 1s var(--ease-out-expo) 1.2s both;
-}
+#product-strip{overflow:hidden;padding:0;position:relative;z-index:1;border-top:1px solid var(--border);}
+.product-heading{max-width:1200px;margin:0 auto;padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,3rem) 2rem;}
+.product-heading h2{font-family:var(--disp);font-size:clamp(1.6rem,4vw,2.8rem);font-weight:800;letter-spacing:-2px;line-height:1;max-width:30ch;margin-bottom:.5rem;}
+.icons-strip{display:flex;align-items:center;gap:.6rem;height:clamp(16rem,28vb,22rem);padding-inline:clamp(1.5rem,5vw,3rem);overflow-x:clip;animation:slideInRight 1s var(--ease-out-expo) 1.2s both;}
 @keyframes slideInRight{from{translate:100% 0;}to{translate:none;}}
-
-.icon-pill{
-  flex:0 0 clamp(3.5rem,8vw,5.5rem);
-  aspect-ratio:1;border-radius:50%;
-  background:rgba(183,191,217,.1);
-  border:1px solid var(--border);
-  backdrop-filter:blur(5px);
-  display:grid;place-content:center;
-  animation:wobble 4s ease infinite alternate;
-  animation-delay:calc(var(--i,0) * -.8s);
-}
+.icon-pill{flex:0 0 clamp(3.5rem,8vw,5.5rem);aspect-ratio:1;border-radius:50%;background:rgba(183,191,217,.1);border:1px solid var(--border);backdrop-filter:blur(5px);display:grid;place-content:center;animation:wobble 4s ease infinite alternate;animation-delay:calc(var(--i,0) * -.8s);}
 .icon-pill .material-symbols-outlined{font-size:1.8em!important;color:var(--muted);}
 @keyframes wobble{from{translate:0 60%;}to{translate:0 -60%;}}
 
-/* ══════════════════════════════════════════
-   SECTIONS COMMON
-══════════════════════════════════════════ */
-.sec{
-  padding:clamp(4rem,8vw,6rem) clamp(1.5rem,5vw,3rem);
-  position:relative;z-index:1;
-}
+.sec{padding:clamp(4rem,8vw,6rem) clamp(1.5rem,5vw,3rem);position:relative;z-index:1;}
 .sec.off{background:var(--off);}
 .sec.dark{background:var(--navy);color:var(--white);}
 .inner{max-width:1200px;margin:0 auto;}
-
 .eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:.6rem;}
 .ey-l{width:26px;height:2px;background:var(--red);}
 .ey-t{font-family:var(--mono);font-size:.67rem;color:var(--red);letter-spacing:3px;text-transform:uppercase;}
-.ey-t.lt{color:var(--teal);}
-.ey-l.lt{background:var(--teal);}
-
-.sec-h{
-  font-family:var(--disp);font-size:clamp(1.8rem,5vw,3rem);
-  font-weight:800;letter-spacing:-2px;line-height:1.02;margin-bottom:.8rem;
-}
+.ey-t.lt{color:var(--teal);}.ey-l.lt{background:var(--teal);}
+.sec-h{font-family:var(--disp);font-size:clamp(1.8rem,5vw,3rem);font-weight:800;letter-spacing:-2px;line-height:1.02;margin-bottom:.8rem;}
 .sec-p{color:var(--muted);font-size:clamp(.9rem,1.8vw,1rem);line-height:1.75;max-width:500px;}
-
-/* Reveal on scroll */
-.rev{
-  opacity:0;transform:translateY(48px);
-  transition:opacity .85s var(--ease),transform .85s var(--ease);
-}
+.rev{opacity:0;transform:translateY(48px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
 .rev.in{opacity:1;transform:none;}
 .d1{transition-delay:.05s;}.d2{transition-delay:.13s;}.d3{transition-delay:.21s;}
 .d4{transition-delay:.29s;}.d5{transition-delay:.37s;}.d6{transition-delay:.45s;}
 .d7{transition-delay:.53s;}.d8{transition-delay:.61s;}
-
-/* ── Buttons generic ── */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  padding:13px 30px;border-radius:999px;font-family:var(--disp);
-  font-size:.9rem;font-weight:700;border:none;cursor:pointer;
-  text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 30px;border-radius:999px;font-family:var(--disp);font-size:.9rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s;}
 .btn-red{background:var(--red);color:#fff;box-shadow:0 4px 18px rgba(230,57,70,.25);}
 .btn-red:hover{background:var(--red2);transform:translateY(-2px);box-shadow:0 6px 32px rgba(230,57,70,.45);}
 .btn-outline{background:transparent;color:var(--text);border:2px solid rgba(33,34,38,.15);}
 .btn-outline:hover{background:var(--text);color:#fff;transform:translateY(-2px);}
 
-/* ══════════════════════════════════════════
-   VIDEO SECTION
-══════════════════════════════════════════ */
-.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
-@media(max-width:640px){.video-grid{grid-template-columns:1fr;}}
-.video-card{background:var(--white);border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .3s,box-shadow .3s;}
-.video-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.12);}
-.v-thumb{position:relative;padding-bottom:56.25%;overflow:hidden;}
-.v-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-.v-info{padding:1rem;}
-.v-title{font-family:var(--disp);font-size:.95rem;font-weight:700;margin-bottom:.3rem;}
-.v-chan{font-family:var(--mono);font-size:.68rem;color:var(--muted);}
+/* ══ VIDEO SECTION MEJORADO ══ */
+.videos-header-row {
+  display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;
+}
+.yt-channel-badge {
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:#ff0000;color:#fff;
+  padding:.55em 1.3em;border-radius:999px;
+  font-family:var(--mono);font-size:.75rem;font-weight:700;
+  text-decoration:none;letter-spacing:.5px;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  box-shadow:0 4px 18px rgba(255,0,0,.3);
+}
+.yt-channel-badge:hover{background:#cc0000;transform:translateY(-2px);box-shadow:0 6px 28px rgba(255,0,0,.45);}
+.yt-icon{font-size:1.15em!important;}
 
-/* ══════════════════════════════════════════
-   BOOKS
-══════════════════════════════════════════ */
+/* Categorías tabs */
+.cat-tabs {
+  display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2rem;
+}
+.cat-tab {
+  background:transparent;border:1.5px solid var(--border);
+  color:var(--muted);padding:7px 18px;border-radius:999px;
+  font-size:.73rem;cursor:pointer;font-family:var(--mono);font-weight:600;
+  transition:all .2s var(--ease);white-space:nowrap;
+}
+.cat-tab.active,.cat-tab:hover{background:var(--red);color:#fff;border-color:var(--red);}
+
+/* Grid masonry-like */
+.video-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.25rem;
+}
+@media(max-width:640px){.video-grid{grid-template-columns:1fr;}}
+
+.video-card {
+  background:var(--white);border-radius:14px;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+  border:1px solid var(--border);
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.video-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.13);border-color:rgba(230,57,70,.15);}
+.video-card:hover .vc-num{color:var(--red);}
+
+/* Thumbnail container — shorts aspect ratio 9:16 */
+.v-thumb {
+  position:relative;
+  /* For shorts: tall ratio. For regular: 16:9 */
+  padding-bottom:56.25%;
+  overflow:hidden;
+  background:#0a0a0a;
+}
+.v-thumb.is-short { padding-bottom:80%; }
+.v-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+
+/* Shorts badge */
+.shorts-badge {
+  position:absolute;top:.6rem;left:.6rem;z-index:2;
+  background:#ff0000;color:#fff;
+  font-family:var(--mono);font-size:.55rem;font-weight:700;
+  padding:3px 8px;border-radius:4px;letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.v-info{padding:1.1rem 1.2rem 1.3rem;flex:1;display:flex;flex-direction:column;gap:.35rem;}
+.vc-top{display:flex;align-items:flex-start;gap:.6rem;}
+.vc-num{
+  font-family:var(--mono);font-size:.65rem;font-weight:700;
+  color:var(--muted);min-width:1.6rem;padding-top:.12rem;
+  transition:color .2s;
+}
+.v-title{font-family:var(--disp);font-size:.92rem;font-weight:700;line-height:1.3;flex:1;}
+.v-meta{display:flex;align-items:center;gap:.5rem;margin-top:.1rem;}
+.v-chan{font-family:var(--mono);font-size:.62rem;color:var(--muted);}
+.v-dot{width:3px;height:3px;border-radius:50%;background:var(--border);}
+
+/* Ver en YouTube link */
+.v-yt-link {
+  display:inline-flex;align-items:center;gap:.3rem;
+  margin-top:.5rem;
+  font-family:var(--mono);font-size:.62rem;color:var(--muted);
+  text-decoration:none;transition:color .2s;
+  align-self:flex-start;
+}
+.v-yt-link:hover{color:#ff0000;}
+.v-yt-link .material-symbols-outlined{font-size:.85em!important;}
+
+/* Count bar */
+.vid-count-bar {
+  display:flex;align-items:center;gap:.7rem;
+  margin-bottom:2rem;
+  font-family:var(--mono);font-size:.72rem;color:var(--muted);
+}
+.vid-count-pill {
+  background:var(--navy);color:#fff;
+  padding:4px 12px;border-radius:999px;
+  font-size:.68rem;font-weight:700;
+}
+
+/* ══ BOOKS ══ */
 .books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.25rem;margin-top:2rem;}
 @media(max-width:500px){.books-grid{grid-template-columns:repeat(2,1fr);}}
 .book-card{background:var(--white);border-radius:10px;padding:1.1rem;text-align:center;transition:transform .3s,box-shadow .3s;border:1px solid var(--border);}
@@ -392,204 +234,90 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .book-title{font-family:var(--disp);font-size:.82rem;font-weight:700;margin-bottom:.2rem;}
 .book-lbl{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
 
-/* ══════════════════════════════════════════
-   WIKIPEDIA
-══════════════════════════════════════════ */
-.wiki-box{
-  background:rgba(255,255,255,.08);backdrop-filter:blur(10px);
-  border-radius:14px;padding:2rem;margin-top:2rem;
-  border:1px solid rgba(255,255,255,.1);
-}
+/* ══ WIKI ══ */
+.wiki-box{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border-radius:14px;padding:2rem;margin-top:2rem;border:1px solid rgba(255,255,255,.1);}
 .wiki-row{display:flex;gap:1rem;flex-wrap:wrap;}
-.wiki-row input{
-  flex:1;min-width:200px;
-  padding:12px 16px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.06);color:#fff;
-  font-size:.9rem;font-family:var(--font);
-  outline:none;transition:border .2s;
-}
+.wiki-row input{flex:1;min-width:200px;padding:12px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#fff;font-size:.9rem;font-family:var(--font);outline:none;transition:border .2s;}
 .wiki-row input:focus{border-color:rgba(255,255,255,.5);}
 .wiki-row input::placeholder{color:rgba(255,255,255,.4);}
-.wiki-row button{
-  padding:12px 28px;border-radius:999px;
-  background:var(--red);color:#fff;border:none;
-  font-weight:700;font-family:var(--disp);cursor:pointer;
-  transition:background .2s,transform .2s;
-}
+.wiki-row button{padding:12px 28px;border-radius:999px;background:var(--red);color:#fff;border:none;font-weight:700;font-family:var(--disp);cursor:pointer;transition:background .2s,transform .2s;}
 .wiki-row button:hover{background:var(--red2);transform:translateY(-1px);}
 #wiki-result{margin-top:1.5rem;color:#fff;font-size:.9rem;line-height:1.7;}
 
-/* ══════════════════════════════════════════
-   SHOP GRID
-══════════════════════════════════════════ */
+/* ══ SHOP ══ */
 .filtros{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0;}
-.fbtn{
-  background:transparent;border:1.5px solid var(--border);
-  color:var(--muted);padding:8px 20px;border-radius:999px;
-  font-size:.76rem;cursor:pointer;font-family:var(--mono);font-weight:600;
-  transition:all .2s var(--ease);
-}
+.fbtn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 20px;border-radius:999px;font-size:.76rem;cursor:pointer;font-family:var(--mono);font-weight:600;transition:all .2s var(--ease);}
 .fbtn.active,.fbtn:hover{background:var(--red);color:#fff;border-color:var(--red);}
-
-.shop-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:1.5px;background:var(--border);
-  border:1.5px solid var(--border);border-radius:16px;overflow:hidden;
-  margin-top:.5rem;
-}
-.card{
-  background:var(--white);cursor:pointer;position:relative;overflow:hidden;
-  display:flex;flex-direction:column;
-  transition:box-shadow .3s;
-}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5px;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-top:.5rem;}
+.card{background:var(--white);cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .3s;}
 .card:hover{box-shadow:0 14px 44px rgba(0,0,0,.12);}
 .card-img{width:100%;height:220px;object-fit:cover;transition:transform .5s var(--ease);}
 .card:hover .card-img{transform:scale(1.07);}
-.card-badge{
-  position:absolute;top:1rem;right:1rem;
-  background:var(--red);color:#fff;padding:5px 11px;
-  border-radius:4px;font-family:var(--mono);font-size:.62rem;font-weight:700;z-index:2;
-}
+.card-badge{position:absolute;top:1rem;right:1rem;background:var(--red);color:#fff;padding:5px 11px;border-radius:4px;font-family:var(--mono);font-size:.62rem;font-weight:700;z-index:2;}
 .card-body{padding:1.3rem;flex:1;display:flex;flex-direction:column;}
 .card-cat{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.35rem;}
 .card-title{font-family:var(--disp);font-size:.98rem;font-weight:800;margin-bottom:.5rem;line-height:1.2;}
 .card-desc{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:.8rem;flex:1;}
 .card-price{font-family:var(--disp);font-size:1.4rem;font-weight:800;color:var(--red);margin-bottom:.9rem;}
-.card-btn{
-  background:var(--text);color:#fff;border:none;padding:10px;
-  border-radius:999px;font-weight:700;font-family:var(--disp);font-size:.76rem;
-  cursor:pointer;transition:background .2s,transform .2s;
-}
+.card-btn{background:var(--text);color:#fff;border:none;padding:10px;border-radius:999px;font-weight:700;font-family:var(--disp);font-size:.76rem;cursor:pointer;transition:background .2s,transform .2s;}
 .card-btn:hover{background:var(--navy);transform:translateY(-1px);}
 
-/* ══════════════════════════════════════════
-   TIMELINE
-══════════════════════════════════════════ */
+/* ══ TIMELINE ══ */
 .timeline{position:relative;margin:3rem 0;}
-.tl-line{
-  position:absolute;left:20px;top:0;width:2px;
-  background:linear-gradient(var(--red),var(--navy));
-  height:0;transition:height 1.6s var(--ease);
-}
+.tl-line{position:absolute;left:20px;top:0;width:2px;background:linear-gradient(var(--red),var(--navy));height:0;transition:height 1.6s var(--ease);}
 .tl-line.drawn{height:100%;}
 .tl-item{display:flex;gap:2.5rem;margin-bottom:3rem;padding-left:3rem;position:relative;}
-.tl-dot{
-  position:absolute;left:12px;top:6px;width:18px;height:18px;border-radius:50%;
-  border:3px solid var(--white);box-shadow:0 0 0 2px var(--red);background:var(--red);
-  transform:scale(0);transition:transform .5s var(--ease);
-}
+.tl-dot{position:absolute;left:12px;top:6px;width:18px;height:18px;border-radius:50%;border:3px solid var(--white);box-shadow:0 0 0 2px var(--red);background:var(--red);transform:scale(0);transition:transform .5s var(--ease);}
 .tl-dot.pop{transform:scale(1);}
 .tl-yr{font-family:var(--mono);font-size:.65rem;color:var(--red);font-weight:700;letter-spacing:2px;margin-bottom:.3rem;}
 .tl-name{font-family:var(--disp);font-size:1.4rem;font-weight:800;margin-bottom:.35rem;}
 .tl-desc{font-size:.86rem;color:var(--muted);line-height:1.7;}
 
-/* ══════════════════════════════════════════
-   TEAM
-══════════════════════════════════════════ */
+/* ══ TEAM ══ */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem;margin-top:2rem;}
-.team-card{
-  background:var(--white);border-radius:14px;padding:1.4rem;
-  border-left:4px solid var(--navy);
-  box-shadow:0 2px 8px rgba(0,0,0,.05);
-  transition:transform .3s,box-shadow .3s;
-}
+.team-card{background:var(--white);border-radius:14px;padding:1.4rem;border-left:4px solid var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.05);transition:transform .3s,box-shadow .3s;}
 .team-card:hover{transform:translateY(-5px);box-shadow:0 10px 28px rgba(0,0,0,.1);}
 .team-h{display:flex;gap:1rem;align-items:flex-start;}
-.team-av{
-  width:52px;height:52px;border-radius:10px;
-  background:linear-gradient(135deg,var(--red),#ff6b6b);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;color:#fff;font-size:1.2rem;flex-shrink:0;
-}
+.team-av{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--red),#ff6b6b);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1.2rem;flex-shrink:0;}
 .team-name{font-family:var(--disp);font-size:1.05rem;font-weight:800;}
 .team-role{font-family:var(--mono);font-size:.72rem;color:var(--muted);font-weight:600;margin-top:.15rem;}
 .team-date{font-family:var(--mono);font-size:.68rem;color:var(--navy);margin-top:.3rem;}
 
-/* ══════════════════════════════════════════
-   WHO (Antigravity "For developers" section)
-══════════════════════════════════════════ */
-#who{
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  position:relative;z-index:1;
-  padding:clamp(2rem,6vw,4rem) clamp(1.5rem,5vw,3rem);
-}
+/* ══ WHO ══ */
+#who{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;padding:clamp(2rem,6vw,4rem) clamp(1.5rem,5vw,3rem);}
 @media(min-width:860px){#who{flex-direction:row;justify-content:space-around;}}
-.who-col{
-  height:40vh;display:grid;place-content:center;gap:1.2rem;
-}
+.who-col{height:40vh;display:grid;place-content:center;gap:1.2rem;}
 @media(min-width:860px){.who-col{height:75vh;}}
-.who-h{
-  font-family:var(--disp);font-size:clamp(1.5rem,4vw,2.4rem);
-  font-weight:800;letter-spacing:-1px;line-height:1.1;
-}
+.who-h{font-family:var(--disp);font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
 .who-h span{color:var(--muted);}
 
-/* ══════════════════════════════════════════
-   BEFORE YOU GO (dark CTA card)
-══════════════════════════════════════════ */
-#byg{
-  padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,3rem);
-  position:relative;z-index:1;
-}
+/* ══ BYG ══ */
+#byg{padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,3rem);position:relative;z-index:1;}
 #byg .inner{max-width:1200px;margin:0 auto;}
-.byg-card{
-  background:var(--text);color:var(--white);
-  border-radius:24px;padding:clamp(2.5rem,5vw,4rem);
-  display:grid;gap:1.5rem;
-  max-height:80vh;
-  /* scale-up on scroll */
-  animation:scaleUp linear both;
-  animation-timeline:view();
-  animation-range:entry 50% entry 100%;
-}
-@supports(animation-timeline:view()){.byg-card{}}
+.byg-card{background:var(--text);color:var(--white);border-radius:24px;padding:clamp(2.5rem,5vw,4rem);display:grid;gap:1.5rem;max-height:80vh;animation:scaleUp linear both;animation-timeline:view();animation-range:entry 50% entry 100%;}
 @keyframes scaleUp{from{scale:.88;}to{scale:1;}}
-.byg-p{
-  font-size:clamp(1.4rem,3.5vw,2.8rem);font-weight:800;
-  font-family:var(--disp);letter-spacing:-1px;line-height:1.1;
-  max-width:22ch;color:var(--white);
-}
-.byg-p .tw2{
-  display:inline;
-  background:linear-gradient(90deg,var(--white) 0 0) 0/0 no-repeat transparent;
-  -webkit-background-clip:text;color:transparent;
-  animation:type-in 2s var(--ease-out-expo) 1.5s both;
-}
+.byg-p{font-size:clamp(1.4rem,3.5vw,2.8rem);font-weight:800;font-family:var(--disp);letter-spacing:-1px;line-height:1.1;max-width:22ch;color:var(--white);}
 .byg-btns{display:flex;gap:.6rem;flex-wrap:wrap;}
 .byg-btns .btn{font-size:1rem;}
-
-/* Inverted button for dark bg */
 .btn-inv{background:var(--white);color:var(--text);}
 .btn-inv:hover{background:var(--off);transform:translateY(-2px);}
 .btn-ghost{background:rgba(255,255,255,.1);color:var(--white);border:1px solid rgba(255,255,255,.2);}
 .btn-ghost:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
 
-/* ══════════════════════════════════════════
-   CLOCK
-══════════════════════════════════════════ */
-#live-clock{
-  position:fixed;top:14px;right:clamp(1rem,5vw,1.5rem);z-index:450;
-  background:rgba(255,255,255,.94);backdrop-filter:blur(12px);
-  border:1px solid var(--border);border-radius:8px;
-  padding:6px 13px;display:flex;flex-direction:column;align-items:flex-end;
-  line-height:1.35;box-shadow:0 4px 20px rgba(0,0,0,.07);
-}
+/* ══ CLOCK ══ */
+#live-clock{position:fixed;top:14px;right:clamp(1rem,5vw,1.5rem);z-index:450;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:8px;padding:6px 13px;display:flex;flex-direction:column;align-items:flex-end;line-height:1.35;box-shadow:0 4px 20px rgba(0,0,0,.07);}
 #clock-time{font-family:var(--mono);font-weight:700;font-size:.82rem;color:var(--red);letter-spacing:1.5px;}
 #clock-date{font-family:var(--mono);font-size:.56rem;color:var(--muted);letter-spacing:.4px;}
 @media(max-width:600px){#live-clock{display:none;}}
 
-/* ══════════════════════════════════════════
-   FOOTER
-══════════════════════════════════════════ */
+/* ══ FOOTER ══ */
 footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5vw,3rem) 2rem;}
 .f-in{max-width:1200px;margin:0 auto;}
 .f-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
 @media(max-width:760px){.f-top{grid-template-columns:1fr 1fr;gap:2rem;}}
 @media(max-width:500px){.f-top{grid-template-columns:1fr;}}
 .f-logo{font-family:var(--disp);font-size:1.6rem;font-weight:800;letter-spacing:-1px;margin-bottom:.5rem;}
-.f-logo .lc{color:var(--navy2);}
-.f-logo .lr{color:var(--red);}
+.f-logo .lc{color:var(--navy2);}.f-logo .lr{color:var(--red);}
 .f-desc{font-size:.82rem;color:rgba(255,255,255,.34);line-height:1.7;max-width:240px;}
 .f-col h4{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;color:rgba(255,255,255,.24);margin-bottom:1rem;text-transform:uppercase;}
 .f-col ul{list-style:none;display:flex;flex-direction:column;gap:.4rem;}
@@ -600,23 +328,17 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
 </head>
 <body>
 
-<!-- CURSOR -->
 <div id="cur"></div>
 <div id="cur-ring"></div>
-
-<!-- PROGRESS BAR -->
 <div id="prog"></div>
-
-<!-- CLOCK -->
 <div id="live-clock"><span id="clock-time"></span><span id="clock-date"></span></div>
 
-<!-- ══ NAVBAR ══ -->
+<!-- NAVBAR -->
 <div class="header-wrapper" id="header-wrap">
   <header id="main-header">
     <a href="#" class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
       <span class="lc">CIRCUITO&nbsp;</span><span class="lr">CERO</span><sup>®</sup>
     </a>
-
     <input type="checkbox" id="ham-cb">
     <ul class="nav-links" id="nav-links">
       <li><a href="#educacion">Educación</a></li>
@@ -624,11 +346,9 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
       <li><a href="#quienes">Nosotros</a></li>
       <li><a href="#wiki">Conceptos</a></li>
     </ul>
-
     <label class="ham-btn" for="ham-cb" aria-label="Menú">
       <span class="material-symbols-outlined">dehaze</span>
     </label>
-
     <button class="nav-cta" onclick="document.getElementById('educacion').scrollIntoView({behavior:'smooth'})">
       <span class="material-symbols-outlined">bolt</span>
       <span>Explorar</span>
@@ -636,7 +356,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </header>
 </div>
 
-<!-- ══ HERO ══ -->
+<!-- HERO -->
 <section id="welcome">
   <div>
     <div class="htag">
@@ -644,15 +364,12 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
       <span class="hdot"></span>
       <span class="htag-txt">Plataforma Educativa · México 2026</span>
     </div>
-
     <h1 class="hero-h1">
       <span class="h1-row"><span class="h1-word d1">CIRCUITO</span></span>
       <span class="h1-row"><span class="h1-word d2">CERO</span></span>
       <span class="h1-row"><span class="h1-word d3">Educación + Tienda</span></span>
     </h1>
-
     <p class="hero-sub">Videos de electrónica, libros profesionales, componentes reales, prototipos listos para usar y mucho más. Todo en un solo lugar.</p>
-
     <div class="hero-btns">
       <a href="#educacion" class="btn-p">
         <span class="material-symbols-outlined">play_circle</span>
@@ -660,15 +377,12 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
       </a>
       <a href="#tienda" class="btn-s">Comprar Componentes</a>
     </div>
-
     <div class="hstats">
-      <div class="hstat"><div class="hstat-n red">20+</div><div class="hstat-l">Videos</div></div>
+      <div class="hstat"><div class="hstat-n red">23</div><div class="hstat-l">Videos</div></div>
       <div class="hstat"><div class="hstat-n blue">30</div><div class="hstat-l">Libros</div></div>
       <div class="hstat"><div class="hstat-n green">100+</div><div class="hstat-l">Productos</div></div>
     </div>
   </div>
-
-  <!-- PLC SVG -->
   <div class="hero-right">
     <div class="hero-img-wrap">
       <svg viewBox="0 0 520 560" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
@@ -676,7 +390,6 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
         <defs>
           <radialGradient id="rg1" cx="65%" cy="35%" r="55%"><stop offset="0%" stop-color="#c03060" stop-opacity=".38"/><stop offset="100%" stop-color="transparent" stop-opacity="0"/></radialGradient>
           <radialGradient id="rg2" cx="20%" cy="75%" r="45%"><stop offset="0%" stop-color="#1a4a8a" stop-opacity=".3"/><stop offset="100%" stop-color="transparent" stop-opacity="0"/></radialGradient>
-          <filter id="lg2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           <filter id="sg2"><feGaussianBlur stdDeviation="7"/></filter>
         </defs>
         <rect width="520" height="560" fill="url(#rg1)"/><rect width="520" height="560" fill="url(#rg2)"/>
@@ -688,94 +401,37 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
         <g stroke="#1c3c1c" stroke-width="1.2" fill="none" opacity=".65">
           <polyline points="85,90 140,90 140,130 210,130"/><polyline points="435,90 385,90 385,130 330,130"/>
           <polyline points="85,300 125,300 125,340 185,340"/><polyline points="435,280 400,280 400,320 360,320"/>
-          <polyline points="130,460 130,420 215,420"/><polyline points="385,450 385,415 310,415"/>
         </g>
-        <!-- top pins -->
         <g fill="#c9940d">
           <rect x="85" y="46" width="7" height="11" rx="1"/><rect x="98" y="46" width="7" height="11" rx="1"/><rect x="111" y="46" width="7" height="11" rx="1"/><rect x="124" y="46" width="7" height="11" rx="1"/><rect x="137" y="46" width="7" height="11" rx="1"/><rect x="150" y="46" width="7" height="11" rx="1"/><rect x="163" y="46" width="7" height="11" rx="1"/><rect x="176" y="46" width="7" height="11" rx="1"/><rect x="189" y="46" width="7" height="11" rx="1"/><rect x="202" y="46" width="7" height="11" rx="1"/><rect x="215" y="46" width="7" height="11" rx="1"/><rect x="228" y="46" width="7" height="11" rx="1"/><rect x="241" y="46" width="7" height="11" rx="1"/><rect x="254" y="46" width="7" height="11" rx="1"/><rect x="267" y="46" width="7" height="11" rx="1"/><rect x="280" y="46" width="7" height="11" rx="1"/><rect x="293" y="46" width="7" height="11" rx="1"/><rect x="306" y="46" width="7" height="11" rx="1"/><rect x="319" y="46" width="7" height="11" rx="1"/><rect x="332" y="46" width="7" height="11" rx="1"/><rect x="345" y="46" width="7" height="11" rx="1"/><rect x="358" y="46" width="7" height="11" rx="1"/><rect x="371" y="46" width="7" height="11" rx="1"/><rect x="384" y="46" width="7" height="11" rx="1"/><rect x="397" y="46" width="7" height="11" rx="1"/><rect x="410" y="46" width="7" height="11" rx="1"/><rect x="423" y="46" width="7" height="11" rx="1"/><rect x="436" y="46" width="7" height="11" rx="1"/>
         </g>
-        <!-- bottom pins -->
         <g fill="#c9940d">
-          <rect x="85" y="503" width="7" height="11" rx="1"/><rect x="98" y="503" width="7" height="11" rx="1"/><rect x="111" y="503" width="7" height="11" rx="1"/><rect x="124" y="503" width="7" height="11" rx="1"/><rect x="137" y="503" width="7" height="11" rx="1"/><rect x="150" y="503" width="7" height="11" rx="1"/><rect x="163" y="503" width="7" height="11" rx="1"/><rect x="176" y="503" width="7" height="11" rx="1"/><rect x="189" y="503" width="7" height="11" rx="1"/><rect x="202" y="503" width="7" height="11" rx="1"/><rect x="215" y="503" width="7" height="11" rx="1"/><rect x="228" y="503" width="7" height="11" rx="1"/><rect x="241" y="503" width="7" height="11" rx="1"/><rect x="254" y="503" width="7" height="11" rx="1"/><rect x="267" y="503" width="7" height="11" rx="1"/><rect x="280" y="503" width="7" height="11" rx="1"/><rect x="293" y="503" width="7" height="11" rx="1"/><rect x="306" y="503" width="7" height="11" rx="1"/><rect x="319" y="503" width="7" height="11" rx="1"/><rect x="332" y="503" width="7" height="11" rx="1"/><rect x="345" y="503" width="7" height="11" rx="1"/><rect x="358" y="503" width="7" height="11" rx="1"/><rect x="371" y="503" width="7" height="11" rx="1"/><rect x="384" y="503" width="7" height="11" rx="1"/><rect x="397" y="503" width="7" height="11" rx="1"/><rect x="410" y="503" width="7" height="11" rx="1"/><rect x="423" y="503" width="7" height="11" rx="1"/><rect x="436" y="503" width="7" height="11" rx="1"/>
+          <rect x="85" y="503" width="7" height="11" rx="1"/><rect x="98" y="503" width="7" height="11" rx="1"/><rect x="111" y="503" width="7" height="11" rx="1"/><rect x="124" y="503" width="7" height="11" rx="1"/><rect x="137" y="503" width="7" height="11" rx="1"/><rect x="150" y="503" width="7" height="11" rx="1"/><rect x="163" y="503" width="7" height="11" rx="1"/><rect x="176" y="503" width="7" height="11" rx="1"/><rect x="189" y="503" width="7" height="11" rx="1"/><rect x="202" y="503" width="7" height="11" rx="1"/><rect x="215" y="503" width="7" height="11" rx="1"/>
         </g>
-        <!-- USB-C -->
-        <rect x="50" y="240" width="22" height="38" rx="6" fill="#252525" stroke="#3a3a3a" stroke-width="1.5"/>
-        <rect x="54" y="245" width="14" height="28" rx="4" fill="#111"/>
-        <!-- RST/BOOT -->
-        <rect x="58" y="315" width="18" height="18" rx="4" fill="#1a1a1a" stroke="#333" stroke-width="1.5"/>
-        <circle cx="67" cy="324" r="6" fill="#111"/><circle cx="67" cy="324" r="3" fill="#2e2e2e"/>
-        <rect x="58" y="348" width="18" height="18" rx="4" fill="#1a1a1a" stroke="#333" stroke-width="1.5"/>
-        <circle cx="67" cy="357" r="6" fill="#111"/><circle cx="67" cy="357" r="3" fill="#2e2e2e"/>
-        <!-- MAIN CPU -->
-        <rect x="140" y="158" width="240" height="210" rx="10" fill="#0d180d" stroke="#1e341e" stroke-width="2.5"/>
-        <rect x="152" y="170" width="216" height="186" rx="8" fill="#0a120a"/>
-        <rect x="178" y="195" width="164" height="136" rx="5" fill="#101a10" stroke="#182818" stroke-width="1.5"/>
-        <rect x="190" y="207" width="140" height="112" rx="4" fill="#080e08"/>
-        <g stroke="#1c3c1c" stroke-width=".7" opacity=".5">
-          <line x1="178" y1="228" x2="342" y2="228"/><line x1="178" y1="258" x2="342" y2="258"/><line x1="178" y1="288" x2="342" y2="288"/>
-          <line x1="215" y1="195" x2="215" y2="331"/><line x1="260" y1="195" x2="260" y2="331"/><line x1="305" y1="195" x2="305" y2="331"/>
-        </g>
+        <rect x="50" y="240" width="22" height="38" rx="6" fill="#252525" stroke="#3a3a3a" stroke-width="1.5"/><rect x="54" y="245" width="14" height="28" rx="4" fill="#111"/>
+        <rect x="140" y="158" width="240" height="210" rx="10" fill="#0d180d" stroke="#1e341e" stroke-width="2.5"/><rect x="152" y="170" width="216" height="186" rx="8" fill="#0a120a"/><rect x="178" y="195" width="164" height="136" rx="5" fill="#101a10" stroke="#182818" stroke-width="1.5"/><rect x="190" y="207" width="140" height="112" rx="4" fill="#080e08"/>
         <text x="260" y="258" text-anchor="middle" font-family="Syne,sans-serif" font-size="13" font-weight="800" fill="#2e5a2e" letter-spacing="2">SIEMENS</text>
         <text x="260" y="274" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="#244424" font-weight="600">S7-1200 PLC CPU</text>
         <text x="260" y="288" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="7" fill="#1c341c">6ES7 214-1AG40-0XB0</text>
-        <!-- CPU pins -->
-        <g fill="#c9940d">
-          <rect x="130" y="172" width="9" height="5" rx="1"/><rect x="130" y="184" width="9" height="5" rx="1"/><rect x="130" y="196" width="9" height="5" rx="1"/><rect x="130" y="208" width="9" height="5" rx="1"/><rect x="130" y="220" width="9" height="5" rx="1"/><rect x="130" y="232" width="9" height="5" rx="1"/><rect x="130" y="244" width="9" height="5" rx="1"/><rect x="130" y="256" width="9" height="5" rx="1"/><rect x="130" y="268" width="9" height="5" rx="1"/><rect x="130" y="280" width="9" height="5" rx="1"/><rect x="130" y="292" width="9" height="5" rx="1"/><rect x="130" y="304" width="9" height="5" rx="1"/><rect x="130" y="316" width="9" height="5" rx="1"/><rect x="130" y="328" width="9" height="5" rx="1"/>
-          <rect x="381" y="172" width="9" height="5" rx="1"/><rect x="381" y="184" width="9" height="5" rx="1"/><rect x="381" y="196" width="9" height="5" rx="1"/><rect x="381" y="208" width="9" height="5" rx="1"/><rect x="381" y="220" width="9" height="5" rx="1"/><rect x="381" y="232" width="9" height="5" rx="1"/><rect x="381" y="244" width="9" height="5" rx="1"/><rect x="381" y="256" width="9" height="5" rx="1"/><rect x="381" y="268" width="9" height="5" rx="1"/><rect x="381" y="280" width="9" height="5" rx="1"/><rect x="381" y="292" width="9" height="5" rx="1"/><rect x="381" y="304" width="9" height="5" rx="1"/><rect x="381" y="316" width="9" height="5" rx="1"/><rect x="381" y="328" width="9" height="5" rx="1"/>
-        </g>
-        <!-- heatsink -->
-        <g fill="#172817" stroke="#203020" stroke-width="1">
-          <rect x="155" y="149" width="14" height="7" rx="1"/><rect x="175" y="149" width="14" height="7" rx="1"/><rect x="195" y="149" width="14" height="7" rx="1"/><rect x="215" y="149" width="14" height="7" rx="1"/><rect x="235" y="149" width="14" height="7" rx="1"/><rect x="255" y="149" width="14" height="7" rx="1"/><rect x="275" y="149" width="14" height="7" rx="1"/><rect x="295" y="149" width="14" height="7" rx="1"/><rect x="315" y="149" width="14" height="7" rx="1"/><rect x="335" y="149" width="14" height="7" rx="1"/><rect x="355" y="149" width="14" height="7" rx="1"/>
-        </g>
-        <!-- secondary ICs -->
-        <rect x="82" y="105" width="50" height="32" rx="5" fill="#0d180d" stroke="#1e341e" stroke-width="1.5"/>
-        <text x="107" y="120" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#2e5a2e" font-weight="700">SRAM 32K</text>
-        <rect x="386" y="105" width="52" height="32" rx="5" fill="#0d180d" stroke="#1e341e" stroke-width="1.5"/>
-        <text x="412" y="120" text-anchor="middle" font-family="Outfit,sans-serif" font-size="7" fill="#2e5a2e" font-weight="700">FLASH 4MB</text>
-        <rect x="82" y="400" width="54" height="32" rx="5" fill="#0d180d" stroke="#1e341e" stroke-width="1.5"/>
-        <text x="109" y="413" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" fill="#2e5a2e" font-weight="700">I/O MODULE</text>
-        <text x="109" y="423" text-anchor="middle" font-family="Outfit,sans-serif" font-size="5.5" fill="#1c3c1c">14DI / 10DO</text>
-        <rect x="382" y="400" width="54" height="32" rx="5" fill="#0d180d" stroke="#1e341e" stroke-width="1.5"/>
-        <text x="409" y="413" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6.5" fill="#2e5a2e" font-weight="700">PROFINET</text>
-        <text x="409" y="423" text-anchor="middle" font-family="Outfit,sans-serif" font-size="5.5" fill="#1c3c1c">ETHERNET</text>
-        <!-- caps -->
-        <ellipse cx="100" cy="462" rx="12" ry="16" fill="#112011" stroke="#1e381e" stroke-width="1.5"/>
-        <line x1="100" y1="446" x2="100" y2="440" stroke="#c9940d" stroke-width="2"/>
-        <line x1="100" y1="478" x2="100" y2="484" stroke="#c9940d" stroke-width="2"/>
-        <ellipse cx="127" cy="462" rx="12" ry="16" fill="#112011" stroke="#1e381e" stroke-width="1.5"/>
-        <line x1="127" y1="446" x2="127" y2="440" stroke="#c9940d" stroke-width="2"/>
-        <line x1="127" y1="478" x2="127" y2="484" stroke="#c9940d" stroke-width="2"/>
-        <!-- LEDs -->
-        <circle cx="415" cy="88" r="5" fill="#00ff44" opacity=".2" filter="url(#sg2)"/>
-        <circle cx="415" cy="88" r="3.5" fill="#00ff44" opacity=".9"/>
-        <circle cx="432" cy="88" r="5" fill="#e63946" opacity=".2" filter="url(#sg2)"/>
-        <circle cx="432" cy="88" r="3.5" fill="#e63946" opacity=".9"/>
-        <circle cx="449" cy="88" r="5" fill="#f4a261" opacity=".2" filter="url(#sg2)"/>
-        <circle cx="449" cy="88" r="3.5" fill="#f4a261" opacity=".8"/>
+        <circle cx="415" cy="88" r="5" fill="#00ff44" opacity=".2" filter="url(#sg2)"/><circle cx="415" cy="88" r="3.5" fill="#00ff44" opacity=".9"/>
+        <circle cx="432" cy="88" r="5" fill="#e63946" opacity=".2" filter="url(#sg2)"/><circle cx="432" cy="88" r="3.5" fill="#e63946" opacity=".9"/>
+        <circle cx="449" cy="88" r="5" fill="#f4a261" opacity=".2" filter="url(#sg2)"/><circle cx="449" cy="88" r="3.5" fill="#f4a261" opacity=".8"/>
         <text x="415" y="99" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6" fill="#1e4a1e">PWR</text>
         <text x="432" y="99" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6" fill="#4a1e1e">ERR</text>
         <text x="449" y="99" text-anchor="middle" font-family="Outfit,sans-serif" font-size="6" fill="#4a3a1e">RUN</text>
-        <!-- mounting holes -->
-        <circle cx="67" cy="55" r="9" fill="#050b05" stroke="#162416" stroke-width="2"/><circle cx="67" cy="55" r="4.5" fill="#0a120a"/>
-        <circle cx="67" cy="505" r="9" fill="#050b05" stroke="#162416" stroke-width="2"/><circle cx="67" cy="505" r="4.5" fill="#0a120a"/>
-        <circle cx="453" cy="55" r="9" fill="#050b05" stroke="#162416" stroke-width="2"/><circle cx="453" cy="55" r="4.5" fill="#0a120a"/>
-        <circle cx="453" cy="505" r="9" fill="#050b05" stroke="#162416" stroke-width="2"/><circle cx="453" cy="505" r="4.5" fill="#0a120a"/>
         <text x="260" y="492" text-anchor="middle" font-family="Syne,sans-serif" font-size="8" font-weight="700" fill="#1a341a" letter-spacing="3">CIRCUITO CERO · PLC DEV BOARD v2.6</text>
       </svg>
       <div class="hero-overlay"></div>
-      <div class="hbadge">
-        <div class="hb-n">2026</div>
-        <div class="hb-t">Versión Actual</div>
-      </div>
+      <div class="hbadge"><div class="hb-n">2026</div><div class="hb-t">Versión Actual</div></div>
     </div>
   </div>
 </section>
 
-<!-- ══ PRODUCT STRIP (Antigravity icons style) ══ -->
+<!-- PRODUCT STRIP -->
 <div id="product-strip">
   <div class="product-heading rev">
     <div class="eyebrow"><div class="ey-l"></div><span class="ey-t">Plataforma completa</span></div>
-    <h2><span class="tw">Circuito Cero es nuestra plataforma educativa + tienda, llevando el aprendizaje de electrónica a la era profesional.</span></h2>
+    <h2>Circuito Cero es nuestra plataforma educativa + tienda, llevando el aprendizaje de electrónica a la era profesional.</h2>
   </div>
   <div class="icons-strip">
     <div class="icon-pill" style="--i:0"><span class="material-symbols-outlined">memory</span></div>
@@ -795,30 +451,39 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
     <div class="icon-pill" style="--i:14"><span class="material-symbols-outlined">sensors</span></div>
     <div class="icon-pill" style="--i:15"><span class="material-symbols-outlined">power</span></div>
     <div class="icon-pill" style="--i:16"><span class="material-symbols-outlined">hub</span></div>
-    <div class="icon-pill" style="--i:17"><span class="material-symbols-outlined">microwave</span></div>
-    <div class="icon-pill" style="--i:18"><span class="material-symbols-outlined">broadcast_on_personal</span></div>
-    <div class="icon-pill" style="--i:19"><span class="material-symbols-outlined">integrated_circuit</span></div>
-    <div class="icon-pill" style="--i:20"><span class="material-symbols-outlined">device_hub</span></div>
-    <div class="icon-pill" style="--i:21"><span class="material-symbols-outlined">hardware</span></div>
-    <div class="icon-pill" style="--i:22"><span class="material-symbols-outlined">podcasts</span></div>
-    <div class="icon-pill" style="--i:23"><span class="material-symbols-outlined">tune</span></div>
+    <div class="icon-pill" style="--i:17"><span class="material-symbols-outlined">tune</span></div>
   </div>
 </div>
 
-<!-- ══ EDUCACIÓN ══ -->
+<!-- EDUCACIÓN -->
 <section class="sec" id="educacion">
   <div class="inner">
     <div class="rev">
       <div class="eyebrow"><div class="ey-l"></div><span class="ey-t">Aprende electrónica</span></div>
-      <h2 class="sec-h">Videos &amp; <span style="color:var(--red)">Contenido</span></h2>
-      <p class="sec-p">Accede a nuestro canal de YouTube con 20+ videos sobre electrónica, circuitos y más.</p>
+      <div class="videos-header-row">
+        <div>
+          <h2 class="sec-h">Videos &amp; <span style="color:var(--red)">Cursos</span></h2>
+          <p class="sec-p">23 videos de electrónica, circuitos, componentes, programación y más. Shorts educativos del canal oficial.</p>
+        </div>
+        <a href="https://www.youtube.com/@circuitocero" target="_blank" class="yt-channel-badge">
+          <span class="material-symbols-outlined yt-icon">smart_display</span>
+          @circuitocero
+        </a>
+      </div>
     </div>
-    <h3 style="font-family:var(--disp);font-size:1.4rem;font-weight:800;margin:2rem 0 .5rem">Canal: @circuitocero</h3>
+
+    <div class="cat-tabs rev" id="cat-tabs"></div>
+
+    <div class="vid-count-bar rev">
+      <span class="vid-count-pill" id="vid-count">23 videos</span>
+      <span id="vid-cat-label">Todos los temas</span>
+    </div>
+
     <div class="video-grid rev" id="videos-grid"></div>
   </div>
 </section>
 
-<!-- ══ LIBROS ══ -->
+<!-- LIBROS -->
 <section class="sec off">
   <div class="inner">
     <div class="rev">
@@ -830,7 +495,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- ══ WIKIPEDIA ══ -->
+<!-- WIKI -->
 <section class="sec dark" id="wiki">
   <div class="inner">
     <div class="rev">
@@ -847,7 +512,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- ══ TIENDA ══ -->
+<!-- TIENDA -->
 <section class="sec" id="tienda">
   <div class="inner">
     <div class="rev">
@@ -866,7 +531,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- ══ WHO (Antigravity style) ══ -->
+<!-- WHO -->
 <section id="who">
   <div class="who-col rev">
     <h2 class="who-h">Para estudiantes<br><span>Aprende desde cero</span></h2>
@@ -878,7 +543,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- ══ QUIÉNES SOMOS ══ -->
+<!-- QUIÉNES SOMOS -->
 <section class="sec off" id="quienes">
   <div class="inner">
     <div class="rev">
@@ -905,11 +570,11 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- ══ BEFORE YOU GO (dark CTA) ══ -->
+<!-- BYG -->
 <div id="byg">
   <div class="inner">
     <div class="byg-card">
-      <p class="byg-p"><span class="tw2">Empieza hoy con Circuito Cero — electrónica profesional al alcance de todos.</span></p>
+      <p class="byg-p">Empieza hoy con Circuito Cero — electrónica profesional al alcance de todos.</p>
       <div class="byg-btns">
         <a href="#educacion" class="btn btn-inv">
           <span class="material-symbols-outlined">school</span>
@@ -921,7 +586,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </div>
 
-<!-- ══ FOOTER ══ -->
+<!-- FOOTER -->
 <footer>
   <div class="f-in">
     <div class="f-top">
@@ -944,93 +609,172 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </footer>
 
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════ -->
 <script>
-/* ── Ring Particles (CSS Houdini) ── */
-if ('paintWorklet' in CSS) {
-  CSS.paintWorklet.addModule('https://unpkg.com/css-houdini-ringparticles/dist/ringparticles.js');
-  const $w = document.querySelector('#welcome');
-  let active = false;
-  $w.addEventListener('pointermove', e => {
-    if (!active) { $w.classList.add('interactive'); active = true; }
-    $w.style.setProperty('--ring-x', (e.clientX / innerWidth)  * 100);
-    $w.style.setProperty('--ring-y', (e.clientY / innerHeight) * 100);
-    $w.style.setProperty('--ring-interactive', 1);
-  });
-  $w.addEventListener('pointerleave', () => {
-    $w.classList.remove('interactive'); active = false;
-    $w.style.setProperty('--ring-x', 50);
-    $w.style.setProperty('--ring-y', 50);
-    $w.style.setProperty('--ring-interactive', 0);
-  });
-}
-
-/* ── Custom cursor ── */
+/* ── Cursor ── */
 const cur = document.getElementById('cur');
 const ring = document.getElementById('cur-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cur.style.left = mx+'px'; cur.style.top = my+'px';
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
 });
 (function animRing(){
-  rx += (mx-rx)*.1; ry += (my-ry)*.1;
-  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
   requestAnimationFrame(animRing);
 })();
 document.querySelectorAll('a,button,.card,.video-card,.book-card,.team-card,.hstat').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('cur-big'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('cur-big'));
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cur-big'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-big'));
 });
 
-/* ── Scroll: progress bar + nav ── */
-let lastY = 0;
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  const sc = h.scrollTop, sh = h.scrollHeight - h.clientHeight;
-  document.getElementById('prog').style.width = (sc/sh*100)+'%';
-  document.getElementById('main-header').classList.toggle('scrolled', sc > 40);
-  // Hidey bar
-  const hw = document.getElementById('header-wrap');
-  hw.classList.toggle('hide', sc > lastY + 10 && sc > 120);
-  if (sc < lastY - 5) hw.classList.remove('hide');
-  lastY = sc;
+/* ── Scroll ── */
+let lastY=0;
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const sc=h.scrollTop, sh=h.scrollHeight-h.clientHeight;
+  document.getElementById('prog').style.width=(sc/sh*100)+'%';
+  document.getElementById('main-header').classList.toggle('scrolled',sc>40);
+  const hw=document.getElementById('header-wrap');
+  hw.classList.toggle('hide',sc>lastY+10&&sc>120);
+  if(sc<lastY-5) hw.classList.remove('hide');
+  lastY=sc;
 });
 
-/* ── Reveal on scroll ── */
-const rObs = new IntersectionObserver(entries =>
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
-  { threshold: .1 }
+/* ── Reveal ── */
+const rObs=new IntersectionObserver(entries=>
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('in');}),
+  {threshold:.08}
 );
-document.querySelectorAll('.rev').forEach(el => rObs.observe(el));
+document.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
 
 /* ── Timeline ── */
-const tlObs = new IntersectionObserver(([e]) => {
-  if (e.isIntersecting) {
+const tlObs=new IntersectionObserver(([e])=>{
+  if(e.isIntersecting){
     document.getElementById('tl-line')?.classList.add('drawn');
-    [0,1,2].forEach(i => setTimeout(() => document.getElementById('dot'+i)?.classList.add('pop'), (i+1)*400));
+    [0,1,2].forEach(i=>setTimeout(()=>document.getElementById('dot'+i)?.classList.add('pop'),(i+1)*400));
     tlObs.disconnect();
   }
-}, { threshold: .2 });
-const tl = document.querySelector('.timeline');
-if (tl) tlObs.observe(tl);
+},{threshold:.2});
+const tl=document.querySelector('.timeline');
+if(tl) tlObs.observe(tl);
 
 /* ── Clock ── */
-const DAYS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-const MONS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-function tick() {
-  const n = new Date();
-  document.getElementById('clock-time').textContent =
-    [n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
-  document.getElementById('clock-date').textContent =
-    `${DAYS[n.getDay()]} ${String(n.getDate()).padStart(2,'0')} ${MONS[n.getMonth()]} ${n.getFullYear()}`;
+const DAYS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const MONS=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+function tick(){
+  const n=new Date();
+  document.getElementById('clock-time').textContent=[n.getHours(),n.getMinutes(),n.getSeconds()].map(v=>String(v).padStart(2,'0')).join(':');
+  document.getElementById('clock-date').textContent=`${DAYS[n.getDay()]} ${String(n.getDate()).padStart(2,'0')} ${MONS[n.getMonth()]} ${n.getFullYear()}`;
 }
-tick(); setInterval(tick, 1000);
+tick(); setInterval(tick,1000);
 
-/* ── Data ── */
-const PRODS = {
+/* ══════════════════════════════════
+   VIDEOS DATA — 23 videos reales
+══════════════════════════════════ */
+const VIDEOS = [
+  { num:1,  url:'https://youtube.com/shorts/Eqml-6B1jMo', id:'Eqml-6B1jMo', title:'¿Cómo funciona un LED?', cat:'componentes' },
+  { num:2,  url:'https://youtube.com/shorts/2t0S1zO5stk', id:'2t0S1zO5stk', title:'¿Qué es la electricidad?', cat:'fundamentos' },
+  { num:3,  url:'https://youtube.com/shorts/lpH5cgeiLp4', id:'lpH5cgeiLp4', title:'Voltaje', cat:'fundamentos' },
+  { num:4,  url:'https://youtube.com/shorts/yGqxnNmyb5c', id:'yGqxnNmyb5c', title:'Resistencia eléctrica', cat:'fundamentos' },
+  { num:5,  url:'https://youtube.com/shorts/Q-VCdSZEukc', id:'Q-VCdSZEukc', title:'Potencia eléctrica', cat:'fundamentos' },
+  { num:6,  url:'https://youtube.com/shorts/SCEBUMWar5U', id:'SCEBUMWar5U', title:'¿Qué es un diodo y sus tipos?', cat:'componentes' },
+  { num:7,  url:'https://youtube.com/shorts/d26kzW1Ou7g', id:'d26kzW1Ou7g', title:'Capacitores — Primera parte', cat:'componentes' },
+  { num:8,  url:'https://youtube.com/shorts/japOiNTjwzQ', id:'japOiNTjwzQ', title:'Capacitor — Tipos', cat:'componentes' },
+  { num:9,  url:'https://youtube.com/shorts/zTzgVgFA6-o', id:'zTzgVgFA6-o', title:'Transistor', cat:'componentes' },
+  { num:10, url:'https://youtube.com/shorts/HUt0eN_ELEQ', id:'HUt0eN_ELEQ', title:'Tipos de transistores', cat:'componentes' },
+  { num:11, url:'https://youtube.com/shorts/aERYrnlOXy0', id:'aERYrnlOXy0', title:'Creando tu primer circuito en Tinkercad', cat:'tinkercad' },
+  { num:12, url:'https://youtube.com/shorts/q4h7LGSLlJE', id:'q4h7LGSLlJE', title:'Encender un LED', cat:'tinkercad' },
+  { num:13, url:'https://youtube.com/shorts/-IMr4QVIdf8', id:'-IMr4QVIdf8', title:'Tinkercad con potenciómetro y zumbador', cat:'tinkercad' },
+  { num:14, url:'https://youtube.com/shorts/QNqdRLPANjw', id:'QNqdRLPANjw', title:'Control de motor DC en Tinkercad', cat:'tinkercad' },
+  { num:15, url:'https://youtube.com/shorts/SfIgyZkXVB0', id:'SfIgyZkXVB0', title:'Inversión de giro con motor CD en Tinkercad', cat:'tinkercad' },
+  { num:16, url:'https://youtube.com/shorts/cecY2NWEO20', id:'cecY2NWEO20', title:'Detención automática de un LED', cat:'tinkercad' },
+  { num:17, url:'https://youtube.com/shorts/zYkMZXvTwoY', id:'zYkMZXvTwoY', title:'Detención automática con sensor PIR', cat:'tinkercad' },
+  { num:18, url:'https://youtube.com/shorts/ted8EtQuBpM', id:'ted8EtQuBpM', title:'Sensor digital: ¿Qué es y cómo funciona?', cat:'componentes' },
+  { num:19, url:'https://youtube.com/shorts/DrAHRbui6Ic', id:'DrAHRbui6Ic', title:'¿Cómo funciona una variable en programación?', cat:'programacion' },
+  { num:20, url:'https://youtube.com/shorts/cyHpBtjPfBQ', id:'cyHpBtjPfBQ', title:'Resistencia eléctrica: R = V/I, V²/P y P/I²', cat:'fundamentos' },
+  { num:21, url:'https://youtube.com/shorts/L-_1tfuC4yw', id:'L-_1tfuC4yw', title:'Ley de Ohm', cat:'fundamentos' },
+  { num:22, url:'https://youtube.com/shorts/YB_lXzLieH8', id:'YB_lXzLieH8', title:'¿Qué es un capacitor y tipos? — Primera parte', cat:'componentes' },
+  { num:23, url:'https://youtube.com/shorts/IIS6Xz6Nlio', id:'IIS6Xz6Nlio', title:'Ejercicio con capacitor — Segunda parte', cat:'componentes' },
+];
+
+const CATS = [
+  { key:'todos',       label:'Todos',        icon:'video_library' },
+  { key:'fundamentos', label:'Fundamentos',  icon:'bolt' },
+  { key:'componentes', label:'Componentes',  icon:'settings_input_component' },
+  { key:'tinkercad',   label:'Tinkercad',    icon:'developer_board' },
+  { key:'programacion',label:'Programación', icon:'code' },
+];
+
+let activeCat = 'todos';
+
+function buildTabs() {
+  const el = document.getElementById('cat-tabs');
+  el.innerHTML = CATS.map(c=>`
+    <button class="cat-tab${c.key===activeCat?' active':''}" onclick="setCat('${c.key}')">
+      ${c.label}
+    </button>`).join('');
+}
+
+function setCat(key) {
+  activeCat = key;
+  buildTabs();
+  renderVideos();
+}
+
+function renderVideos() {
+  const list = activeCat==='todos' ? VIDEOS : VIDEOS.filter(v=>v.cat===activeCat);
+  const cat = CATS.find(c=>c.key===activeCat);
+  document.getElementById('vid-count').textContent = list.length+' video'+(list.length!==1?'s':'');
+  document.getElementById('vid-cat-label').textContent = activeCat==='todos' ? 'Todos los temas' : 'Categoría: '+cat.label;
+
+  const grid = document.getElementById('videos-grid');
+  grid.innerHTML = list.map((v,i)=>`
+    <div class="video-card rev d${(i%8)+1}">
+      <div class="v-thumb is-short">
+        <span class="shorts-badge">Shorts</span>
+        <iframe
+          src="https://www.youtube.com/embed/${v.id}"
+          title="${v.title}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
+      </div>
+      <div class="v-info">
+        <div class="vc-top">
+          <span class="vc-num">${String(v.num).padStart(2,'0')}</span>
+          <span class="v-title">${v.title}</span>
+        </div>
+        <div class="v-meta">
+          <span class="v-chan">@circuitocero</span>
+          <span class="v-dot"></span>
+          <span class="v-chan" style="color:var(--red);font-size:.6rem">${CATS.find(c=>c.key===v.cat)?.label||''}</span>
+        </div>
+        <a href="${v.url}" target="_blank" class="v-yt-link">
+          <span class="material-symbols-outlined">open_in_new</span>
+          Ver en YouTube
+        </a>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
+}
+
+/* ── Books ── */
+const LIBROS=['The Art of Electronics','Horowitz & Hill','Electronic Devices','Maquinas Electricas','Circuitos Eléctricos','Semiconductores','Microcontroladores','Sistemas Digitales','Electronica Industrial','Telecomunicaciones','Señales y Sistemas','Física Semiconductores','Componentes','Diseño PCB','Protección Eléctrica','Transformadores','Motores DC','Automatización','Control Industrial','SCADA','PLC Siemens','Python IoT','Redes Industriales','Energía Solar','Baterías','Fuentes Conmutadas','Amplificadores','Filtros Activos','Sensores','Actuadores'];
+function renderBooks() {
+  document.getElementById('books-grid').innerHTML=LIBROS.map((b,i)=>`
+    <div class="book-card rev d${(i%8)+1}">
+      <div class="book-icon">📚</div>
+      <div class="book-title">${b}</div>
+      <div class="book-lbl">Libro ${i+1} / 30</div>
+    </div>`).join('');
+  document.querySelectorAll('#books-grid .rev').forEach(el=>rObs.observe(el));
+}
+
+/* ── Shop ── */
+const PRODS={
   playeras:[
     {nombre:'Playera CIRCUITO CERO',cat:'Playera',desc:'Algodón 100%, diseño premium',img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=75',precio:29.99},
     {nombre:'Playera Ley de Ohm',cat:'Playera',desc:'Fórmula V=IR minimalista',img:'https://images.unsplash.com/photo-1503341291549-8d766f8db3dc?w=400&q=75',precio:32.99},
@@ -1052,22 +796,9 @@ const PRODS = {
     {nombre:'Carcasa Robótica',cat:'Pieza 3D',desc:'Chassis para robots',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=75',precio:89.99},
   ]
 };
-const VIDEOS=[
-  {id:'dQw4w9WgXcQ',title:'Introducción a Electrónica'},
-  {id:'9No-FIEFjlU',title:'Ley de Ohm Explicada'},
-  {id:'aqvDTCpNRig',title:'Circuitos en Serie'},
-  {id:'1gNPnvWEwq0',title:'Diodos y Rectificación'},
-  {id:'2ggkvyD0sAE',title:'Transistores BJT'},
-  {id:'4sJy2R2aD5s',title:'Op-Amps'},
-  {id:'5VyrehIGbow',title:'Arduino Básico'},
-  {id:'oaf_zQcrg7E',title:'Circuitos Digitales'},
-];
-const LIBROS=['The Art of Electronics','Horowitz & Hill','Electronic Devices','Maquinas Electricas','Circuitos Eléctricos','Semiconductores','Microcontroladores','Sistemas Digitales','Electronica Industrial','Telecomunicaciones','Señales y Sistemas','Física Semiconductores','Componentes','Diseño PCB','Protección Eléctrica','Transformadores','Motores DC','Automatización','Control Industrial','SCADA','PLC Siemens','Python IoT','Redes Industriales','Energía Solar','Baterías','Fuentes Conmutadas','Amplificadores','Filtros Activos','Sensores','Actuadores'];
-
-/* ── Render products ── */
-function renderProds(list) {
-  const g = document.getElementById('shop-grid');
-  g.innerHTML = list.map((p,i) => `
+function renderProds(list){
+  const g=document.getElementById('shop-grid');
+  g.innerHTML=list.map((p,i)=>`
     <div class="card rev d${(i%8)+1}">
       <img class="card-img" src="${p.img}" alt="${p.nombre}" loading="lazy">
       <div class="card-badge">${p.cat}</div>
@@ -1079,67 +810,39 @@ function renderProds(list) {
         <button class="card-btn" onclick="alert('Agregado al carrito: ${p.nombre}')">Comprar</button>
       </div>
     </div>`).join('');
-  g.querySelectorAll('.rev').forEach(el => rObs.observe(el));
+  g.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
 }
-
-function filterShop(cat, btn) {
-  document.querySelectorAll('.filtros .fbtn').forEach(b => b.classList.remove('active'));
+function filterShop(cat,btn){
+  document.querySelectorAll('.filtros .fbtn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  renderProds(cat === 'todos' ? Object.values(PRODS).flat() : PRODS[cat] || []);
+  renderProds(cat==='todos'?Object.values(PRODS).flat():PRODS[cat]||[]);
 }
 
-/* ── Render videos ── */
-function renderVideos() {
-  document.getElementById('videos-grid').innerHTML = VIDEOS.map(v => `
-    <div class="video-card rev">
-      <div class="v-thumb">
-        <iframe src="https://www.youtube.com/embed/${v.id}" frameborder="0"
-          allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
-      </div>
-      <div class="v-info">
-        <div class="v-title">${v.title}</div>
-        <div class="v-chan">@circuitocero</div>
-      </div>
-    </div>`).join('');
-  document.querySelectorAll('#videos-grid .rev').forEach(el => rObs.observe(el));
-}
-
-/* ── Render books ── */
-function renderBooks() {
-  document.getElementById('books-grid').innerHTML = LIBROS.map((b,i) => `
-    <div class="book-card rev d${(i%8)+1}">
-      <div class="book-icon">📚</div>
-      <div class="book-title">${b}</div>
-      <div class="book-lbl">Libro ${i+1} / 30</div>
-    </div>`).join('');
-  document.querySelectorAll('#books-grid .rev').forEach(el => rObs.observe(el));
-}
-
-/* ── Wikipedia ── */
-async function searchWiki() {
-  const q = document.getElementById('wiki-search').value.trim();
-  if (!q) return;
-  const out = document.getElementById('wiki-result');
-  out.innerHTML = '<p style="opacity:.6">Buscando…</p>';
-  try {
-    const r = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q)}`);
-    if (!r.ok) throw 0;
-    const d = await r.json();
-    out.innerHTML = `
+/* ── Wiki ── */
+async function searchWiki(){
+  const q=document.getElementById('wiki-search').value.trim();
+  if(!q) return;
+  const out=document.getElementById('wiki-result');
+  out.innerHTML='<p style="opacity:.6">Buscando…</p>';
+  try{
+    const r=await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q)}`);
+    if(!r.ok) throw 0;
+    const d=await r.json();
+    out.innerHTML=`
       <h4 style="color:var(--red);margin-bottom:.5rem;font-family:var(--disp);font-weight:800;font-size:1.2rem">${d.title}</h4>
       <p style="margin-bottom:.8rem;color:rgba(255,255,255,.85);line-height:1.7">${d.extract||'Sin descripción.'}</p>
-      <a href="${d.content_urls.desktop.page}" target="_blank"
-        style="color:var(--teal);text-decoration:underline;font-size:.88rem">Leer artículo completo →</a>`;
-  } catch {
-    out.innerHTML = '<p style="color:#ff6b6b">No encontrado. Intenta con otro término.</p>';
+      <a href="${d.content_urls.desktop.page}" target="_blank" style="color:var(--teal);text-decoration:underline;font-size:.88rem">Leer artículo completo →</a>`;
+  }catch{
+    out.innerHTML='<p style="color:#ff6b6b">No encontrado. Intenta con otro término.</p>';
   }
 }
-document.getElementById('wiki-search').addEventListener('keydown', e => { if(e.key==='Enter') searchWiki(); });
+document.getElementById('wiki-search').addEventListener('keydown',e=>{if(e.key==='Enter') searchWiki();});
 
 /* ── Init ── */
-renderProds(Object.values(PRODS).flat());
+buildTabs();
 renderVideos();
 renderBooks();
+renderProds(Object.values(PRODS).flat());
 </script>
 </body>
 </html>
