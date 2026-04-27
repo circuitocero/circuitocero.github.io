@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CIRCUITO CERO® — Plataforma Educativa + Tienda</title>
+<title>CIRCUITO CERO® — Plataforma Educativa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -75,14 +75,13 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .btn-p:hover{background:var(--navy);transform:translateY(-2px);box-shadow:0 8px 28px rgba(29,53,87,.25);}
 .btn-s{display:inline-flex;align-items:center;gap:.4rem;padding:13px 28px;border-radius:999px;background:rgba(183,191,217,.12);color:var(--text);border:1px solid rgba(33,34,38,.1);font-size:.9rem;font-weight:600;font-family:var(--font);cursor:pointer;text-decoration:none;transition:background .2s,transform .2s;}
 .btn-s:hover{background:rgba(183,191,217,.24);transform:translateY(-2px);}
-.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:460px;opacity:0;animation:fadeUp .8s var(--ease) 1.04s forwards;}
+.hstats{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;max-width:460px;opacity:0;animation:fadeUp .8s var(--ease) 1.04s forwards;}
 @media(max-width:500px){.hstats{grid-template-columns:1fr;}}
 .hstat{background:var(--off);border-radius:10px;padding:1rem 1.1rem;border-left:3px solid var(--red);transition:transform .3s,box-shadow .3s;}
 .hstat:nth-child(2){border-color:var(--navy);}
-.hstat:nth-child(3){border-color:#2a9d8f;}
 .hstat:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .hstat-n{font-family:var(--disp);font-size:1.6rem;font-weight:800;line-height:1;}
-.red{color:var(--red)!important;}.blue{color:var(--navy)!important;}.green{color:#2a9d8f!important;}
+.red{color:var(--red)!important;}.blue{color:var(--navy)!important;}
 .hstat-l{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-top:3px;letter-spacing:.1em;text-transform:uppercase;}
 .hero-right{position:relative;opacity:0;animation:fadeUp .9s var(--ease) .5s forwards;}
 .hero-img-wrap{position:relative;border-radius:16px;overflow:hidden;height:560px;box-shadow:0 32px 80px rgba(0,0,0,.22);}
@@ -123,7 +122,7 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .btn-outline{background:transparent;color:var(--text);border:2px solid rgba(33,34,38,.15);}
 .btn-outline:hover{background:var(--text);color:#fff;transform:translateY(-2px);}
 
-/* ══ VIDEO SECTION MEJORADO ══ */
+/* ══ VIDEO SECTION ══ */
 .videos-header-row {
   display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;
 }
@@ -139,7 +138,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .yt-channel-badge:hover{background:#cc0000;transform:translateY(-2px);box-shadow:0 6px 28px rgba(255,0,0,.45);}
 .yt-icon{font-size:1.15em!important;}
 
-/* Categorías tabs */
 .cat-tabs {
   display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:2rem;
 }
@@ -151,7 +149,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 }
 .cat-tab.active,.cat-tab:hover{background:var(--red);color:#fff;border-color:var(--red);}
 
-/* Grid masonry-like */
 .video-grid {
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
@@ -170,10 +167,8 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .video-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.13);border-color:rgba(230,57,70,.15);}
 .video-card:hover .vc-num{color:var(--red);}
 
-/* Thumbnail container — shorts aspect ratio 9:16 */
 .v-thumb {
   position:relative;
-  /* For shorts: tall ratio. For regular: 16:9 */
   padding-bottom:56.25%;
   overflow:hidden;
   background:#0a0a0a;
@@ -181,7 +176,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .v-thumb.is-short { padding-bottom:80%; }
 .v-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 
-/* Shorts badge */
 .shorts-badge {
   position:absolute;top:.6rem;left:.6rem;z-index:2;
   background:#ff0000;color:#fff;
@@ -202,7 +196,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .v-chan{font-family:var(--mono);font-size:.62rem;color:var(--muted);}
 .v-dot{width:3px;height:3px;border-radius:50%;background:var(--border);}
 
-/* Ver en YouTube link */
 .v-yt-link {
   display:inline-flex;align-items:center;gap:.3rem;
   margin-top:.5rem;
@@ -213,7 +206,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .v-yt-link:hover{color:#ff0000;}
 .v-yt-link .material-symbols-outlined{font-size:.85em!important;}
 
-/* Count bar */
 .vid-count-bar {
   display:flex;align-items:center;gap:.7rem;
   margin-bottom:2rem;
@@ -225,15 +217,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
   font-size:.68rem;font-weight:700;
 }
 
-/* ══ BOOKS ══ */
-.books-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1.25rem;margin-top:2rem;}
-@media(max-width:500px){.books-grid{grid-template-columns:repeat(2,1fr);}}
-.book-card{background:var(--white);border-radius:10px;padding:1.1rem;text-align:center;transition:transform .3s,box-shadow .3s;border:1px solid var(--border);}
-.book-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(0,0,0,.09);}
-.book-icon{font-size:2.6rem;margin-bottom:.5rem;}
-.book-title{font-family:var(--disp);font-size:.82rem;font-weight:700;margin-bottom:.2rem;}
-.book-lbl{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
-
 /* ══ WIKI ══ */
 .wiki-box{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border-radius:14px;padding:2rem;margin-top:2rem;border:1px solid rgba(255,255,255,.1);}
 .wiki-row{display:flex;gap:1rem;flex-wrap:wrap;}
@@ -243,24 +226,6 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .wiki-row button{padding:12px 28px;border-radius:999px;background:var(--red);color:#fff;border:none;font-weight:700;font-family:var(--disp);cursor:pointer;transition:background .2s,transform .2s;}
 .wiki-row button:hover{background:var(--red2);transform:translateY(-1px);}
 #wiki-result{margin-top:1.5rem;color:#fff;font-size:.9rem;line-height:1.7;}
-
-/* ══ SHOP ══ */
-.filtros{display:flex;gap:.5rem;flex-wrap:wrap;margin:2rem 0;}
-.fbtn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:8px 20px;border-radius:999px;font-size:.76rem;cursor:pointer;font-family:var(--mono);font-weight:600;transition:all .2s var(--ease);}
-.fbtn.active,.fbtn:hover{background:var(--red);color:#fff;border-color:var(--red);}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5px;background:var(--border);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-top:.5rem;}
-.card{background:var(--white);cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .3s;}
-.card:hover{box-shadow:0 14px 44px rgba(0,0,0,.12);}
-.card-img{width:100%;height:220px;object-fit:cover;transition:transform .5s var(--ease);}
-.card:hover .card-img{transform:scale(1.07);}
-.card-badge{position:absolute;top:1rem;right:1rem;background:var(--red);color:#fff;padding:5px 11px;border-radius:4px;font-family:var(--mono);font-size:.62rem;font-weight:700;z-index:2;}
-.card-body{padding:1.3rem;flex:1;display:flex;flex-direction:column;}
-.card-cat{font-family:var(--mono);font-size:.58rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.35rem;}
-.card-title{font-family:var(--disp);font-size:.98rem;font-weight:800;margin-bottom:.5rem;line-height:1.2;}
-.card-desc{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:.8rem;flex:1;}
-.card-price{font-family:var(--disp);font-size:1.4rem;font-weight:800;color:var(--red);margin-bottom:.9rem;}
-.card-btn{background:var(--text);color:#fff;border:none;padding:10px;border-radius:999px;font-weight:700;font-family:var(--disp);font-size:.76rem;cursor:pointer;transition:background .2s,transform .2s;}
-.card-btn:hover{background:var(--navy);transform:translateY(-1px);}
 
 /* ══ TIMELINE ══ */
 .timeline{position:relative;margin:3rem 0;}
@@ -277,6 +242,7 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem;margin-top:2rem;}
 .team-card{background:var(--white);border-radius:14px;padding:1.4rem;border-left:4px solid var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.05);transition:transform .3s,box-shadow .3s;}
 .team-card:hover{transform:translateY(-5px);box-shadow:0 10px 28px rgba(0,0,0,.1);}
+.team-card.director{border-left:4px solid var(--red);}
 .team-h{display:flex;gap:1rem;align-items:flex-start;}
 .team-av{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--red),#ff6b6b);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:1.2rem;flex-shrink:0;}
 .team-name{font-family:var(--disp);font-size:1.05rem;font-weight:800;}
@@ -285,9 +251,7 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 
 /* ══ WHO ══ */
 #who{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;padding:clamp(2rem,6vw,4rem) clamp(1.5rem,5vw,3rem);}
-@media(min-width:860px){#who{flex-direction:row;justify-content:space-around;}}
 .who-col{height:40vh;display:grid;place-content:center;gap:1.2rem;}
-@media(min-width:860px){.who-col{height:75vh;}}
 .who-h{font-family:var(--disp);font-size:clamp(1.5rem,4vw,2.4rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
 .who-h span{color:var(--muted);}
 
@@ -313,7 +277,7 @@ header.scrolled{box-shadow:0 6px 32px rgba(0,0,0,.07);}
 /* ══ FOOTER ══ */
 footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5vw,3rem) 2rem;}
 .f-in{max-width:1200px;margin:0 auto;}
-.f-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.f-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
 @media(max-width:760px){.f-top{grid-template-columns:1fr 1fr;gap:2rem;}}
 @media(max-width:500px){.f-top{grid-template-columns:1fr;}}
 .f-logo{font-family:var(--disp);font-size:1.6rem;font-weight:800;letter-spacing:-1px;margin-bottom:.5rem;}
@@ -342,7 +306,6 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
     <input type="checkbox" id="ham-cb">
     <ul class="nav-links" id="nav-links">
       <li><a href="#educacion">Educación</a></li>
-      <li><a href="#tienda">Tienda</a></li>
       <li><a href="#quienes">Nosotros</a></li>
       <li><a href="#wiki">Conceptos</a></li>
     </ul>
@@ -367,20 +330,19 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
     <h1 class="hero-h1">
       <span class="h1-row"><span class="h1-word d1">CIRCUITO</span></span>
       <span class="h1-row"><span class="h1-word d2">CERO</span></span>
-      <span class="h1-row"><span class="h1-word d3">Educación + Tienda</span></span>
+      <span class="h1-row"><span class="h1-word d3">Educación Digital</span></span>
     </h1>
-    <p class="hero-sub">Videos de electrónica, libros profesionales, componentes reales, prototipos listos para usar y mucho más. Todo en un solo lugar.</p>
+    <p class="hero-sub">Videos de electrónica, circuitos, componentes y programación. Aprende con contenido profesional desde cero.</p>
     <div class="hero-btns">
       <a href="#educacion" class="btn-p">
         <span class="material-symbols-outlined">play_circle</span>
         <span>Ver Cursos</span>
       </a>
-      <a href="#tienda" class="btn-s">Comprar Componentes</a>
+      <a href="#wiki" class="btn-s">Buscar Conceptos</a>
     </div>
     <div class="hstats">
       <div class="hstat"><div class="hstat-n red">23</div><div class="hstat-l">Videos</div></div>
-      <div class="hstat"><div class="hstat-n blue">30</div><div class="hstat-l">Libros</div></div>
-      <div class="hstat"><div class="hstat-n green">100+</div><div class="hstat-l">Productos</div></div>
+      <div class="hstat"><div class="hstat-n blue">9</div><div class="hstat-l">Colaboradores</div></div>
     </div>
   </div>
   <div class="hero-right">
@@ -430,8 +392,8 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
 <!-- PRODUCT STRIP -->
 <div id="product-strip">
   <div class="product-heading rev">
-    <div class="eyebrow"><div class="ey-l"></div><span class="ey-t">Plataforma completa</span></div>
-    <h2>Circuito Cero es nuestra plataforma educativa + tienda, llevando el aprendizaje de electrónica a la era profesional.</h2>
+    <div class="eyebrow"><div class="ey-l"></div><span class="ey-t">Plataforma educativa</span></div>
+    <h2>Circuito Cero es nuestra plataforma educativa, llevando el aprendizaje de electrónica a la era digital.</h2>
   </div>
   <div class="icons-strip">
     <div class="icon-pill" style="--i:0"><span class="material-symbols-outlined">memory</span></div>
@@ -483,18 +445,6 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- LIBROS -->
-<section class="sec off">
-  <div class="inner">
-    <div class="rev">
-      <div class="eyebrow"><div class="ey-l"></div><span class="ey-t">Biblioteca técnica</span></div>
-      <h2 class="sec-h">Libros de <span style="color:var(--navy)">Electrónica</span></h2>
-      <p class="sec-p">30 libros profesionales de referencia en electrónica, circuitos y componentes.</p>
-    </div>
-    <div class="books-grid" id="books-grid"></div>
-  </div>
-</section>
-
 <!-- WIKI -->
 <section class="sec dark" id="wiki">
   <div class="inner">
@@ -512,34 +462,11 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
   </div>
 </section>
 
-<!-- TIENDA -->
-<section class="sec" id="tienda">
-  <div class="inner">
-    <div class="rev">
-      <div class="eyebrow"><div class="ey-l"></div><span class="ey-t">Compra componentes</span></div>
-      <h2 class="sec-h">Tienda <span style="color:var(--red)">Oficial</span></h2>
-      <p class="sec-p">Playeras, tazas, circuitos armados, piezas 3D y componentes electrónicos.</p>
-    </div>
-    <div class="filtros rev">
-      <button class="fbtn active" onclick="filterShop('todos',this)">Todos</button>
-      <button class="fbtn" onclick="filterShop('playeras',this)">Playeras</button>
-      <button class="fbtn" onclick="filterShop('tazas',this)">Tazas</button>
-      <button class="fbtn" onclick="filterShop('circuitos',this)">Circuitos</button>
-      <button class="fbtn" onclick="filterShop('piezas3d',this)">Piezas 3D</button>
-    </div>
-    <div class="shop-grid rev" id="shop-grid"></div>
-  </div>
-</section>
-
 <!-- WHO -->
 <section id="who">
   <div class="who-col rev">
     <h2 class="who-h">Para estudiantes<br><span>Aprende desde cero</span></h2>
     <a href="#educacion" class="btn btn-red">Ver Cursos</a>
-  </div>
-  <div class="who-col rev">
-    <h2 class="who-h">Para makers<br><span>Construye tu proyecto</span></h2>
-    <a href="#tienda" class="btn btn-outline">Comprar Componentes</a>
   </div>
 </section>
 
@@ -554,7 +481,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
       <div class="tl-line" id="tl-line"></div>
       <div class="tl-item"><div class="tl-dot" id="dot0"></div><div><div class="tl-yr">17 DE AGOSTO 2025</div><div class="tl-name">E-VOLT Nace</div><div class="tl-desc">Proyecto inicial como plataforma educativa de electrónica, robótica y automatización. Enfocado en educación mexicana.</div></div></div>
       <div class="tl-item"><div class="tl-dot" id="dot1"></div><div><div class="tl-yr">2 DE FEBRERO 2026</div><div class="tl-name">EN CORTO</div><div class="tl-desc">Cambio de marca a "EN CORTO" — aprender de forma concisa y directa. Se lanza canal @circuitocero en YouTube.</div></div></div>
-      <div class="tl-item"><div class="tl-dot" id="dot2"></div><div><div class="tl-yr">8 DE ABRIL 2026</div><div class="tl-name">CIRCUITO CERO</div><div class="tl-desc">Versión actual. Plataforma completa con tienda, educación y comunidad. Expansión global con componentes y prototipos.</div></div></div>
+      <div class="tl-item"><div class="tl-dot" id="dot2"></div><div><div class="tl-yr">8 DE ABRIL 2026</div><div class="tl-name">CIRCUITO CERO</div><div class="tl-desc">Versión actual. Plataforma completa educativa con alcance global y contenido profesional.</div></div></div>
     </div>
     <div style="margin-top:3.5rem">
       <div class="rev">
@@ -562,9 +489,23 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
         <h2 class="sec-h">Nuestro <span style="color:var(--red)">Equipo</span></h2>
       </div>
       <div class="team-grid rev">
-        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,var(--red),#ff6b6b)">DM</div><div><div class="team-name">Diego Muñoz</div><div class="team-role">Fundador &amp; CEO</div><div class="team-date">17 AGO 2025</div></div></div></div>
-        <div class="team-card" style="border-color:var(--navy2)"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,var(--navy),var(--navy2))">JM</div><div><div class="team-name">Joel Muñoz</div><div class="team-role">Diseñador &amp; Coordinador</div><div class="team-date">17 AGO 2025</div></div></div></div>
-        <div class="team-card" style="border-color:#7209b7"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#7209b7,#9d4edd)">AR</div><div><div class="team-name">Andrés Ramírez</div><div class="team-role">Especialista en Electrónica</div><div class="team-date">FEB 2026</div></div></div></div>
+        <div class="team-card director"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,var(--red),#ff6b6b)">DM</div><div><div class="team-name">Diego Muñoz</div><div class="team-role">Director</div><div class="team-date">17 AGO 2025</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#7209b7,#9d4edd)">JM</div><div><div class="team-name">Joel Muñoz</div><div class="team-role">Colaborador</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,var(--navy),var(--navy2))">LB</div><div><div class="team-name">Levi Bryan</div><div class="team-role">Colaborador</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#f4a261,#e76f51)">LP</div><div><div class="team-name">Luis Polvo</div><div class="team-role">Colaborador</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#2a9d8f,#06d6a0)">EF</div><div><div class="team-name">Edwin Fernández</div><div class="team-role">Colaborador</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#e63946,#d62828)">MA</div><div><div class="team-name">Miguel Ángel</div><div class="team-role">Colaborador</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#bc4749,#f28482)">EM</div><div><div class="team-name">Erica Montiel</div><div class="team-role">Colaboradora</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#560bad,#b5179e)">VM</div><div><div class="team-name">Valeria Monte</div><div class="team-role">Colaboradora</div><div class="team-date">2026</div></div></div></div>
+        
+        <div class="team-card"><div class="team-h"><div class="team-av" style="background:linear-gradient(135deg,#1d3557,#457b9d)">JC</div><div><div class="team-name">Julio Cervantes</div><div class="team-role">Colaborador</div><div class="team-date">2026</div></div></div></div>
       </div>
     </div>
   </div>
@@ -580,7 +521,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
           <span class="material-symbols-outlined">school</span>
           <span>Ver Cursos</span>
         </a>
-        <a href="#tienda" class="btn btn-ghost">Explorar Tienda</a>
+        <a href="#wiki" class="btn btn-ghost">Buscar Conceptos</a>
       </div>
     </div>
   </div>
@@ -592,10 +533,9 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
     <div class="f-top">
       <div>
         <div class="f-logo"><span class="lc">CIRCUITO&nbsp;</span><span class="lr">CERO</span><sup style="font-size:.45em;color:rgba(255,255,255,.3)">®</sup></div>
-        <p class="f-desc">Plataforma educativa + tienda de electrónica. E-VOLT → EN CORTO → CIRCUITO CERO. México 2025-2026.</p>
+        <p class="f-desc">Plataforma educativa de electrónica. E-VOLT → EN CORTO → CIRCUITO CERO. México 2025-2026.</p>
       </div>
-      <div class="f-col"><h4>Plataforma</h4><ul><li><a href="#educacion">Educación</a></li><li><a href="#tienda">Tienda</a></li><li><a href="#wiki">Conceptos</a></li><li><a href="#quienes">Equipo</a></li></ul></div>
-      <div class="f-col"><h4>Categorías</h4><ul><li><a href="#tienda">Playeras</a></li><li><a href="#tienda">Tazas</a></li><li><a href="#tienda">Circuitos</a></li><li><a href="#tienda">Piezas 3D</a></li></ul></div>
+      <div class="f-col"><h4>Plataforma</h4><ul><li><a href="#educacion">Educación</a></li><li><a href="#wiki">Conceptos</a></li><li><a href="#quienes">Equipo</a></li></ul></div>
       <div class="f-col"><h4>Social</h4><ul>
         <li><a href="https://www.youtube.com/@circuitocero" target="_blank">YouTube @circuitocero</a></li>
         <li><a href="#quienes">Nosotros</a></li>
@@ -606,7 +546,7 @@ footer{background:#0a1628;color:#fff;padding:clamp(3rem,6vw,4rem) clamp(1.5rem,5
       <span>CIRCUITO CERO® 2025-2026 — Todos los derechos reservados. Hecho en México 🇲🇽</span>
       <a href="https://www.youtube.com/@circuitocero" target="_blank" style="color:rgba(255,255,255,.35);font-family:var(--mono);font-size:.7rem;text-decoration:none;">@circuitocero</a>
     </div>
-  </div>
+  </f-in>
 </footer>
 
 <script>
@@ -623,7 +563,7 @@ document.addEventListener('mousemove', e => {
   ring.style.left=rx+'px'; ring.style.top=ry+'px';
   requestAnimationFrame(animRing);
 })();
-document.querySelectorAll('a,button,.card,.video-card,.book-card,.team-card,.hstat').forEach(el => {
+document.querySelectorAll('a,button,.video-card,.team-card,.hstat').forEach(el => {
   el.addEventListener('mouseenter',()=>document.body.classList.add('cur-big'));
   el.addEventListener('mouseleave',()=>document.body.classList.remove('cur-big'));
 });
@@ -761,63 +701,6 @@ function renderVideos() {
   grid.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
 }
 
-/* ── Books ── */
-const LIBROS=['The Art of Electronics','Horowitz & Hill','Electronic Devices','Maquinas Electricas','Circuitos Eléctricos','Semiconductores','Microcontroladores','Sistemas Digitales','Electronica Industrial','Telecomunicaciones','Señales y Sistemas','Física Semiconductores','Componentes','Diseño PCB','Protección Eléctrica','Transformadores','Motores DC','Automatización','Control Industrial','SCADA','PLC Siemens','Python IoT','Redes Industriales','Energía Solar','Baterías','Fuentes Conmutadas','Amplificadores','Filtros Activos','Sensores','Actuadores'];
-function renderBooks() {
-  document.getElementById('books-grid').innerHTML=LIBROS.map((b,i)=>`
-    <div class="book-card rev d${(i%8)+1}">
-      <div class="book-icon">📚</div>
-      <div class="book-title">${b}</div>
-      <div class="book-lbl">Libro ${i+1} / 30</div>
-    </div>`).join('');
-  document.querySelectorAll('#books-grid .rev').forEach(el=>rObs.observe(el));
-}
-
-/* ── Shop ── */
-const PRODS={
-  playeras:[
-    {nombre:'Playera CIRCUITO CERO',cat:'Playera',desc:'Algodón 100%, diseño premium',img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&q=75',precio:29.99},
-    {nombre:'Playera Ley de Ohm',cat:'Playera',desc:'Fórmula V=IR minimalista',img:'https://images.unsplash.com/photo-1503341291549-8d766f8db3dc?w=400&q=75',precio:32.99},
-    {nombre:'Playera RGB LED',cat:'Playera',desc:'Códigos de color en espalda',img:'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=75',precio:34.99},
-  ],
-  tazas:[
-    {nombre:'Taza Circuito PCB',cat:'Taza',desc:'Diseño circuito impreso',img:'https://images.unsplash.com/photo-1559056199-641a0ac8b3f4?w=400&q=75',precio:16.99},
-    {nombre:'Taza Electrónica 101',cat:'Taza',desc:'Símbolos de electrónica',img:'https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=400&q=75',precio:17.99},
-    {nombre:'Taza Arduino Code',cat:'Taza',desc:'Código Arduino grabado',img:'https://images.unsplash.com/photo-1556742208-999c70bf8de1?w=400&q=75',precio:18.99},
-  ],
-  circuitos:[
-    {nombre:'Kit Parpadeo LED',cat:'Circuito',desc:'Arduino + resistencias + LED',img:'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&q=75',precio:45.99},
-    {nombre:'Circuito Semáforo',cat:'Circuito',desc:'Tres LED con lógica',img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75',precio:59.99},
-    {nombre:'Robot Seguidor Línea',cat:'Circuito',desc:'Arduino + sensores + motores',img:'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=400&q=75',precio:129.99},
-  ],
-  piezas3d:[
-    {nombre:'Caja ESP32 3D',cat:'Pieza 3D',desc:'Estuche impreso en PLA',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=75',precio:24.99},
-    {nombre:'Soporte Arduino',cat:'Pieza 3D',desc:'Plataforma de montaje',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=75',precio:32.99},
-    {nombre:'Carcasa Robótica',cat:'Pieza 3D',desc:'Chassis para robots',img:'https://images.unsplash.com/photo-1609336399814-73ca06536d97?w=400&q=75',precio:89.99},
-  ]
-};
-function renderProds(list){
-  const g=document.getElementById('shop-grid');
-  g.innerHTML=list.map((p,i)=>`
-    <div class="card rev d${(i%8)+1}">
-      <img class="card-img" src="${p.img}" alt="${p.nombre}" loading="lazy">
-      <div class="card-badge">${p.cat}</div>
-      <div class="card-body">
-        <div class="card-cat">${p.cat.toUpperCase()}</div>
-        <div class="card-title">${p.nombre}</div>
-        <div class="card-desc">${p.desc}</div>
-        <div class="card-price">$${p.precio}</div>
-        <button class="card-btn" onclick="alert('Agregado al carrito: ${p.nombre}')">Comprar</button>
-      </div>
-    </div>`).join('');
-  g.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
-}
-function filterShop(cat,btn){
-  document.querySelectorAll('.filtros .fbtn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderProds(cat==='todos'?Object.values(PRODS).flat():PRODS[cat]||[]);
-}
-
 /* ── Wiki ── */
 async function searchWiki(){
   const q=document.getElementById('wiki-search').value.trim();
@@ -841,8 +724,6 @@ document.getElementById('wiki-search').addEventListener('keydown',e=>{if(e.key==
 /* ── Init ── */
 buildTabs();
 renderVideos();
-renderBooks();
-renderProds(Object.values(PRODS).flat());
 </script>
 </body>
 </html>
