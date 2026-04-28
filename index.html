@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -17,18 +17,69 @@
   --font:'Outfit',sans-serif;--disp:'Syne',sans-serif;--mono:'IBM Plex Mono',monospace;
   --ease:cubic-bezier(.16,1,.3,1);--ease2:cubic-bezier(.19,1,.22,1);
   --r:16px;--max:480px;
+  --card-shadow:0 2px 16px rgba(0,0,0,.07);
+  --splash-bg:#e63946;
+}
+[data-theme="dark"]{
+  --bg:#0f0f0f;--bg2:#161616;--bg3:#1e1e1e;--surface:#1a1a1a;--surface2:#222;
+  --white:#1a1a1a;--text:#f0f0f0;--muted:#888;--muted2:#555;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --card-shadow:0 2px 16px rgba(0,0,0,.4);
+  --splash-bg:#0f0f0f;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;background:var(--bg);overscroll-behavior-y:contain;}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;max-width:var(--max);margin:0 auto;overflow-x:hidden;position:relative;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;max-width:var(--max);margin:0 auto;overflow-x:hidden;position:relative;transition:background .3s,color .3s;}
 img{max-width:100%;height:auto;display:block;}
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
 
+/* ─── MEJORA 20: SPLASH SCREEN ─── */
+#splash{
+  position:fixed;inset:0;background:var(--red);z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .5s var(--ease),transform .5s var(--ease);
+}
+#splash.hide{opacity:0;transform:translateY(-100%);pointer-events:none;}
+.splash-logo{
+  width:80px;height:80px;border-radius:20px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--disp);font-size:1.8rem;font-weight:800;color:var(--red);
+  animation:splashPulse 1.2s var(--ease) infinite alternate;
+  margin-bottom:16px;box-shadow:0 0 0 0 rgba(255,255,255,.5);
+}
+.splash-name{font-family:var(--disp);font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-.04em;}
+.splash-sub{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.7);margin-top:4px;letter-spacing:2px;}
+.splash-bar{
+  width:120px;height:3px;background:rgba(255,255,255,.25);border-radius:99px;
+  margin-top:32px;overflow:hidden;
+}
+.splash-bar-inner{height:100%;background:#fff;border-radius:99px;width:0%;animation:splashLoad 1.8s var(--ease) forwards;}
+@keyframes splashLoad{to{width:100%;}}
+@keyframes splashPulse{
+  0%{box-shadow:0 0 0 0 rgba(255,255,255,.5);}
+  100%{box-shadow:0 0 0 20px rgba(255,255,255,0);}
+}
+
+/* ─── MEJORA 15: CURSOR PERSONALIZADO ─── */
+#custom-cursor{
+  width:20px;height:20px;border:2px solid var(--red);border-radius:50%;
+  position:fixed;pointer-events:none;z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:width .15s,height .15s,background .15s;
+  mix-blend-mode:normal;
+}
+#custom-cursor.click{width:10px;height:10px;background:var(--red);}
+@media(pointer:coarse){#custom-cursor{display:none;}}
+
+/* ─── TOPBAR ─── */
 .topbar{
   position:sticky;top:0;z-index:100;
   background:rgba(255,255,255,.96);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
+}
+[data-theme="dark"] .topbar{background:rgba(15,15,15,.96);}
+.topbar-main{
   padding:10px 16px;
   display:flex;align-items:center;gap:10px;
 }
@@ -46,19 +97,39 @@ img{max-width:100%;height:auto;display:block;}
   text-decoration:none;
 }
 .tb-btn:hover{background:var(--red2);transform:scale(.97);}
+
+/* ─── MEJORA 9: DARK MODE TOGGLE ─── */
+.dark-toggle{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--muted);transition:all .2s;flex-shrink:0;font-size:1.1em;
+}
+.dark-toggle:hover{background:var(--red);color:#fff;border-color:var(--red);}
 .material-symbols-outlined{font-size:1em!important;vertical-align:middle;}
 
-.hero-cover{
-  position:relative;width:100%;
-  aspect-ratio:16/9;
-  overflow:hidden;
-  background:#eee;
+/* ─── MEJORA 8: TICKER DE NOTICIAS ─── */
+.news-ticker{
+  background:var(--navy);
+  padding:5px 0;overflow:hidden;white-space:nowrap;
 }
+.ticker-inner{
+  display:inline-block;
+  animation:ticker 30s linear infinite;
+  font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.85);
+  letter-spacing:.5px;
+}
+.ticker-inner span.sep{color:var(--red);margin:0 16px;}
+@keyframes ticker{0%{transform:translateX(100vw);}100%{transform:translateX(-100%);}}
+
+/* ─── HERO ─── */
+.hero-cover{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#eee;}
 .hero-cover img{width:100%;height:100%;object-fit:cover;display:block;}
-.hero-cover-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(0deg,rgba(0,0,0,.7) 0%,rgba(0,0,0,.2) 50%,transparent 100%);
-}
+.hero-cover-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,rgba(0,0,0,.2) 50%,transparent 100%);}
+
+/* ─── MEJORA 1: PARTÍCULAS DE CIRCUITO ─── */
+#circuit-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.35;pointer-events:none;}
+
 .hero-cover-text{position:absolute;bottom:0;left:0;right:0;padding:20px 16px 16px;}
 .hero-tag{
   display:inline-flex;align-items:center;gap:6px;
@@ -69,13 +140,14 @@ img{max-width:100%;height:auto;display:block;}
 }
 .hero-title{font-family:var(--disp);font-size:1.7rem;font-weight:800;color:#fff;line-height:1;letter-spacing:-.04em;margin-bottom:4px;}
 .hero-title span{color:var(--red);}
-.hero-sub{font-family:var(--font);font-size:.8rem;color:rgba(255,255,255,.8);line-height:1.5;}
 
-.stats-row{
-  display:flex;gap:0;
-  border-bottom:1px solid var(--border);
-  background:var(--bg2);
-}
+/* ─── MEJORA 13: TYPING ANIMATION ─── */
+.hero-sub{font-family:var(--font);font-size:.8rem;color:rgba(255,255,255,.85);line-height:1.5;min-height:1.2em;}
+.typing-cursor{display:inline-block;width:2px;height:.85em;background:#fff;vertical-align:middle;animation:blink .7s step-end infinite;margin-left:2px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ─── MEJORA 2: STATS CON CONTADOR ─── */
+.stats-row{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg2);}
 .stat-item{flex:1;text-align:center;padding:14px 8px;position:relative;cursor:default;}
 .stat-item+.stat-item::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:var(--border);}
 .stat-n{font-family:var(--disp);font-size:1.3rem;font-weight:800;color:var(--text);line-height:1;}
@@ -90,27 +162,57 @@ img{max-width:100%;height:auto;display:block;}
 
 .divider{height:8px;background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
 
+/* ─── MEJORA 19: SVG WAVE ENTRE SECCIONES ─── */
+.wave-sep{width:100%;overflow:hidden;line-height:0;background:var(--bg3);}
+.wave-sep svg{display:block;width:100%;height:32px;}
+.wave-sep.inv{transform:scaleY(-1);}
+
+/* ─── MEJORA 10: BUSCADOR EN TIEMPO REAL ─── */
+.search-bar-wrap{padding:0 16px 12px;}
+.search-bar{
+  width:100%;background:var(--surface);border:1.5px solid var(--border2);
+  color:var(--text);font-family:var(--font);font-size:.85rem;
+  padding:10px 14px 10px 38px;border-radius:12px;outline:none;
+  transition:border .2s,box-shadow .2s;
+}
+.search-bar:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(230,57,70,.12);}
+.search-bar::placeholder{color:var(--muted2);}
+.search-bar-wrap{position:relative;}
+.search-icon-abs{position:absolute;left:28px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:1.1em!important;}
+
 .chips-wrap{padding:0 16px 14px;overflow-x:auto;display:flex;gap:7px;scrollbar-width:none;}
 .chips-wrap::-webkit-scrollbar{display:none;}
 .chip{
-  flex-shrink:0;
-  background:var(--surface);border:1px solid var(--border2);
-  color:var(--muted);
-  font-family:var(--mono);font-size:.65rem;font-weight:600;
+  flex-shrink:0;background:var(--surface);border:1px solid var(--border2);
+  color:var(--muted);font-family:var(--mono);font-size:.65rem;font-weight:600;
   padding:6px 14px;border-radius:999px;cursor:pointer;
   transition:all .18s var(--ease);white-space:nowrap;
 }
 .chip.active,.chip:hover{background:var(--red);color:#fff;border-color:var(--red);}
 
+/* ─── MEJORA 5: BARRA DE PROGRESO POR CATEGORÍA ─── */
+.progress-bars{padding:0 16px 12px;display:flex;flex-direction:column;gap:7px;}
+.prog-row{display:flex;align-items:center;gap:8px;}
+.prog-label{font-family:var(--mono);font-size:.58rem;color:var(--muted);width:88px;flex-shrink:0;}
+.prog-track{flex:1;height:5px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;transition:width 1.2s var(--ease2);}
+.prog-num{font-family:var(--mono);font-size:.58rem;color:var(--muted);width:22px;text-align:right;}
+
 .videos-feed{padding:0 12px 12px;display:flex;flex-direction:column;gap:10px;}
+
+/* ─── MEJORA 3: VIDEO CARDS CON ANIMACIÓN STAGGER ─── */
 .vcard{
   background:var(--white);border-radius:14px;overflow:hidden;
   border:1px solid var(--border);
+  box-shadow:var(--card-shadow);
   transition:transform .2s var(--ease),box-shadow .2s;
   position:relative;
+  opacity:0;transform:translateY(20px);
+  animation:cardIn .5s var(--ease) forwards;
 }
+@keyframes cardIn{to{opacity:1;transform:none;}}
 .vcard:active{transform:scale(.98);}
-.vcard:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);}
+.vcard:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);}
 
 .vcard-thumb{position:relative;padding-bottom:75%;background:#f0f0f0;overflow:hidden;}
 .vcard-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
@@ -131,16 +233,8 @@ img{max-width:100%;height:auto;display:block;}
 .vcard-title{font-family:var(--disp);font-size:.92rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;}
 .vcard-meta{display:flex;align-items:center;justify-content:space-between;}
 .vcard-chan{font-family:var(--mono);font-size:.6rem;color:var(--muted);display:flex;align-items:center;gap:4px;}
-.vcard-cat-badge{
-  font-family:var(--mono);font-size:.58rem;font-weight:700;
-  padding:3px 9px;border-radius:999px;
-  background:rgba(230,57,70,.1);color:var(--red);
-  border:1px solid rgba(230,57,70,.2);
-}
-.vcard-actions{
-  display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;
-  border-top:1px solid var(--border);
-}
+.vcard-cat-badge{font-family:var(--mono);font-size:.58rem;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(230,57,70,.1);color:var(--red);border:1px solid rgba(230,57,70,.2);}
+.vcard-actions{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
 .vcard-yt{
   display:inline-flex;align-items:center;gap:5px;
   background:rgba(255,0,0,.08);color:#cc0000;border:1px solid rgba(255,0,0,.15);
@@ -154,46 +248,99 @@ img{max-width:100%;height:auto;display:block;}
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   color:var(--muted);transition:all .18s;flex-shrink:0;
 }
+.like-btn:hover{transform:scale(1.15);}
 .like-btn.liked{background:rgba(230,57,70,.1);border-color:rgba(230,57,70,.3);color:var(--red);}
 
+/* ─── MEJORA 11: BOTÓN COPIAR ENLACE ─── */
+.copy-btn{
+  width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--muted);transition:all .18s;flex-shrink:0;
+}
+.copy-btn:hover{background:rgba(42,157,143,.1);color:var(--teal);border-color:var(--teal);}
+.copy-btn.copied{background:rgba(42,157,143,.15);color:var(--teal);}
+
+/* ─── MEJORA 12: CONTADOR DE FAVORITOS ─── */
 .count-bar{
-  margin:0 16px 12px;
-  background:var(--surface);border-radius:10px;
-  padding:10px 14px;
-  display:flex;align-items:center;gap:8px;
-  border:1px solid var(--border);
+  margin:0 16px 12px;background:var(--surface);border-radius:10px;
+  padding:10px 14px;display:flex;align-items:center;gap:8px;border:1px solid var(--border);
 }
 .count-pill{background:var(--navy);color:#fff;padding:3px 10px;border-radius:999px;font-family:var(--mono);font-size:.62rem;font-weight:700;}
 .count-label{font-family:var(--mono);font-size:.65rem;color:var(--muted);}
+.fav-pill{margin-left:auto;background:rgba(230,57,70,.1);border:1px solid rgba(230,57,70,.2);color:var(--red);padding:3px 10px;border-radius:999px;font-family:var(--mono);font-size:.6rem;font-weight:700;display:flex;align-items:center;gap:4px;transition:all .2s;}
 
+/* ─── MEJORA 6: TOAST NOTIFICATION ─── */
+#toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--navy);color:#fff;
+  font-family:var(--mono);font-size:.7rem;font-weight:600;
+  padding:10px 18px;border-radius:999px;z-index:9998;
+  opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;
+  white-space:nowrap;display:flex;align-items:center;gap:6px;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ─── WIKI ─── */
 .wiki-section{background:var(--bg2);padding:0 0 16px;}
 .wiki-inner{padding:0 16px;}
 .wiki-input-row{display:flex;gap:8px;margin-bottom:0;}
 .wiki-input{
   flex:1;background:var(--white);border:1px solid var(--border2);
   color:var(--text);font-family:var(--font);font-size:.85rem;
-  padding:11px 14px;border-radius:10px;outline:none;
-  transition:border .2s;
+  padding:11px 14px;border-radius:10px;outline:none;transition:border .2s;
 }
 .wiki-input:focus{border-color:var(--red);}
 .wiki-input::placeholder{color:var(--muted2);}
 .wiki-btn{
   background:var(--red);color:#fff;border:none;
   font-family:var(--disp);font-size:.78rem;font-weight:700;
-  padding:11px 16px;border-radius:10px;cursor:pointer;
-  transition:background .2s;white-space:nowrap;
+  padding:11px 16px;border-radius:10px;cursor:pointer;transition:background .2s;white-space:nowrap;
 }
 .wiki-btn:hover{background:var(--red2);}
-.wiki-result{
-  margin-top:12px;background:var(--white);border-radius:12px;
-  padding:14px;border:1px solid var(--border);
-  font-size:.82rem;line-height:1.7;color:var(--text);
-  display:none;
-}
+.wiki-result{margin-top:12px;background:var(--white);border-radius:12px;padding:14px;border:1px solid var(--border);font-size:.82rem;line-height:1.7;color:var(--text);display:none;}
 .wiki-result.show{display:block;}
 .wiki-result h4{font-family:var(--disp);font-size:1rem;font-weight:800;color:var(--red);margin-bottom:8px;}
 .wiki-result a{color:var(--teal);font-size:.78rem;}
 
+/* ─── MEJORA 7: SIMULADOR DE LEY DE OHM ─── */
+.ohm-sec{padding:16px;}
+.ohm-card{
+  background:linear-gradient(135deg,var(--navy),#0d2240);
+  border-radius:18px;padding:20px;color:#fff;
+  position:relative;overflow:hidden;
+}
+.ohm-card::before{
+  content:'⚡';position:absolute;right:-10px;bottom:-10px;
+  font-size:8rem;opacity:.06;line-height:1;
+}
+.ohm-title{font-family:var(--disp);font-size:1rem;font-weight:800;margin-bottom:4px;}
+.ohm-sub{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.6);margin-bottom:16px;}
+.ohm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ohm-field label{font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.7);display:block;margin-bottom:4px;}
+.ohm-field input{
+  width:100%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-family:var(--mono);font-size:.9rem;font-weight:700;
+  padding:10px 12px;border-radius:10px;outline:none;transition:border .2s;
+}
+.ohm-field input:focus{border-color:var(--red);}
+.ohm-field input::placeholder{color:rgba(255,255,255,.3);}
+.ohm-result{
+  background:rgba(230,57,70,.2);border:1px solid rgba(230,57,70,.4);
+  border-radius:12px;padding:14px;text-align:center;
+}
+.ohm-result-label{font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.7);margin-bottom:4px;}
+.ohm-result-val{font-family:var(--disp);font-size:2rem;font-weight:800;color:var(--red);line-height:1;animation:valPop .3s var(--ease);}
+@keyframes valPop{0%{transform:scale(.85);}100%{transform:scale(1);}}
+.ohm-btns{display:flex;gap:8px;margin-top:12px;}
+.ohm-btn{
+  flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-family:var(--mono);font-size:.65rem;font-weight:700;
+  padding:9px;border-radius:10px;cursor:pointer;transition:background .2s;
+}
+.ohm-btn:hover,.ohm-btn.active{background:var(--red);border-color:var(--red);}
+
+/* ─── TIMELINE ─── */
 .timeline-sec{padding:0 16px 20px;}
 .tl-item{display:flex;gap:14px;margin-bottom:20px;position:relative;}
 .tl-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0;}
@@ -204,14 +351,15 @@ img{max-width:100%;height:auto;display:block;}
 .tl-name{font-family:var(--disp);font-size:1rem;font-weight:800;color:var(--text);margin-bottom:4px;}
 .tl-desc{font-size:.78rem;color:var(--muted);line-height:1.6;}
 
+/* ─── MEJORA 14: TEAM CON FLIP CARD ─── */
 .team-section{padding:0 16px 20px;}
 .director-card{
   background:linear-gradient(135deg,#eef4fb,#dbeaf7);
   border-radius:14px;padding:16px;
   display:flex;align-items:center;gap:12px;
-  border:1px solid rgba(69,123,157,.2);
-  margin-bottom:10px;
+  border:1px solid rgba(69,123,157,.2);margin-bottom:10px;
 }
+[data-theme="dark"] .director-card{background:linear-gradient(135deg,#1a2535,#0d1a2d);}
 .dir-av{
   width:54px;height:54px;border-radius:12px;flex-shrink:0;
   background:linear-gradient(135deg,var(--red),#ff6b6b);
@@ -227,112 +375,177 @@ img{max-width:100%;height:auto;display:block;}
   font-family:var(--mono);font-size:.58rem;font-weight:700;letter-spacing:.5px;white-space:nowrap;
 }
 .team-grid{display:flex;flex-direction:column;gap:7px;}
+
+/* flip card */
+.flip-wrap{perspective:600px;}
+.flip-inner{position:relative;transition:transform .5s var(--ease);transform-style:preserve-3d;}
+.flip-wrap:hover .flip-inner{transform:rotateY(180deg);}
+.flip-front,.flip-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.flip-back{position:absolute;inset:0;transform:rotateY(180deg);}
+
 .team-card{
   background:var(--white);border-radius:12px;padding:12px 14px;
   display:flex;align-items:center;gap:12px;
   border:1px solid var(--border);border-left:3px solid var(--navy2);
-  transition:transform .18s,box-shadow .18s;
+  box-shadow:var(--card-shadow);
 }
-.team-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.team-card-back{
+  background:linear-gradient(135deg,var(--navy),#0d2240);
+  border-radius:12px;padding:12px 14px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-family:var(--mono);font-size:.65rem;text-align:center;
+  gap:8px;
+}
 .team-av{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.85rem;flex-shrink:0;}
 .team-name{font-family:var(--disp);font-size:.88rem;font-weight:800;color:var(--text);}
 .team-role{font-family:var(--mono);font-size:.58rem;color:var(--muted);margin-top:1px;}
 
+/* ─── MEJORA 16: FUNDACIONES ─── */
+.fundaciones-sec{padding:16px;overflow:hidden;}
+.fund-title{font-family:var(--disp);font-size:.85rem;font-weight:800;color:var(--muted);text-align:center;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase;}
+.fund-scroll{display:flex;gap:12px;animation:fundScroll 20s linear infinite;}
+.fund-scroll:hover{animation-play-state:paused;}
+.fund-item{
+  flex-shrink:0;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:8px 16px;
+  font-family:var(--mono);font-size:.65rem;color:var(--muted);white-space:nowrap;
+  display:flex;align-items:center;gap:6px;
+}
+@keyframes fundScroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+
+/* ─── MEJORA 18: EASTER EGG KONAMI ─── */
+#konami-overlay{
+  position:fixed;inset:0;background:var(--red);z-index:99998;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+#konami-overlay.show{opacity:1;pointer-events:all;}
+.konami-text{font-family:var(--disp);font-size:2rem;font-weight:800;color:#fff;text-align:center;animation:konami 0.5s var(--ease) infinite alternate;}
+@keyframes konami{0%{transform:scale(1);}100%{transform:scale(1.08);}}
+.konami-close{margin-top:20px;background:#fff;color:var(--red);font-family:var(--mono);font-size:.75rem;font-weight:700;padding:10px 24px;border-radius:999px;border:none;cursor:pointer;}
+
+/* ─── CTA ─── */
 .byg-section{padding:16px;}
 .byg-card{
   background:linear-gradient(135deg,var(--red) 0%,var(--red2) 100%);
-  border-radius:20px;padding:24px 20px;text-align:center;
-  position:relative;overflow:hidden;
+  border-radius:20px;padding:24px 20px;text-align:center;position:relative;overflow:hidden;
 }
 .byg-card::before{content:'';position:absolute;top:-30%;right:-20%;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06);}
 .byg-card::after{content:'';position:absolute;bottom:-20%;left:-10%;width:150px;height:150px;border-radius:50%;background:rgba(0,0,0,.06);}
-.byg-logo{width:56px;height:56px;border-radius:14px;margin:0 auto 12px;border:3px solid rgba(255,255,255,.3);object-fit:contain;background:#fff;padding:4px;}
 .byg-title{font-family:var(--disp);font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.1;}
 .byg-sub{font-size:.8rem;color:rgba(255,255,255,.8);margin-bottom:18px;line-height:1.5;}
 .byg-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
-.byg-btn-w{
-  background:#fff;color:var(--red);
-  font-family:var(--disp);font-size:.82rem;font-weight:800;
-  padding:10px 20px;border-radius:999px;text-decoration:none;
-  display:flex;align-items:center;gap:5px;transition:transform .15s;
-}
+.byg-btn-w{background:#fff;color:var(--red);font-family:var(--disp);font-size:.82rem;font-weight:800;padding:10px 20px;border-radius:999px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:transform .15s;}
 .byg-btn-w:hover{transform:scale(.97);}
-.byg-btn-t{
-  background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);
-  font-family:var(--mono);font-size:.78rem;font-weight:700;
-  padding:10px 16px;border-radius:999px;text-decoration:none;
-  display:flex;align-items:center;gap:5px;transition:background .18s;
-}
+.byg-btn-t{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);font-family:var(--mono);font-size:.78rem;font-weight:700;padding:10px 16px;border-radius:999px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:background .18s;}
 .byg-btn-t:hover{background:rgba(255,255,255,.25);}
 
-.footer-bar{
-  background:var(--bg2);border-top:1px solid var(--border);
-  padding:20px 16px;text-align:center;
-}
+/* ─── FOOTER ─── */
+.footer-bar{background:var(--bg2);border-top:1px solid var(--border);padding:20px 16px;text-align:center;}
 .footer-logo-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px;}
 .footer-logo-img{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--red);padding:2px;background:#fff;object-fit:contain;}
 .footer-brand{font-family:var(--disp);font-size:.95rem;font-weight:800;color:var(--text);letter-spacing:-.02em;}
 .footer-brand span{color:var(--red);}
 .footer-copy{font-family:var(--mono);font-size:.55rem;color:var(--muted);margin-top:4px;}
 
+/* ─── BOTTOM NAV ─── */
 .bottom-nav{
   position:fixed;bottom:0;left:50%;transform:translateX(-50%);
   width:100%;max-width:var(--max);
   background:rgba(255,255,255,.97);backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);
-  display:flex;z-index:200;
+  border-top:1px solid var(--border);display:flex;z-index:200;
   padding-bottom:env(safe-area-inset-bottom);
 }
-.bnav-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:10px 4px 8px;cursor:pointer;
-  text-decoration:none;transition:opacity .15s;color:var(--muted);
-}
+[data-theme="dark"] .bottom-nav{background:rgba(15,15,15,.97);}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;cursor:pointer;text-decoration:none;transition:opacity .15s;color:var(--muted);}
 .bnav-item.active,.bnav-item:hover{color:var(--text);}
 .bnav-item.active .bnav-icon{color:var(--red);}
 .bnav-icon{font-size:1.4em!important;}
 .bnav-label{font-family:var(--mono);font-size:.52rem;letter-spacing:.3px;}
 
 .bottom-space{height:72px;}
-
 #prog{position:fixed;top:0;left:0;height:2px;background:var(--red);z-index:999;width:0%;transition:width .08s linear;}
-
 .rev{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease);}
 .rev.in{opacity:1;transform:none;}
 </style>
 </head>
 <body>
 
+<!-- MEJORA 20: SPLASH -->
+<div id="splash">
+  <div class="splash-logo">⚡</div>
+  <div class="splash-name">CIRCUITO CERO<sup style="font-size:.5em">®</sup></div>
+  <div class="splash-sub">PLATAFORMA EDUCATIVA</div>
+  <div class="splash-bar"><div class="splash-bar-inner"></div></div>
+</div>
+
+<!-- MEJORA 15: CURSOR PERSONALIZADO -->
+<div id="custom-cursor"></div>
+
+<!-- MEJORA 18: EASTER EGG -->
+<div id="konami-overlay">
+  <div class="konami-text">⚡ CIRCUITO CERO MODE ⚡<br><span style="font-size:.7em;opacity:.8">¡Encontraste el secreto!</span></div>
+  <button class="konami-close" onclick="closeKonami()">Cerrar</button>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
 <div id="prog"></div>
 
 <header class="topbar">
-  <img class="topbar-logo" src="https://yt3.googleusercontent.com/ytc/AIdro_lhqcZ9I7B8GhpB8cWLf9_gTzDNMEYpSbzLuFMKoS6MiA=s176-c-k-c0x00ffffff-no-rj" alt="Logo Circuito Cero" onerror="this.style.background='var(--red)';this.style.padding='6px'">
-  <div>
-    <div class="topbar-name">CIRCUITO <span>CERO</span><sup style="font-size:.5em;color:#aaa">®</sup></div>
-    <span class="topbar-sub">Plataforma Educativa · México</span>
+  <!-- MEJORA 8: TICKER -->
+  <div class="news-ticker">
+    <span class="ticker-inner">
+      ⚡ CIRCUITO CERO — 23 videos disponibles <span class="sep">|</span>
+      🔌 Nuevo: Ejercicio con capacitor — 2da parte <span class="sep">|</span>
+      🤖 Próximamente: Módulo de Robótica <span class="sep">|</span>
+      🇲🇽 Hecho en México con ❤️ <span class="sep">|</span>
+      💻 Tinkercad: 6 tutoriales interactivos <span class="sep">|</span>
+      ⚡ CIRCUITO CERO — 23 videos disponibles <span class="sep">|</span>
+      🔌 Nuevo: Ejercicio con capacitor — 2da parte <span class="sep">|</span>
+      🤖 Próximamente: Módulo de Robótica <span class="sep">|</span>
+    </span>
   </div>
-  <div class="topbar-right">
-    <a href="https://www.youtube.com/@circuitocero" target="_blank" class="tb-btn">
-      <span class="material-symbols-outlined">smart_display</span>
-      YouTube
-    </a>
+  <div class="topbar-main">
+    <img class="topbar-logo" src="https://yt3.googleusercontent.com/ytc/AIdro_lhqcZ9I7B8GhpB8cWLf9_gTzDNMEYpSbzLuFMKoS6MiA=s176-c-k-c0x00ffffff-no-rj" alt="Logo" onerror="this.style.background='var(--red)';this.style.padding='6px'">
+    <div>
+      <div class="topbar-name">CIRCUITO <span>CERO</span><sup style="font-size:.5em;color:#aaa">®</sup></div>
+      <span class="topbar-sub">Plataforma Educativa · México</span>
+    </div>
+    <div class="topbar-right">
+      <!-- MEJORA 9: DARK MODE -->
+      <button class="dark-toggle" onclick="toggleDark()" title="Modo oscuro" id="dark-btn">
+        <span class="material-symbols-outlined">dark_mode</span>
+      </button>
+      <a href="https://www.youtube.com/@circuitocero" target="_blank" class="tb-btn">
+        <span class="material-symbols-outlined">smart_display</span>YouTube
+      </a>
+    </div>
   </div>
 </header>
 
 <div class="hero-cover">
+  <!-- MEJORA 1: CANVAS DE PARTÍCULAS -->
+  <canvas id="circuit-canvas"></canvas>
   <img src="https://i.ytimg.com/vi/Eqml-6B1jMo/hqdefault.jpg" alt="Circuito Cero portada" onerror="this.style.background='linear-gradient(135deg,#e63946,#1d3557)'">
   <div class="hero-cover-overlay"></div>
   <div class="hero-cover-text">
     <div class="hero-tag"><span class="material-symbols-outlined">bolt</span>Plataforma Educativa 2026</div>
     <div class="hero-title">CIRCUITO <span>CERO</span></div>
-    <div class="hero-sub">Electrónica · Robótica · Automatización · Programación</div>
+    <!-- MEJORA 13: TYPING -->
+    <div class="hero-sub"><span id="typing-text"></span><span class="typing-cursor"></span></div>
   </div>
 </div>
 
+<!-- MEJORA 2: STATS CON CONTADOR ANIMADO -->
 <div class="stats-row">
-  <div class="stat-item"><div class="stat-n r">23</div><div class="stat-l">Videos</div></div>
-  <div class="stat-item"><div class="stat-n" style="color:var(--teal)">9</div><div class="stat-l">Equipo</div></div>
-  <div class="stat-item"><div class="stat-n" style="color:#639922">2025</div><div class="stat-l">Inicio</div></div>
+  <div class="stat-item"><div class="stat-n r" data-target="23" id="c1">0</div><div class="stat-l">Videos</div></div>
+  <div class="stat-item"><div class="stat-n" style="color:var(--teal)" data-target="9" id="c2">0</div><div class="stat-l">Equipo</div></div>
+  <div class="stat-item"><div class="stat-n" style="color:#639922" data-target="2025" id="c3">0</div><div class="stat-l">Inicio</div></div>
 </div>
 
 <div class="divider"></div>
@@ -342,13 +555,56 @@ img{max-width:100%;height:auto;display:block;}
     <div class="sec-title">Videos &amp; <span>Cursos</span></div>
     <a href="https://www.youtube.com/@circuitocero" target="_blank" class="sec-more">Ver canal <span class="material-symbols-outlined">chevron_right</span></a>
   </div>
+
+  <!-- MEJORA 10: BÚSQUEDA EN TIEMPO REAL -->
+  <div class="search-bar-wrap rev" style="position:relative;">
+    <span class="material-symbols-outlined search-icon-abs">search</span>
+    <input class="search-bar" type="text" id="live-search" placeholder="Buscar video... (ej: transistor, LED, Tinkercad)">
+  </div>
+
   <div class="chips-wrap rev" id="cat-chips"></div>
+
+  <!-- MEJORA 5: BARRAS DE PROGRESO -->
+  <div class="progress-bars rev" id="prog-bars"></div>
+
   <div class="count-bar rev">
     <span class="count-pill" id="vid-count">23 videos</span>
     <span class="count-label" id="vid-cat-label">Todos los temas</span>
+    <!-- MEJORA 12: FAVORITOS COUNTER -->
+    <div class="fav-pill" id="fav-pill" style="display:none">
+      <span class="material-symbols-outlined" style="font-size:.9em!important">favorite</span>
+      <span id="fav-count">0</span>
+    </div>
   </div>
+
   <div class="videos-feed" id="videos-feed"></div>
 </section>
+
+<!-- WAVE SEPARATOR -->
+<div class="wave-sep">
+  <svg viewBox="0 0 480 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 16 Q60 0 120 16 Q180 32 240 16 Q300 0 360 16 Q420 32 480 16 L480 32 L0 32Z" fill="var(--bg)"/>
+  </svg>
+</div>
+
+<!-- MEJORA 7: SIMULADOR LEY DE OHM -->
+<div class="ohm-sec rev" id="simulador">
+  <div class="sec-header" style="padding:0 0 12px"><div class="sec-title">Simulador <span>V=I·R</span></div></div>
+  <div class="ohm-card">
+    <div class="ohm-title">⚡ Calculadora de Ley de Ohm</div>
+    <div class="ohm-sub">Ingresa dos valores para calcular el tercero</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;" id="ohm-mode-btns">
+      <button class="ohm-btn active" onclick="setOhmMode('V',this)">Calcular V</button>
+      <button class="ohm-btn" onclick="setOhmMode('I',this)">Calcular I</button>
+      <button class="ohm-btn" onclick="setOhmMode('R',this)">Calcular R</button>
+    </div>
+    <div class="ohm-grid" id="ohm-inputs"></div>
+    <div class="ohm-result">
+      <div class="ohm-result-label" id="ohm-result-label">Resultado</div>
+      <div class="ohm-result-val" id="ohm-result-val">—</div>
+    </div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
@@ -390,13 +646,23 @@ img{max-width:100%;height:auto;display:block;}
       <div class="dir-av">DM</div>
       <div>
         <div class="dir-name">Diego Muñoz</div>
-        <div class="dir-role">Director General &amp; Fundador</div>
+        <div class="dir-role">CEO &amp; Fundador Principal</div>
       </div>
-      <div class="dir-badge">Director</div>
+      <div class="dir-badge">CEO</div>
     </div>
+    <!-- MEJORA 14: FLIP CARDS -->
     <div class="team-grid" id="team-grid"></div>
   </div>
 </section>
+
+<!-- MEJORA 16: FUNDACIONES CON SCROLL ANIMADO -->
+<div class="divider"></div>
+<div class="fundaciones-sec rev">
+  <div class="fund-title">Fundaciones Aliadas</div>
+  <div style="overflow:hidden;position:relative;">
+    <div class="fund-scroll" id="fund-scroll"></div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
@@ -406,6 +672,7 @@ img{max-width:100%;height:auto;display:block;}
     <div class="byg-sub">Electrónica profesional al alcance de todos. Hecho en México 🇲🇽</div>
     <div class="byg-btns">
       <a href="#educacion" class="byg-btn-w"><span class="material-symbols-outlined">play_circle</span>Ver Cursos</a>
+      <a href="#simulador" class="byg-btn-t"><span class="material-symbols-outlined">calculate</span>Simulador</a>
       <a href="https://www.youtube.com/@circuitocero" target="_blank" class="byg-btn-t"><span class="material-symbols-outlined">smart_display</span>YouTube</a>
     </div>
   </div>
@@ -426,6 +693,10 @@ img{max-width:100%;height:auto;display:block;}
     <span class="material-symbols-outlined bnav-icon">play_circle</span>
     <span class="bnav-label">Cursos</span>
   </a>
+  <a href="#simulador" class="bnav-item" onclick="setNav(this)">
+    <span class="material-symbols-outlined bnav-icon">calculate</span>
+    <span class="bnav-label">Simular</span>
+  </a>
   <a href="#wiki" class="bnav-item" onclick="setNav(this)">
     <span class="material-symbols-outlined bnav-icon">search</span>
     <span class="bnav-label">Conceptos</span>
@@ -441,16 +712,136 @@ img{max-width:100%;height:auto;display:block;}
 </nav>
 
 <script>
+/* ─── SPLASH ─── */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('hide');
+    startCounters();
+    startTyping();
+  },2000);
+});
+
+/* ─── CURSOR ─── */
+const cur=document.getElementById('custom-cursor');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+document.addEventListener('mousedown',()=>cur.classList.add('click'));
+document.addEventListener('mouseup',()=>cur.classList.remove('click'));
+
+/* ─── DARK MODE ─── */
+function toggleDark(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('dark-btn').innerHTML=`<span class="material-symbols-outlined">${isDark?'dark_mode':'light_mode'}</span>`;
+}
+
+/* ─── PROGRESS BAR ─── */
 window.addEventListener('scroll',()=>{
   const h=document.documentElement,sc=h.scrollTop,sh=h.scrollHeight-h.clientHeight;
   document.getElementById('prog').style.width=(sc/sh*100)+'%';
 });
 
+/* ─── REVEAL ─── */
 const rObs=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('in');}),{threshold:.06});
 document.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
-
 function setNav(el){document.querySelectorAll('.bnav-item').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
 
+/* ─── MEJORA 2: CONTADORES ─── */
+function animateCount(el,target,dur=1200){
+  const start=performance.now();
+  function step(now){
+    const p=Math.min((now-start)/dur,1);
+    const ease=1-Math.pow(1-p,4);
+    el.textContent=Math.floor(ease*target);
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=target;
+  }
+  requestAnimationFrame(step);
+}
+function startCounters(){
+  ['c1','c2','c3'].forEach(id=>{
+    const el=document.getElementById(id);
+    animateCount(el,+el.dataset.target);
+  });
+}
+
+/* ─── MEJORA 13: TYPING ANIMATION ─── */
+const phrases=['Electrónica · Robótica · Automatización','Aprende desde cero, domina lo profesional','Programación · Tinkercad · Componentes','Hecho en México 🇲🇽 para el mundo'];
+let pi=0,ci=0,deleting=false;
+function startTyping(){typeTick();}
+function typeTick(){
+  const el=document.getElementById('typing-text');
+  const ph=phrases[pi];
+  if(!deleting){
+    el.textContent=ph.slice(0,++ci);
+    if(ci===ph.length){deleting=true;setTimeout(typeTick,2200);return;}
+  } else {
+    el.textContent=ph.slice(0,--ci);
+    if(ci===0){deleting=false;pi=(pi+1)%phrases.length;}
+  }
+  setTimeout(typeTick,deleting?40:70);
+}
+
+/* ─── MEJORA 1: CIRCUIT CANVAS PARTICLES ─── */
+(function(){
+  const canvas=document.getElementById('circuit-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,nodes=[];
+  function resize(){
+    W=canvas.width=canvas.offsetWidth;
+    H=canvas.height=canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize',()=>{resize();buildNodes();});
+  function buildNodes(){
+    nodes=[];
+    const n=18;
+    for(let i=0;i<n;i++){
+      nodes.push({
+        x:Math.random()*W,y:Math.random()*H,
+        vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
+      });
+    }
+  }
+  buildNodes();
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,0.7)';
+    ctx.lineWidth=1;
+    for(let i=0;i<nodes.length;i++){
+      const a=nodes[i];
+      for(let j=i+1;j<nodes.length;j++){
+        const b=nodes[j];
+        const d=Math.hypot(a.x-b.x,a.y-b.y);
+        if(d<130){
+          ctx.globalAlpha=(1-d/130)*.5;
+          ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha=1;
+    nodes.forEach(n=>{
+      ctx.fillStyle='rgba(255,255,255,0.9)';
+      ctx.beginPath();ctx.arc(n.x,n.y,2,0,Math.PI*2);ctx.fill();
+      n.x+=n.vx;n.y+=n.vy;
+      if(n.x<0||n.x>W)n.vx*=-1;
+      if(n.y<0||n.y>H)n.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ─── TOAST ─── */
+function showToast(msg,icon='⚡'){
+  const t=document.getElementById('toast');
+  t.innerHTML=`<span>${icon}</span>${msg}`;
+  t.classList.add('show');
+  clearTimeout(t._to);
+  t._to=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* ─── VIDEOS DATA ─── */
 const VIDEOS=[
   {num:1,url:'https://youtube.com/shorts/Eqml-6B1jMo',id:'Eqml-6B1jMo',title:'¿Cómo funciona un LED?',cat:'componentes'},
   {num:2,url:'https://youtube.com/shorts/2t0S1zO5stk',id:'2t0S1zO5stk',title:'¿Qué es la electricidad?',cat:'fundamentos'},
@@ -485,22 +876,45 @@ const CATS=[
   {key:'programacion',label:'👨‍💻 Programación'},
 ];
 const CAT_LABELS={todos:'Todos los temas',fundamentos:'Fundamentos',componentes:'Componentes',tinkercad:'Tinkercad',programacion:'Programación'};
+const CAT_COLORS={fundamentos:'#e63946',componentes:'#2a9d8f',tinkercad:'#457b9d',programacion:'#7209b7'};
 
 let activeCat='todos';
 const likedVideos=new Set();
+let searchQ='';
 
 function buildChips(){
   document.getElementById('cat-chips').innerHTML=CATS.map(c=>`<button class="chip${c.key===activeCat?' active':''}" onclick="setCat('${c.key}')">${c.label}</button>`).join('');
 }
-function setCat(key){activeCat=key;buildChips();renderVideos();}
+function setCat(key){activeCat=key;searchQ='';document.getElementById('live-search').value='';buildChips();renderVideos();}
 
+/* ─── MEJORA 5: BARRAS DE PROGRESO ─── */
+function buildProgBars(){
+  const cats=['fundamentos','componentes','tinkercad','programacion'];
+  const total=VIDEOS.length;
+  document.getElementById('prog-bars').innerHTML=cats.map(c=>{
+    const n=VIDEOS.filter(v=>v.cat===c).length;
+    const pct=Math.round(n/total*100);
+    return `<div class="prog-row">
+      <div class="prog-label">${CAT_LABELS[c]}</div>
+      <div class="prog-track"><div class="prog-fill" style="width:0%;background:${CAT_COLORS[c]}" data-pct="${pct}"></div></div>
+      <div class="prog-num">${n}</div>
+    </div>`;
+  }).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.prog-fill').forEach(el=>{el.style.width=el.dataset.pct+'%';});
+  },600);
+}
+
+/* ─── MEJORA 3: RENDER VIDEOS CON STAGGER ─── */
 function renderVideos(){
-  const list=activeCat==='todos'?VIDEOS:VIDEOS.filter(v=>v.cat===activeCat);
+  let list=activeCat==='todos'?VIDEOS:VIDEOS.filter(v=>v.cat===activeCat);
+  if(searchQ)list=list.filter(v=>v.title.toLowerCase().includes(searchQ.toLowerCase()));
   document.getElementById('vid-count').textContent=list.length+' video'+(list.length!==1?'s':'');
-  document.getElementById('vid-cat-label').textContent=CAT_LABELS[activeCat]||activeCat;
+  document.getElementById('vid-cat-label').textContent=searchQ?`"${searchQ}"`:CAT_LABELS[activeCat]||activeCat;
+  updateFavPill();
   const feed=document.getElementById('videos-feed');
-  feed.innerHTML=list.map(v=>`
-    <div class="vcard rev">
+  feed.innerHTML=list.map((v,i)=>`
+    <div class="vcard rev" style="animation-delay:${i*0.04}s">
       <div class="vcard-thumb">
         <span class="vcard-num">${String(v.num).padStart(2,'0')}</span>
         <span class="shorts-pill">Shorts</span>
@@ -514,34 +928,127 @@ function renderVideos(){
         </div>
         <div class="vcard-actions">
           <a href="${v.url}" target="_blank" class="vcard-yt"><span class="material-symbols-outlined">open_in_new</span>Ver en YouTube</a>
-          <button class="like-btn${likedVideos.has(v.id)?' liked':''}" onclick="toggleLike(this,'${v.id}')" aria-label="Me gusta"><span class="material-symbols-outlined" style="font-size:1.1em!important">favorite</span></button>
+          <!-- MEJORA 11: COPIAR ENLACE -->
+          <button class="copy-btn" onclick="copyLink(this,'${v.url}')" title="Copiar enlace"><span class="material-symbols-outlined" style="font-size:1.1em!important">link</span></button>
+          <!-- MEJORA 6: LIKE CON TOAST -->
+          <button class="like-btn${likedVideos.has(v.id)?' liked':''}" onclick="toggleLike(this,'${v.id}','${v.title}')" aria-label="Me gusta"><span class="material-symbols-outlined" style="font-size:1.1em!important">favorite</span></button>
         </div>
       </div>
     </div>`).join('');
   feed.querySelectorAll('.rev').forEach(el=>rObs.observe(el));
 }
 
-function toggleLike(btn,id){
-  if(likedVideos.has(id)){likedVideos.delete(id);btn.classList.remove('liked');}
-  else{likedVideos.add(id);btn.classList.add('liked');}
+/* ─── MEJORA 12: FAVORITOS COUNTER ─── */
+function updateFavPill(){
+  const pill=document.getElementById('fav-pill');
+  const fc=document.getElementById('fav-count');
+  if(likedVideos.size>0){pill.style.display='flex';fc.textContent=likedVideos.size;}
+  else pill.style.display='none';
 }
 
+/* ─── MEJORA 6: TOAST AL HACER LIKE ─── */
+function toggleLike(btn,id,title){
+  if(likedVideos.has(id)){
+    likedVideos.delete(id);btn.classList.remove('liked');
+    showToast('Quitado de favoritos','💔');
+  } else {
+    likedVideos.add(id);btn.classList.add('liked');
+    showToast(`Guardado: ${title.slice(0,22)}…`,'❤️');
+  }
+  updateFavPill();
+}
+
+/* ─── MEJORA 11: COPIAR ENLACE ─── */
+function copyLink(btn,url){
+  navigator.clipboard.writeText(url).then(()=>{
+    btn.classList.add('copied');
+    showToast('Enlace copiado','🔗');
+    setTimeout(()=>btn.classList.remove('copied'),1500);
+  });
+}
+
+/* ─── MEJORA 10: BÚSQUEDA EN TIEMPO REAL ─── */
+document.getElementById('live-search').addEventListener('input',e=>{
+  searchQ=e.target.value;
+  if(searchQ){activeCat='todos';buildChips();}
+  renderVideos();
+});
+
+/* ─── MEJORA 14: TEAM FLIP CARDS ─── */
 const TEAM=[
-  {ini:'JM',nombre:'Joel Muñoz',rol:'Colaborador',color:'linear-gradient(135deg,#1d3557,#457b9d)'},
-  {ini:'LB',nombre:'Levi Bryan',rol:'Colaborador',color:'linear-gradient(135deg,#2a9d8f,#52b788)'},
-  {ini:'LP',nombre:'Luis Polvo',rol:'Colaborador',color:'linear-gradient(135deg,#e76f51,#f4a261)'},
-  {ini:'EF',nombre:'Edwin Fernández',rol:'Colaborador',color:'linear-gradient(135deg,#7209b7,#9d4edd)'},
-  {ini:'MA',nombre:'Miguel Ángel',rol:'Colaborador',color:'linear-gradient(135deg,#023e8a,#0096c7)'},
-  {ini:'EM',nombre:'Erica Montiel',rol:'Colaboradora',color:'linear-gradient(135deg,#c77dff,#9d4edd)'},
-  {ini:'VM',nombre:'Valeria Monte',rol:'Colaboradora',color:'linear-gradient(135deg,#ff477e,#ff85a1)'},
-  {ini:'JC',nombre:'Julio Cervantes',rol:'Colaborador',color:'linear-gradient(135deg,#606c38,#a7c957)'},
+  {ini:'JM',nombre:'Joel Muñoz',rol:'Fundador & Diseñador',color:'linear-gradient(135deg,#1d3557,#457b9d)',info:'Co-fundador de la plataforma y líder de diseño visual'},
+  {ini:'LB',nombre:'Levi Bryan',rol:'Colaborador',color:'linear-gradient(135deg,#2a9d8f,#52b788)',info:'Apoyo en producción de contenido técnico'},
+  {ini:'LP',nombre:'Luis Polvo',rol:'Colaborador',color:'linear-gradient(135deg,#e76f51,#f4a261)',info:'Desarrollador de materiales educativos'},
+  {ini:'EF',nombre:'Edwin Fernández',rol:'Colaborador',color:'linear-gradient(135deg,#7209b7,#9d4edd)',info:'Especialista en programación y robótica'},
+  {ini:'MA',nombre:'Miguel Ángel',rol:'Colaborador',color:'linear-gradient(135deg,#023e8a,#0096c7)',info:'Experto en automatización industrial'},
+  {ini:'EM',nombre:'Erica Montiel',rol:'Colaboradora',color:'linear-gradient(135deg,#c77dff,#9d4edd)',info:'Comunicación y gestión de comunidad'},
+  {ini:'VM',nombre:'Valeria Monte',rol:'Colaboradora',color:'linear-gradient(135deg,#ff477e,#ff85a1)',info:'Diseño gráfico y producción visual'},
+  {ini:'JC',nombre:'Julio Cervantes',rol:'Colaborador',color:'linear-gradient(135deg,#606c38,#a7c957)',info:'Soporte técnico y hardware'},
 ];
 document.getElementById('team-grid').innerHTML=TEAM.map(m=>`
-  <div class="team-card">
-    <div class="team-av" style="background:${m.color}">${m.ini}</div>
-    <div><div class="team-name">${m.nombre}</div><div class="team-role">${m.rol}</div></div>
+  <div class="flip-wrap">
+    <div class="flip-inner" style="height:62px;">
+      <div class="flip-front" style="height:62px;">
+        <div class="team-card">
+          <div class="team-av" style="background:${m.color}">${m.ini}</div>
+          <div><div class="team-name">${m.nombre}</div><div class="team-role">${m.rol}</div></div>
+          <span class="material-symbols-outlined" style="margin-left:auto;color:var(--muted);font-size:.9em!important">flip</span>
+        </div>
+      </div>
+      <div class="flip-back" style="height:62px;">
+        <div class="team-card-back">
+          <div class="team-av" style="background:${m.color}">${m.ini}</div>
+          <div style="font-size:.65rem;opacity:.9">${m.info}</div>
+        </div>
+      </div>
+    </div>
   </div>`).join('');
 
+/* ─── MEJORA 16: FUNDACIONES ─── */
+const FUNDS=[
+  {icon:'🔌',name:'Fundación Arduino México'},
+  {icon:'🤖',name:'Fundación Robótica MX'},
+  {icon:'⚡',name:'Fundación Electrónica Libre'},
+  {icon:'🎓',name:'Fundación EdTech Tlaxcala'},
+  {icon:'🛠️',name:'Fundación Maker MX'},
+];
+const fundHTML=FUNDS.concat(FUNDS).map(f=>`<div class="fund-item">${f.icon} ${f.name}</div>`).join('');
+document.getElementById('fund-scroll').innerHTML=fundHTML;
+
+/* ─── MEJORA 7: SIMULADOR OHM ─── */
+let ohmMode='V';
+const ohmDefs={
+  V:{fields:[{k:'I',l:'Corriente (A)',u:'A'},{k:'R',l:'Resistencia (Ω)',u:'Ω'}],label:'Voltaje (V)',unit:'V',fn:(I,R)=>I*R},
+  I:{fields:[{k:'V',l:'Voltaje (V)',u:'V'},{k:'R',l:'Resistencia (Ω)',u:'Ω'}],label:'Corriente (A)',unit:'A',fn:(V,R)=>V/R},
+  R:{fields:[{k:'V',l:'Voltaje (V)',u:'V'},{k:'I',l:'Corriente (A)',u:'A'}],label:'Resistencia (Ω)',unit:'Ω',fn:(V,I)=>V/I},
+};
+function setOhmMode(m,btn){
+  ohmMode=m;
+  document.querySelectorAll('#ohm-mode-btns .ohm-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildOhmFields();
+  calcOhm();
+}
+function buildOhmFields(){
+  const def=ohmDefs[ohmMode];
+  document.getElementById('ohm-inputs').innerHTML=def.fields.map(f=>`
+    <div class="ohm-field">
+      <label>${f.l}</label>
+      <input type="number" id="ohm-${f.k}" placeholder="0.0" oninput="calcOhm()">
+    </div>`).join('');
+  document.getElementById('ohm-result-label').textContent=def.label;
+}
+function calcOhm(){
+  const def=ohmDefs[ohmMode];
+  const vals=def.fields.map(f=>+document.getElementById('ohm-'+f.k)?.value||0);
+  const res=def.fn(...vals);
+  const el=document.getElementById('ohm-result-val');
+  el.textContent=isNaN(res)||!isFinite(res)?'—':(res.toFixed(3).replace(/\.?0+$/,''))+' '+def.unit;
+  el.style.animation='none';requestAnimationFrame(()=>el.style.animation='');
+}
+buildOhmFields();
+
+/* ─── WIKI ─── */
 async function searchWiki(){
   const q=document.getElementById('wiki-search').value.trim();
   if(!q)return;
@@ -559,7 +1066,17 @@ async function searchWiki(){
 }
 document.getElementById('wiki-search').addEventListener('keydown',e=>{if(e.key==='Enter')searchWiki();});
 
+/* ─── MEJORA 18: KONAMI CODE ─── */
+const KONAMI=[38,38,40,40,37,39,37,39,66,65];
+let ki=0;
+document.addEventListener('keydown',e=>{
+  if(e.keyCode===KONAMI[ki])ki++;else ki=0;
+  if(ki===KONAMI.length){ki=0;document.getElementById('konami-overlay').classList.add('show');}
+});
+function closeKonami(){document.getElementById('konami-overlay').classList.remove('show');}
+
 buildChips();
+buildProgBars();
 renderVideos();
 </script>
 </body>
