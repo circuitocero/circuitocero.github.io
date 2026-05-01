@@ -726,7 +726,7 @@ input,select,textarea{font-family:var(--font);}
       <div>
         <div class="ai-name">EMAI.IA</div>
         <div class="ai-desc">Inteligencia para Circuito Cero &middot; Gratis</div>
-        <div class="ai-model-badge">Llama 3 via Groq API</div>
+        <div class="ai-model-badge">EMAI.IA · Motor de Circuito Cero</div>
       </div>
       <div class="ai-status"><div class="ai-dot"></div>En linea</div>
     </div>
@@ -736,7 +736,7 @@ input,select,textarea{font-family:var(--font);}
       <input class="ai-input" type="text" id="ai-in" placeholder="Pregunta sobre electronica, robotica...">
       <button class="ai-send" onclick="sendAI()"><span class="material-symbols-outlined" style="font-size:1.2em!important">send</span></button>
     </div>
-    <div class="ai-groq-note">EMAI.IA usa Groq (Llama 3) gratis. Para activar: agrega tu GROQ_API_KEY en el codigo.</div>
+    <div class="ai-groq-note">EMAI.IA responde preguntas de electronica, robotica, automatizacion y programacion.</div>
   </div>
 </section>
 
@@ -890,8 +890,6 @@ document.getElementById("footer-logo").src = LOGO_SRC;
 document.getElementById("hero-img").src = COVER_SRC;
 
 // ── GROQ API KEY ── Diego: reemplaza con tu key de console.groq.com (gratis)
-var GROQ_API_KEY = "TU_GROQ_API_KEY";
-
 // ── DIRECTOR EMAIL (para mostrar panel de analitica) ──
 var DIRECTOR_EMAIL = "diego@circuitocero.mx";
 
@@ -1192,29 +1190,29 @@ async function askAI(q){
   box.scrollTop=box.scrollHeight;
 }
 async function getAIResp(q){
-  // Intentar con Groq API real
-  if(GROQ_API_KEY !== "TU_GROQ_API_KEY"){
-    try{
-      var res = await fetch("https://api.groq.com/openai/v1/chat/completions",{
-        method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Bearer "+GROQ_API_KEY},
-        body:JSON.stringify({
-          model:"llama3-8b-8192",
-          messages:[
-            {role:"system",content:"Eres EMAI.IA, la inteligencia artificial de Circuito Cero, plataforma educativa mexicana de electronica, robotica y automatizacion. Responde en espanol, de forma concisa y practica. Menciona los simuladores, videos o juegos de la plataforma cuando sea relevante."},
-            {role:"user",content:q}
-          ],
-          max_tokens:300
-        })
-      });
-      var data = await res.json();
-      if(data.choices&&data.choices[0]) return data.choices[0].message.content;
-    }catch(e){console.log("Groq error, usando base local");}
-  }
-  // Fallback a base de conocimiento local
+  // Usar Anthropic API con soporte directo de navegador
+  try{
+    var res = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
+      body:JSON.stringify({
+        model:"claude-haiku-4-5-20251001",
+        max_tokens:400,
+        system:"Eres EMAI.IA, la IA de Circuito Cero, plataforma educativa mexicana de electronica, robotica y automatizacion. Responde siempre en espanol, de forma concisa y practica. Maximo 2 parrafos.",
+        messages:[{role:"user",content:q}]
+      })
+    });
+    var data = await res.json();
+    if(data.content&&data.content[0]&&data.content[0].text) return data.content[0].text;
+  }catch(e){}
+  // Base de conocimiento local como respaldo
   var ql=q.toLowerCase();
   for(var i=0;i<AI_KB.length;i++){var e=AI_KB[i];for(var j=0;j<e.q.length;j++){if(ql.indexOf(e.q[j])!==-1)return e.a;}}
-  return "Interesante pregunta. Basandome en el contenido de Circuito Cero, te recomiendo explorar los videos de fundamentos y el Simulador Electrico. Para respuestas mas avanzadas, configura la GROQ_API_KEY en el codigo para activar Llama 3 completo.";
+  return "Revisa los videos de fundamentos y el Simulador Electrico de la plataforma. Si tienes dudas especificas, el equipo de Circuito Cero responde en el chat en vivo.";
 }
 
 // ── PWA INSTALL ──
