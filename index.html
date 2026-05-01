@@ -517,25 +517,39 @@ input,select,textarea{font-family:var(--font);}
 <div class="divider"></div>
 
 <section id="emai">
-  <div class="sec-hd rev"><div class="sec-title">EMAI<span>.IA</span></div></div>
+  <div class="sec-hd rev"><div class="sec-title">Chat <span>Mogorado</span></div></div>
   <div class="ai-wrap rev">
     <div class="ai-header">
-      <div class="ai-avatar"><span class="material-symbols-outlined" style="font-size:1.5em!important;color:#fff">psychology</span></div>
-      <div>
-        <div class="ai-name">EMAI.IA</div>
-        <div class="ai-desc">Basada en Llama &middot; Aprende de Circuito Cero &middot; Gratis</div>
+      <div class="ai-avatar">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+          <circle cx="50" cy="50" r="48" fill="none" stroke="white" stroke-width="4"/>
+          <rect x="20" y="25" width="60" height="10" fill="white"/>
+          <circle cx="50" cy="50" r="15" fill="white"/>
+          <circle cx="50" cy="50" r="6" fill="#e63946"/>
+          <rect x="20" y="42" width="15" height="16" fill="white"/>
+          <rect x="65" y="42" width="15" height="16" fill="white"/>
+          <rect x="20" y="65" width="60" height="10" fill="white"/>
+        </svg>
       </div>
-      <div class="ai-status"><div class="ai-dot"></div>En linea</div>
+      <div>
+        <div class="ai-name">Chat Mogorado</div>
+        <div class="ai-desc">IA Conectada &middot; Sin Límites &middot; Gratis</div>
+      </div>
+      <div class="ai-status"><div class="ai-dot"></div><span id="ai-question-count">0 preguntas</span></div>
     </div>
     <div class="ai-chat" id="ai-chat"></div>
     <div class="ai-sugs" id="ai-sugs"></div>
     <div class="ai-input-row">
-      <input class="ai-input" type="text" id="ai-in" placeholder="Pregunta sobre electronica, robotica...">
-      <button class="ai-send" onclick="sendAI()"><span class="material-symbols-outlined" style="font-size:1.2em!important">send</span></button>
+      <input class="ai-input" type="text" id="ai-in" placeholder="Pregunta lo que quieras..." autocomplete="off">
+      <button class="ai-send" id="ai-send-btn" onclick="sendAI()"><span class="material-symbols-outlined" style="font-size:1.2em!important">send</span></button>
     </div>
     <div class="ai-knowledge">
-      <div class="ai-k-title">Base de conocimiento activa</div>
-      <div class="ai-k-tags" id="ai-tags"></div>
+      <div class="ai-k-title">Conversación Activa · Historial Completo</div>
+      <div class="ai-k-tags" id="ai-tags">
+        <span class="ai-k-tag">IA Conectada</span>
+        <span class="ai-k-tag">Respuestas Ilimitadas</span>
+        <span class="ai-k-tag">Contexto Completo</span>
+      </div>
     </div>
   </div>
 </section>
@@ -857,44 +871,115 @@ function renderVotes(){document.getElementById("vote-list").innerHTML=IDEAS.map(
 function doVote(i,t){if(IDEAS[i].voted){toast("Ya votaste en esta idea");return;}IDEAS[i].voted=t;if(t==="up")IDEAS[i].up++;else IDEAS[i].dn++;renderVotes();toast(t==="up"?"Voto positivo registrado":"Voto registrado");}
 function toggleVoteForm(){document.getElementById("vote-new-form").classList.toggle("open");}
 function submitVote(){var v=document.getElementById("vote-in").value.trim();if(!v)return;IDEAS.unshift({txt:v,up:1,dn:0,voted:"up"});document.getElementById("vote-in").value="";document.getElementById("vote-new-form").classList.remove("open");renderVotes();toast("Propuesta enviada");}
-var AI_KB=[
-  {q:["ley de ohm","ohm","v=ir"],a:"La Ley de Ohm establece V = I x R. Si tienes 12V y 4 Ohm, la corriente es I = 12/4 = 3 Amperios. Es la base del analisis de circuitos y se relaciona con el Simulador de la plataforma."},
-  {q:["capacitor","condensador"],a:"El capacitor almacena energia en un campo electrico entre dos placas. Se mide en Faradios. Bloquea corriente directa DC y permite alterna AC. Energia: E = 0.5 x C x V^2. Tenemos videos sobre capacitores en la seccion de Componentes."},
-  {q:["transistor"],a:"El transistor puede funcionar como amplificador o interruptor electronico. Los mas comunes son BJT y MOSFET. En robotica se usa para controlar motores con senales de bajo voltaje. Revisa nuestro video sobre transistores en la plataforma."},
-  {q:["resistencia led","led","resistor led"],a:"Para un LED: R = (Vcc - Vf) / I. Ejemplo: Vcc=5V, LED rojo Vf=2.1V, I=20mA: R = (5-2.1)/0.02 = 145 Ohm. Usa 150 Ohm comercial. Practica con el Simulador de LED de la plataforma."},
-  {q:["arduino"],a:"Arduino Uno tiene 14 pines digitales (6 con PWM), 6 entradas analogicas y opera a 5V. analogRead() devuelve 0-1023. delay(1000) espera 1 segundo. Tenemos un juego de Arduino Quiz para practicar."},
-  {q:["potencia","watts"],a:"Potencia: P = V x I, P = V^2/R, o P = I^2 x R. Se mide en Watts. Un foco de 60W a 120V consume 0.5 Amperios. Calcula con el Simulador de Potencia de la plataforma."},
-  {q:["servo","motor servo"],a:"El servo estandar gira de 0 a 180 grados. Se controla con PWM: 1ms=0 grados, 1.5ms=90 grados, 2ms=180 grados. Con Arduino se usa la libreria Servo.h. Revisa la seccion de Robotica."},
-  {q:["sensor pir","pir","movimiento"],a:"El sensor PIR detecta movimiento de objetos que emiten calor infrarrojo. Opera a 5V con salida digital HIGH cuando detecta movimiento. Tenemos un video sobre el sensor PIR en Tinkercad."},
-  {q:["voltaje alterno","corriente alterna","ca","ac"],a:"En Mexico la red opera a 120V rms y 60 Hz. Voltaje pico: Vpico = 120 x sqrt(2) = 169.7V. Periodo: T = 1/60 = 16.67 ms. Calcula con el Simulador de Voltaje Alterno."},
-  {q:["que aprender","contenido","temas","videos"],a:"En Circuito Cero aprenderás: Fundamentos (electricidad, voltaje, corriente, Ley de Ohm), Componentes (LEDs, diodos, transistores, capacitores), Tinkercad (simulacion y Arduino), y Programacion. Tenemos 23 videos, 10 juegos, chat en vivo y EMAI.IA disponible siempre."}
-];
-var AI_SUGS=["Que es la Ley de Ohm?","Como calculo la resistencia para un LED?","Que es un transistor?","Como funciona el sensor PIR?","Que puedo aprender aqui?"];
+var conversationHistory = [];
+var questionCount = 0;
+var isProcessing = false;
+
 function initAI(){
   var box=document.getElementById("ai-chat");
-  box.innerHTML='<div class="ai-msg bot"><div class="ai-bubble">Hola. Soy EMAI.IA, la inteligencia de Circuito Cero. Aprendo de los contenidos de la plataforma y respondo dudas de electronica, robotica y automatizacion de forma gratuita. Escribe tu pregunta o elige una sugerencia.</div></div>';
-  document.getElementById("ai-sugs").innerHTML=AI_SUGS.map(function(s){return '<button class="ai-sug" onclick="askAI(\''+s+'\')">'+s+'</button>';}).join("");
-  document.getElementById("ai-tags").innerHTML=["Ley de Ohm","Capacitores","Transistores","Arduino","Servo","Sensor PIR","Voltaje AC","LED","Potencia","Tinkercad"].map(function(t){return '<span class="ai-k-tag">'+t+'</span>';}).join("");
-  document.getElementById("ai-in").addEventListener("keydown",function(e){if(e.key==="Enter")sendAI();});
+  box.innerHTML='<div class="ai-msg bot"><div class="ai-bubble">¡Hola! Soy tu asistente inteligente. Puedo ayudarte con cualquier pregunta. ¿En qué puedo ayudarte hoy?</div></div>';
+  document.getElementById("ai-sugs").innerHTML=["¿Qué puedo preguntarte?","Explícame algo interesante","Ayúdame con un problema","Dame consejos","Quiero aprender algo nuevo"].map(function(s){return '<button class="ai-sug" onclick="askAI(\''+s+'\')">'+s+'</button>';}).join("");
+  document.getElementById("ai-in").addEventListener("keydown",function(e){if(e.key==="Enter" && !isProcessing)sendAI();});
 }
-function sendAI(){var v=document.getElementById("ai-in").value.trim();if(!v)return;askAI(v);document.getElementById("ai-in").value="";}
-function askAI(q){
+
+function sendAI(){
+  var v=document.getElementById("ai-in").value.trim();
+  if(!v || isProcessing)return;
+  askAI(v);
+  document.getElementById("ai-in").value="";
+}
+
+async function askAI(q){
+  if(isProcessing) return;
+  isProcessing = true;
+  
   var box=document.getElementById("ai-chat");
+  var sendBtn = document.getElementById("ai-send-btn");
+  
+  // Deshabilitar botón
+  if(sendBtn) sendBtn.disabled = true;
+  
+  // Agregar mensaje del usuario
   box.innerHTML+='<div class="ai-msg user"><div class="ai-bubble">'+q+'</div></div>';
+  box.scrollTop=box.scrollHeight;
+  
+  // Actualizar contador
+  questionCount++;
+  document.getElementById("ai-question-count").textContent = questionCount + (questionCount === 1 ? " pregunta" : " preguntas");
+  
+  // Agregar a historial
+  conversationHistory.push({
+    role: 'user',
+    content: q
+  });
+  
+  // Mostrar indicador de escritura
   box.innerHTML+='<div class="ai-msg bot" id="ai-typing"><div class="ai-typing-wrap"><div class="ai-dt"></div><div class="ai-dt"></div><div class="ai-dt"></div></div></div>';
   box.scrollTop=box.scrollHeight;
-  setTimeout(function(){
-    var resp=getAIResp(q);
-    var tp=document.getElementById("ai-typing");if(tp)tp.remove();
-    box.innerHTML+='<div class="ai-msg bot"><div class="ai-bubble">'+resp+'</div></div>';
+  
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: conversationHistory
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Error del servidor: ' + response.status);
+    }
+    
+    const data = await response.json();
+    
+    // Remover indicador
+    var tp = document.getElementById("ai-typing");
+    if(tp) tp.remove();
+    
+    // Extraer respuesta
+    var assistantMessage = '';
+    if (data.content && Array.isArray(data.content)) {
+      for (var i = 0; i < data.content.length; i++) {
+        if (data.content[i].type === 'text') {
+          assistantMessage += data.content[i].text;
+        }
+      }
+    }
+    
+    if (assistantMessage) {
+      // Escapar HTML para seguridad
+      var escaped = assistantMessage.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+      box.innerHTML+='<div class="ai-msg bot"><div class="ai-bubble">'+escaped+'</div></div>';
+      
+      conversationHistory.push({
+        role: 'assistant',
+        content: assistantMessage
+      });
+      
+      // Limitar historial
+      if (conversationHistory.length > 20) {
+        conversationHistory = conversationHistory.slice(-20);
+      }
+    } else {
+      throw new Error('No se recibió respuesta válida');
+    }
+    
+  } catch (error) {
+    console.error('Error:', error);
+    var tp = document.getElementById("ai-typing");
+    if(tp) tp.remove();
+    box.innerHTML+='<div class="ai-msg bot"><div class="ai-bubble" style="color:var(--red)">Hubo un error al procesar tu mensaje. Por favor, intenta de nuevo.</div></div>';
+  } finally {
     box.scrollTop=box.scrollHeight;
-  },1200);
+    isProcessing = false;
+    if(sendBtn) sendBtn.disabled = false;
+  }
 }
-function getAIResp(q){
-  var ql=q.toLowerCase();
-  for(var i=0;i<AI_KB.length;i++){var e=AI_KB[i];for(var j=0;j<e.q.length;j++){if(ql.indexOf(e.q[j])!==-1)return e.a;}}
-  return "Interesante pregunta. Basandome en los contenidos de Circuito Cero, te recomiendo revisar los videos de fundamentos y el Simulador Electrico de la plataforma. Si es una duda especifica, puedes buscarla en la seccion Conceptos. El equipo sigue ampliando mi base de conocimiento constantemente.";
-}
+
 var COLORS=["#e63946","#2a9d8f","#457b9d","#7209b7","#f4a261","#22c55e","#0096c7","#e76f51"];
 var profileData={name:"",handle:"",nivel:"Principiante",color:COLORS[0],pts:0,videos:0,likes:0,badges:[]};
 function initProfile(){document.getElementById("color-opts").innerHTML=COLORS.map(function(c,i){return '<div class="color-opt'+(i===0?" selected":"")+'" style="background:'+c+'" onclick="selectColor(\''+c+'\',this)"></div>';}).join("");}
