@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CIRCUITO CERO® — Red Social Técnica</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=IBM+Plex+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="ticker">
+    <span class="tick-in">CIRCUITO CERO &mdash; Plataforma Interactiva<span class="s">|</span>HECHO EN MÉXICO<span class="s">|</span></span>
+  </div>
+  <div class="topbar-main">
+    <div class="tb-name">CIRCUITO <span>CERO</span></div>
+    <a href="admin.html" style="font-family:var(--mono);font-size:.65rem;color:var(--red);text-decoration:none;font-weight:700;">Panel Admin</a>
+  </div>
+</header>
+
+<main class="feed" id="feed-container">
+  <!-- Carga de publicaciones desde Supabase -->
+</main>
+
+<nav class="bnav">
+  <a href="index.html" class="bnav-item active">
+    <span class="material-symbols-outlined">home</span>
+    <span>Inicio</span>
+  </a>
+  <a href="admin.html" class="bnav-item">
+    <span class="material-symbols-outlined">add_circle</span>
+    <span>Subir</span>
+  </a>
+</nav>
+
+<script>
+async function loadPosts() {
+  const container = document.getElementById('feed-container');
+  try {
+    const res = await fetch('/api/posts');
+    const data = await res.json();
+    
+    if (!data.posts || data.posts.length === 0) {
+      container.innerHTML = '<p style="text-align:center;font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:20px;">No hay publicaciones disponibles.</p>';
+      return;
+    }
+
+    container.innerHTML = data.posts.map(post => `
+      <article class="vcard">
+        <div class="vthumb">
+          ${post.type === 'video' 
+            ? `<video src="${post.content_url}" controls poster="${post.thumb_url}"></video>` 
+            : `<img src="${post.thumb_url}" alt="${post.title}">`}
+        </div>
+        <div class="vbody">
+          <div class="vtitle">${post.title}</div>
+          <div class="vmeta">
+            <span>${post.category} • Por ${post.author}</span>
+            <span class="vbadge">NUEVO</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  } catch (err) {
+    container.innerHTML = '<p style="text-align:center;font-family:var(--mono);font-size:.7rem;color:var(--red);margin-top:20px;">Error al cargar datos de Supabase.</p>';
+  }
+}
+
+window.addEventListener('DOMContentLoaded', loadPosts);
+</script>
+</body>
+</html>
